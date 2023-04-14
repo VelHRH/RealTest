@@ -1,12 +1,15 @@
 import express from 'express';
 import {config} from 'dotenv'
 import expressApp from './express-app'
+import { dbConnection } from './database/connection';
 
 const StartUserService = async () => {
 
   config();
 
   const app = express();
+
+  await dbConnection();
 
   await expressApp(app);
 
