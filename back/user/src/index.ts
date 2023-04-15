@@ -1,11 +1,9 @@
 import express from 'express';
-import {config} from 'dotenv'
+import { PORT } from './config';
 import expressApp from './express-app'
 import { dbConnection } from './database/connection';
 
 const StartUserService = async () => {
-
-  config();
 
   const app = express();
 
@@ -17,8 +15,8 @@ const StartUserService = async () => {
     res.json({"msg": "Success"});
   });
 
-  app.listen(process.env.PORT, () => {
-    console.log(`User service working on port ${process.env.PORT}!`)
+  app.listen(PORT, () => {
+    console.log(`User service working on port ${PORT}!`)
   });
 }
 

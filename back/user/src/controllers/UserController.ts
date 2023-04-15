@@ -1,4 +1,5 @@
-import {APIError} from '../utils/errors'
+// @ts-nocheck
+import {APIError, STATUS_CODES} from '../utils/app-errors'
 import { UserModel } from '../database/models/User'
 
 export class UserController {
