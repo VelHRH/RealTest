@@ -5,12 +5,5 @@ import express from 'express'
 export const userAPI = async (app: express.Application) => {
   const controller = new UserController();
 
-  app.get('/user/profile', async (req, res, next) => {
-    try{
-      const data = await controller.GetProfile(req.body.id);
-      return res.json(data);
-    } catch (err){
-      next(err);
-    }
-  })
+  app.get('/user/profile', controller.GetProfile)
 }

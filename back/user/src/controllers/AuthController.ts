@@ -1,15 +1,16 @@
-// @ts-nocheck
-import {APIError, STATUS_CODES, BadRequestError} from '../utils/app-errors'
 import { UserModel } from '../database/models/User'
 import { random, authentication } from '../utils';
+import express from 'express'
+import {AppError} from '../utils/app-errors'
 
 export class AuthController {
-  async RegisterUser(email: string, password: string, name: string, login: string) {
+  async RegisterUser(req: express.Request, res: express.Response, next: express.NextFunction) {
     try{
+      const {email, login, password, name} = req.body;
       const existingEmail = await UserModel.findOne({email});
       const existingLogin = await UserModel.findOne({login});
       if (existingEmail || existingLogin){
-        throw new BadRequestError();
+        throw AppError.badRequest("User with this email/login alredy registered");
       }
       const salt = random();
 
@@ -23,13 +24,9 @@ export class AuthController {
         }
       });
       const userResult = await user.save();
-      return userResult;
+      return res.status(200).json(userResult);
     } catch (err) {
-      throw new APIError(
-        "API Error",
-        STATUS_CODES.INTERNAL_ERROR,
-        "Unable to Create Customer"
-      );
+      next(err);
     }
   }
 }
