@@ -29,4 +29,30 @@ export class AuthController {
       next(err);
     }
   }
+
+  async LoginUser(req: express.Request, res: express.Response, next: express.NextFunction) {
+    try{
+      const {email, password} = req.body;
+      if (!email || !password){
+        throw AppError.badRequest("Wrong login or password");
+      }
+      const user = await UserModel.findOne({email: email}).select('+authentication.salt +authentication.password');
+
+      const expectedHash = authentication(user.authentication.salt, password);
+
+      if (user.authentication.password !== expectedHash){
+        throw AppError.badRequest("Wrong login or password");
+      }
+
+      const salt = random();
+      user.authentication.sessionToken = authentication(salt, user._id.toString());
+      await user.save();
+
+      res.cookie('COOKIE_AUTH', user.authentication.sessionToken, {domain: 'localhost', path: '/'});
+
+      return res.status(200).json(user).end();
+    } catch (err) {
+      next(err);
+    }
+  }
 }
