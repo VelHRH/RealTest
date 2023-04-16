@@ -32,16 +32,17 @@ export class AuthController {
 
   async LoginUser(req: express.Request, res: express.Response, next: express.NextFunction) {
     try{
-      const {email, password} = req.body;
-      if (!email || !password){
-        throw AppError.badRequest("Wrong login or password");
+      const {email, login, password} = req.body;
+      if ((!email && !login) || !password){
+        throw AppError.badRequest("Wrong login, email or password");
       }
-      const user = await UserModel.findOne({email: email}).select('+authentication.salt +authentication.password');
-
+      const user = email ? 
+        await UserModel.findOne({email}).select('+authentication.salt +authentication.password') : 
+        await UserModel.findOne({login}).select('+authentication.salt +authentication.password');
       const expectedHash = authentication(user.authentication.salt, password);
 
       if (user.authentication.password !== expectedHash){
-        throw AppError.badRequest("Wrong login or password");
+        throw AppError.badRequest("Wrong login, email or password");
       }
 
       const salt = random();
@@ -51,6 +52,15 @@ export class AuthController {
       res.cookie('COOKIE_AUTH', user.authentication.sessionToken, {domain: 'localhost', path: '/'});
 
       return res.status(200).json(user).end();
+    } catch (err) {
+      next(err);
+    }
+  }
+
+  async LogoutUser(req: express.Request, res: express.Response, next: express.NextFunction) {
+    try{
+      res.clearCookie('COOKIE_AUTH');
+      return res.status(200).json({message: "success"}).end();
     } catch (err) {
       next(err);
     }

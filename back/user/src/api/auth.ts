@@ -6,4 +6,5 @@ export const authAPI = async (app: express.Application) => {
 
   app.post('/user/register', controller.RegisterUser);
   app.post('/user/login', controller.LoginUser);
+  app.post('/user/logout', controller.LogoutUser);
 }
