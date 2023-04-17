@@ -45,7 +45,6 @@ export class AuthService {
         throw AppError.badRequest("Wrong login, email or password");
       }
       const expectedHash = authentication(user.authentication.salt, password);
-      console.log(expectedHash);
 
       if (user.authentication.password !== expectedHash){
         throw AppError.badRequest("Wrong login, email or password");
