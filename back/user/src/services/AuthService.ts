@@ -1,6 +1,5 @@
 import { UserModel } from '../database/models/User'
 import { random, authentication } from '../utils';
-import express from 'express'
 import {AppError} from '../utils/app-errors'
 
 export class AuthService {
@@ -27,7 +26,7 @@ export class AuthService {
         }
       });
       const userResult = await user.save();
-      return userResult;
+      return ({email: user.email, login: user.login, _id: user._id, role: user.role});
     } catch (err) {
       throw err;
     }
@@ -46,6 +45,7 @@ export class AuthService {
         throw AppError.badRequest("Wrong login, email or password");
       }
       const expectedHash = authentication(user.authentication.salt, password);
+      console.log(expectedHash);
 
       if (user.authentication.password !== expectedHash){
         throw AppError.badRequest("Wrong login, email or password");
@@ -54,9 +54,37 @@ export class AuthService {
       const salt = random();
       user.authentication.sessionToken = authentication(salt, user._id.toString());
       await user.save();
-      return { data: {email: user.email, login: user.login, _id: user._id, password, role: user.role}, token: user.authentication.sessionToken};
+      return { data: {email: user.email, login: user.login, _id: user._id, role: user.role}, token: user.authentication.sessionToken};
     } catch (err) {
       throw err;
     }
+  }
+
+  async EditPassword(data: {oldPassword: string, newPassword: string, repeatPassword: string, _id: string}) {
+    try{
+      const {oldPassword, newPassword, repeatPassword, _id} = data;
+      const user = await UserModel.findById(_id).select('+authentication.salt +authentication.password');
+      const expectedHash = authentication(user.authentication.salt, oldPassword);
+
+      if (user.authentication.password !== expectedHash){
+        throw AppError.badRequest("Wrong old password");
+      }
+
+      if (newPassword !== repeatPassword){
+        throw AppError.badRequest("Passwords do not match");
+      }
+
+      const salt = random();
+
+      user.authentication.salt = salt;
+      user.authentication.password = authentication(salt, newPassword);
+
+      await user.save();
+
+      return({email: user.email, login: user.login, _id: user._id, role: user.role});
+    } catch(err){
+      throw err;
+    }
+
   }
 }

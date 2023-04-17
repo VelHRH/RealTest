@@ -25,9 +25,21 @@ export const authAPI = async (app: express.Application) => {
       next(err);
     }
   });
-  app.post('/logout', checkAuth, (req: express.Request, res: express.Response, next: express.NextFunction) => {
+
+  app.post('/logout', checkAuth, async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     try{
       res.clearCookie('COOKIE_AUTH');
+      return res.status(200).json({message: "success"}).end();
+    } catch (err) {
+      next(err);
+    }
+  });
+
+  app.put('/changePassword', checkAuth, async (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    try{
+      const {oldPassword, newPassword, repeatPassword} = req.body;
+      const _id = req.body.identity;
+      await service.EditPassword({oldPassword, newPassword, repeatPassword, _id});
       return res.status(200).json({message: "success"}).end();
     } catch (err) {
       next(err);

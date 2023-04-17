@@ -18,7 +18,6 @@ export class UserService {
     const { event, data} =  payload;
     
     switch(event){
-        case 'ADD_TO_WISHLIST':
         case 'GET_PROFILE':
             this.GetProfile(data.id);
             break;
