@@ -11,10 +11,6 @@ const StartUserService = async () => {
 
   await expressApp(app);
 
-  app.use('/', (req: express.Request, res: express.Response) => {
-    res.json({"msg": "Success"});
-  });
-
   app.listen(PORT, () => {
     console.log(`User service working on port ${PORT}!`)
   });

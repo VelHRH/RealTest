@@ -5,10 +5,7 @@ import {AppError} from '../utils/app-errors'
 
 export const checkAuth = async (req: express.Request, res: express.Response, next: express.NextFunction) => {
   try{
-    const sessionToken = req.rawHeaders[5].slice(12);
-    if (req.rawHeaders[5].slice(0, 12) !== "COOKIE_AUTH=") {
-      throw AppError.unauthorised('You are not logged in.');
-    }
+    const sessionToken = req.rawHeaders.filter(s => s.includes("COOKIE_AUTH="))[0].slice(12);
 
     const existingUser = await UserModel.findOne({'authentication.sessionToken': sessionToken});
 

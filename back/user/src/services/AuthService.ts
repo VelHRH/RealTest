@@ -3,10 +3,13 @@ import { random, authentication } from '../utils';
 import express from 'express'
 import {AppError} from '../utils/app-errors'
 
-export class AuthController {
-  async RegisterUser(req: express.Request, res: express.Response, next: express.NextFunction) {
+export class AuthService {
+  async RegisterUser(data: {email: string, login: string, password: string, name: string}) {
     try{
-      const {email, login, password, name} = req.body;
+      const {email, password, login, name} = data;
+      if (!email || !password || !name || !login){
+        throw AppError.badRequest("All fields should be filled");
+      }
       const existingEmail = await UserModel.findOne({email});
       const existingLogin = await UserModel.findOne({login});
       if (existingEmail || existingLogin){
@@ -24,21 +27,24 @@ export class AuthController {
         }
       });
       const userResult = await user.save();
-      return res.status(200).json(userResult);
+      return userResult;
     } catch (err) {
-      next(err);
+      throw err;
     }
   }
 
-  async LoginUser(req: express.Request, res: express.Response, next: express.NextFunction) {
+  async LoginUser(data: {email: string, login: string, password: string}) {
     try{
-      const {email, login, password} = req.body;
+      const {email, login, password} = data;
       if ((!email && !login) || !password){
         throw AppError.badRequest("Wrong login, email or password");
       }
       const user = email ? 
         await UserModel.findOne({email}).select('+authentication.salt +authentication.password') : 
         await UserModel.findOne({login}).select('+authentication.salt +authentication.password');
+      if (!user){
+        throw AppError.badRequest("Wrong login, email or password");
+      }
       const expectedHash = authentication(user.authentication.salt, password);
 
       if (user.authentication.password !== expectedHash){
@@ -48,21 +54,9 @@ export class AuthController {
       const salt = random();
       user.authentication.sessionToken = authentication(salt, user._id.toString());
       await user.save();
-
-      res.cookie('COOKIE_AUTH', user.authentication.sessionToken, {domain: 'localhost', path: '/'});
-
-      return res.status(200).json(user).end();
+      return { data: {email: user.email, login: user.login, _id: user._id, password, role: user.role}, token: user.authentication.sessionToken};
     } catch (err) {
-      next(err);
-    }
-  }
-
-  async LogoutUser(req: express.Request, res: express.Response, next: express.NextFunction) {
-    try{
-      res.clearCookie('COOKIE_AUTH');
-      return res.status(200).json({message: "success"}).end();
-    } catch (err) {
-      next(err);
+      throw err;
     }
   }
 }
