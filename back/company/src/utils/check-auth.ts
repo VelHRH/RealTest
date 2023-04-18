@@ -2,6 +2,7 @@ import express from "express";
 import {merge} from "lodash";
 import {AppError} from '../utils/app-errors'
 import axios from 'axios';
+import { BASE_URL } from "../config";
 
 export const checkAuth = async (req: express.Request, res: express.Response, next: express.NextFunction) => {
   try{
@@ -16,7 +17,7 @@ export const checkAuth = async (req: express.Request, res: express.Response, nex
       }
     }
     
-    const existingUser = await axios.post('http://localhost:8000/user/app-events/', {payload});
+    const existingUser = await axios.post(`${BASE_URL}/user/app-events/`, {payload});
 
     if (!existingUser.data) {
       throw AppError.unauthorised("You are not logged in.");
