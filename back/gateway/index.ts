@@ -9,10 +9,9 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-app.use('/user', proxy('http://localhost:8001')); //users
+app.use('/user', proxy('http://localhost:8001'));
 app.use('/test', proxy('http://localhost:8002'));
-app.use('/device', proxy('http://localhost:8003'));
-app.use('/company', proxy('http://localhost:8004'));
+app.use('/company', proxy('http://localhost:8003'));
 
 app.listen(process.env.PORT, () => {
   console.log(`Gateway service working on port ${process.env.PORT}!`)

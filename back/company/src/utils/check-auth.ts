@@ -1,19 +1,28 @@
 import express from "express";
 import {merge} from "lodash";
-import { UserModel } from "../database/models/Company";
 import {AppError} from '../utils/app-errors'
+import axios from 'axios';
 
 export const checkAuth = async (req: express.Request, res: express.Response, next: express.NextFunction) => {
   try{
-    const sessionToken = req.rawHeaders.filter(s => s.includes("COOKIE_AUTH="))[0].slice(12);
+    const sessionToken = req.rawHeaders.filter(s => s.includes("COOKIE_AUTH="))[0]?.slice(12);
+    if (!sessionToken) {
+      throw AppError.unauthorised("You are not logged in.");
+    }
+    const payload = {
+      event: "GET_PROFILE_BY_TOKEN",
+      data: {
+        token: sessionToken
+      }
+    }
+    
+    const existingUser = await axios.post('http://localhost:8000/user/app-events/', {payload});
 
-    const existingUser = await UserModel.findOne({'authentication.sessionToken': sessionToken});
-
-    if (!existingUser) {
+    if (!existingUser.data) {
       throw AppError.unauthorised("You are not logged in.");
     }
 
-    merge(req.body, {identity: existingUser._id});
+    merge(req.body, {identity: existingUser.data._id});
     return next();
   } catch (err) {
     next(err);

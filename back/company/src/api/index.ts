@@ -1,3 +1,2 @@
-export { userAPI } from "./user";
-export { authAPI } from "./auth";
+export { companyAPI } from "./company";
 export { appEvents } from "./app-events";

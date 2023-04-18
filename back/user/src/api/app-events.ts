@@ -6,8 +6,8 @@ export const appEvents = async (app: express.Application) => {
 
   app.use('/app-events', async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     const {payload} = req.body;
-    service.SubscribeEvents(payload);
+    const result = await service.SubscribeEvents(payload);
     console.log("============= App Event ================");
-    return res.status(200).json(payload);
+    return res.status(200).json(result);
   });
 }

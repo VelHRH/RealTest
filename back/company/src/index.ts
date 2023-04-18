@@ -12,7 +12,7 @@ const StartUserService = async () => {
   await expressApp(app);
 
   app.listen(PORT, () => {
-    console.log(`User service working on port ${PORT}!`)
+    console.log(`Company service working on port ${PORT}!`)
   });
 }
 

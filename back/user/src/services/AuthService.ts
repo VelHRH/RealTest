@@ -25,7 +25,7 @@ export class AuthService {
           password: authentication(salt, password)
         }
       });
-      const userResult = await user.save();
+      await user.save();
       return ({email: user.email, login: user.login, _id: user._id, role: user.role});
     } catch (err) {
       throw err;

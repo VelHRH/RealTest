@@ -1,6 +1,6 @@
 import express from 'express';
 import cors  from 'cors';
-import {userAPI, authAPI, appEvents} from './api'
+import { companyAPI, appEvents} from './api'
 import {ErrorHandler} from './utils/error-handler'
 
 const ExpressApp = async (app: express.Application) => {
@@ -10,9 +10,8 @@ const ExpressApp = async (app: express.Application) => {
     app.use(cors());
 
     appEvents(app);
-
-    userAPI(app);
-    authAPI(app);
+    
+    companyAPI(app);
 
     app.use(ErrorHandler);
 }
