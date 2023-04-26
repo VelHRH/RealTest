@@ -1,19 +1,20 @@
-import express from 'express';
-import cors  from 'cors';
-import { companyAPI, appEvents} from './api'
-import {ErrorHandler} from './utils/error-handler'
+import express from "express";
+import cors from "cors";
+import cookieParser from "cookie-parser";
+import { companyAPI, appEvents } from "./api";
+import { ErrorHandler } from "./utils/error-handler";
 
 const ExpressApp = async (app: express.Application) => {
+ app.use(express.json());
+ app.use(express.urlencoded({ extended: true, limit: "1mb" }));
+ app.use(cors());
+ app.use(cookieParser());
 
-    app.use(express.json());
-    app.use(express.urlencoded({ extended: true, limit: '1mb'}));
-    app.use(cors());
+ appEvents(app);
 
-    appEvents(app);
-    
-    companyAPI(app);
+ companyAPI(app);
 
-    app.use(ErrorHandler);
-}
+ app.use(ErrorHandler);
+};
 
 export default ExpressApp;
