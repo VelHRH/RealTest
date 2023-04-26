@@ -57,6 +57,7 @@ export const authAPI = async (app: express.Application) => {
    next: express.NextFunction
   ) => {
    try {
+    await service.LogoutUser(req.cookies.COOKIE_AUTH);
     res.clearCookie("COOKIE_AUTH");
     return res.status(200).json({ message: "success" }).end();
    } catch (err) {
