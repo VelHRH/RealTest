@@ -117,4 +117,21 @@ export class DeviceService {
    throw err;
   }
  }
+
+ async SubscribeEvents(payload: {
+  event: string;
+  data: { identity: string; purchaseId: string };
+ }) {
+  const { event, data } = payload;
+  const { identity, purchaseId } = data;
+  let result;
+  switch (event) {
+   case "GET_PURCHASE_BY_ID":
+    result = await this.GetPurchase({ identity, purchaseId });
+    break;
+   default:
+    break;
+  }
+  return result;
+ }
 }
