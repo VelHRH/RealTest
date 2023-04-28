@@ -1,12 +1,14 @@
-import {body} from 'express-validator'
+import { body } from "express-validator";
 
-export const registerValidation = [
-  body('email', 'Invalid email').isEmail(),
-  body('password', 'Password should contain at least 8 symbols').isLength({min: 8}),
-  body('login', 'Login should contain at least 3 symbols').isLength({min: 3}),
-  body('avatarUrl', 'Invalid avatar link').optional().isURL()
+export const companyValidation = [
+ body(
+  "name",
+  "Company name should contain at least 2 symbols, maximum 30 symbols"
+ ).isLength({
+  min: 2,
+  max: 30,
+ }),
+ body("avatarUrl", "Invalid avatar link").isURL(),
 ];
 
-export const passwordValidation = [
-  body('newPassword', 'Password should contain at least 8 symbols').isLength({min: 8}),
-];
+export const deviceValidation = [body("imgUrl", "Invalid avatar link").isURL()];

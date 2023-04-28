@@ -2,7 +2,7 @@ import { CompanyService } from "../services/CompanyService";
 import express from "express";
 import { checkAuth } from "../utils/check-auth";
 import axios from "axios";
-import { registerValidation, passwordValidation } from "../utils/validations";
+import { companyValidation } from "../utils/validations";
 import { validationResult } from "express-validator";
 import { AppError } from "../utils/app-errors";
 import { BASE_URL } from "../config";
@@ -13,12 +13,17 @@ export const companyAPI = async (app: express.Application) => {
  app.post(
   "/create",
   checkAuth,
+  companyValidation,
   async (
    req: express.Request,
    res: express.Response,
    next: express.NextFunction
   ) => {
    try {
+    const validationErrors = validationResult(req);
+    if (!validationErrors.isEmpty()) {
+     throw AppError.badRequest(validationErrors.array()[0].msg);
+    }
     const { name, avatarUrl, identity } = req.body;
     const payload = {
      event: "CHANGE_ROLE",

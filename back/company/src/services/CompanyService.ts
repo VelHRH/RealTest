@@ -6,7 +6,7 @@ export class CompanyService {
   try {
    const { name, owner, avatarUrl } = data;
    if (!owner || !avatarUrl || !name) {
-    throw AppError.badRequest("All fields should be filled");
+    throw AppError.badRequest("All fields should be filled!");
    }
    const existingName = await CompanyModel.findOne({ name });
    if (existingName) {
@@ -39,7 +39,7 @@ export class CompanyService {
 
    await CompanyModel.findOneAndDelete({ _id });
 
-   return { message: "success" };
+   return { success: true };
   } catch (err) {
    throw err;
   }

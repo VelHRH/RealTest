@@ -12,6 +12,9 @@ export class DeviceService {
  }) {
   try {
    const { name, description, imgUrl, price } = data;
+   if (!name || !description || !imgUrl || !price) {
+    throw AppError.badRequest("All fields should be filled!");
+   }
    const device = new DeviceModel({ name, description, imgUrl, price });
    const doc = await device.save();
    return doc;
@@ -66,6 +69,50 @@ export class DeviceService {
     { balance: newBallance }
    );
    return doc;
+  } catch (err) {
+   throw err;
+  }
+ }
+
+ async ChangeDefaults(data: {
+  reportingFrequency: string;
+  defaultTrackingRange: number;
+  identity: string;
+  purchaseId: string;
+ }) {
+  try {
+   const { reportingFrequency, defaultTrackingRange, identity, purchaseId } =
+    data;
+   const purchase = await PurchaseModel.findById(purchaseId);
+   if (!purchase) {
+    throw AppError.badRequest("The device is unavilable!");
+   }
+   const company = await CompanyModel.findById(purchase.companyId);
+   if (company.owner !== identity && !company.admins.includes(identity)) {
+    throw AppError.badRequest("You don't work in the company!");
+   }
+   await PurchaseModel.findOneAndUpdate(
+    { _id: purchaseId },
+    { reportingFrequency, defaultTrackingRange }
+   );
+   return { success: true };
+  } catch (err) {
+   throw err;
+  }
+ }
+
+ async GetPurchase(data: { identity: string; purchaseId: string }) {
+  try {
+   const { identity, purchaseId } = data;
+   const purchase = await PurchaseModel.findById(purchaseId);
+   if (!purchase) {
+    throw AppError.badRequest("The device is unavilable!");
+   }
+   const company = await CompanyModel.findById(purchase.companyId);
+   if (company.owner !== identity && !company.admins.includes(identity)) {
+    throw AppError.badRequest("You don't work in the company!");
+   }
+   return purchase;
   } catch (err) {
    throw err;
   }
