@@ -11,7 +11,6 @@ export const checkAuth = async (
 ) => {
  try {
   const sessionToken = req.cookies.COOKIE_AUTH;
-  console.log("COOKIE_AUTH" + sessionToken);
   if (!sessionToken) {
    throw AppError.unauthorised("You are not logged in.");
   }
