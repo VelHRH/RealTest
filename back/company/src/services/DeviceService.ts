@@ -26,7 +26,7 @@ export class DeviceService {
  async PurchaseDevice(data: {
   companyId: string;
   deviceId: string;
-  reportingFrequency: string;
+  defaultReportingFrequency: string;
   defaultTrackingRange: number;
   identity: string;
  }) {
@@ -34,7 +34,7 @@ export class DeviceService {
    const {
     companyId,
     deviceId,
-    reportingFrequency,
+    defaultReportingFrequency,
     defaultTrackingRange,
     identity,
    } = data;
@@ -58,7 +58,7 @@ export class DeviceService {
    const purchase = new PurchaseModel({
     companyId,
     deviceId,
-    reportingFrequency,
+    defaultReportingFrequency,
     defaultTrackingRange,
     delivered: false,
    });
@@ -75,25 +75,25 @@ export class DeviceService {
  }
 
  async ChangeDefaults(data: {
-  reportingFrequency: string;
+  defaultReportingFrequency: string;
   defaultTrackingRange: number;
   identity: string;
   purchaseId: string;
  }) {
   try {
-   const { reportingFrequency, defaultTrackingRange, identity, purchaseId } =
-    data;
-   const purchase = await PurchaseModel.findById(purchaseId);
-   if (!purchase) {
-    throw AppError.badRequest("The device is unavilable!");
-   }
-   const company = await CompanyModel.findById(purchase.companyId);
+   const {
+    defaultReportingFrequency,
+    defaultTrackingRange,
+    identity,
+    purchaseId,
+   } = data;
+   const company = await this.GetCompanyByPurchaseId(purchaseId);
    if (company.owner !== identity && !company.admins.includes(identity)) {
     throw AppError.badRequest("You don't work in the company!");
    }
    await PurchaseModel.findOneAndUpdate(
     { _id: purchaseId },
-    { reportingFrequency, defaultTrackingRange }
+    { defaultReportingFrequency, defaultTrackingRange }
    );
    return { success: true };
   } catch (err) {
@@ -104,15 +104,25 @@ export class DeviceService {
  async GetPurchase(data: { identity: string; purchaseId: string }) {
   try {
    const { identity, purchaseId } = data;
+   const company = await this.GetCompanyByPurchaseId(purchaseId);
+   if (company.owner !== identity && !company.admins.includes(identity)) {
+    throw AppError.badRequest("You don't work in the company!");
+   }
+   const purchase = await PurchaseModel.findById(purchaseId);
+   return purchase;
+  } catch (err) {
+   throw err;
+  }
+ }
+
+ async GetCompanyByPurchaseId(purchaseId: string) {
+  try {
    const purchase = await PurchaseModel.findById(purchaseId);
    if (!purchase) {
     throw AppError.badRequest("The device is unavilable!");
    }
    const company = await CompanyModel.findById(purchase.companyId);
-   if (company.owner !== identity && !company.admins.includes(identity)) {
-    throw AppError.badRequest("You don't work in the company!");
-   }
-   return purchase;
+   return company;
   } catch (err) {
    throw err;
   }
@@ -128,6 +138,9 @@ export class DeviceService {
   switch (event) {
    case "GET_PURCHASE_BY_ID":
     result = await this.GetPurchase({ identity, purchaseId });
+    break;
+   case "GET_COMPANY_BY_PURCHASE":
+    result = await this.GetCompanyByPurchaseId(purchaseId);
     break;
    default:
     break;

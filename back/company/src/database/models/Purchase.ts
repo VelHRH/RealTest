@@ -9,7 +9,7 @@ const PurchaseSchema = new mongoose.Schema({
   type: String,
   required: true,
  },
- reportingFrequency: {
+ defaultReportingFrequency: {
   type: String,
   default: "Daily",
  },

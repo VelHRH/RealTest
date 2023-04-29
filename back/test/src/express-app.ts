@@ -1,7 +1,7 @@
 import express from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
-import { testAPI, appEvents } from "./api";
+import { testAPI, appEvents, resultAPI } from "./api";
 import { ErrorHandler } from "./utils/error-handler";
 
 const ExpressApp = async (app: express.Application) => {
@@ -13,6 +13,7 @@ const ExpressApp = async (app: express.Application) => {
  appEvents(app);
 
  testAPI(app);
+ resultAPI(app);
 
  app.use(ErrorHandler);
 };

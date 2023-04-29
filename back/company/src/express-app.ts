@@ -6,7 +6,7 @@ import { ErrorHandler } from "./utils/error-handler";
 
 const ExpressApp = async (app: express.Application) => {
  app.use(express.json());
- app.use(express.urlencoded({ extended: true, limit: "1mb" }));
+ app.use(express.urlencoded({ extended: true, limit: "10mb" }));
  app.use(cors());
  app.use(cookieParser());
 

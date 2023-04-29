@@ -28,7 +28,7 @@ export const testAPI = async (app: express.Application) => {
      testEnd,
      reportingFrequency,
      trackingRange,
-     testCreator: identity,
+     identity,
     });
     res.status(200).json(data);
    } catch (err) {

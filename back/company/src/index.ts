@@ -1,20 +1,18 @@
-import express from 'express';
-import { PORT } from './config';
-import expressApp from './express-app'
-import { dbConnection } from './database/connection';
+import express from "express";
+import { PORT } from "./config";
+import expressApp from "./express-app";
+import { dbConnection } from "./database/connection";
 
-const StartUserService = async () => {
+const StartCompanyService = async () => {
+ const app = express();
 
-  const app = express();
+ await dbConnection();
 
-  await dbConnection();
+ await expressApp(app);
 
-  await expressApp(app);
+ app.listen(PORT, () => {
+  console.log(`Company service working on port ${PORT}!`);
+ });
+};
 
-  app.listen(PORT, () => {
-    console.log(`Company service working on port ${PORT}!`)
-  });
-}
-
-StartUserService();
-
+StartCompanyService();

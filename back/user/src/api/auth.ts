@@ -59,7 +59,7 @@ export const authAPI = async (app: express.Application) => {
    try {
     await service.LogoutUser(req.cookies.COOKIE_AUTH);
     res.clearCookie("COOKIE_AUTH");
-    return res.status(200).json({ message: "success" }).end();
+    return res.status(200).json({ success: true }).end();
    } catch (err) {
     next(err);
    }
@@ -88,7 +88,7 @@ export const authAPI = async (app: express.Application) => {
      repeatPassword,
      _id,
     });
-    return res.status(200).json({ message: "success" }).end();
+    return res.status(200).json({ success: true }).end();
    } catch (err) {
     next(err);
    }

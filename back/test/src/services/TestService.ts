@@ -10,7 +10,7 @@ export class TestService {
   testEnd: string;
   reportingFrequency: string;
   trackingRange: number;
-  testCreator: string;
+  identity: string;
  }) {
   try {
    const {
@@ -19,12 +19,9 @@ export class TestService {
     testEnd,
     reportingFrequency,
     trackingRange,
-    testCreator,
+    identity,
    } = data;
 
-   if (!testCreator) {
-    throw AppError.unauthorised("You are not logged in!");
-   }
    if (
     !purchaseId ||
     !testStart ||
@@ -34,14 +31,14 @@ export class TestService {
    ) {
     throw AppError.badRequest("All fields should be filled!");
    }
-   await this.CheckCompanyByPurchase(purchaseId, testCreator);
+   await this.CheckCompanyByPurchase(purchaseId, identity);
    const test = new TestModel({
     purchaseId,
     testStart,
     testEnd,
     reportingFrequency,
     trackingRange,
-    testCreator,
+    testCreator: identity,
    });
    const doc = await test.save();
    return doc;
@@ -54,9 +51,6 @@ export class TestService {
   try {
    const { testId, identity } = data;
    const test = await TestModel.findById(testId);
-   if (!identity) {
-    throw AppError.unauthorised("You are not logged in!");
-   }
    await this.CheckCompanyByPurchase(test.purchaseId, identity);
    await TestModel.findByIdAndDelete(testId);
    return { success: true };
@@ -87,13 +81,10 @@ export class TestService {
    if (curDate > startDate) {
     throw AppError.badRequest("You can not change test after it started!");
    }
-   if (!identity) {
-    throw AppError.unauthorised("You are not logged in!");
-   }
    const test = await TestModel.findById(testId);
    if (!test) {
     throw AppError.unauthorised(
-     "nThe test you are trying to edit does nor exist anymore!"
+     "The test you are trying to edit does nor exist anymore!"
     );
    }
    await this.CheckCompanyByPurchase(test.purchaseId, identity);

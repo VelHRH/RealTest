@@ -48,7 +48,7 @@ export const deviceAPI = async (app: express.Application) => {
     const {
      companyId,
      deviceId,
-     reportingFrequency,
+     defaultReportingFrequency,
      defaultTrackingRange,
      identity,
     } = req.body;
@@ -56,7 +56,7 @@ export const deviceAPI = async (app: express.Application) => {
     const data = await device.PurchaseDevice({
      companyId,
      deviceId,
-     reportingFrequency,
+     defaultReportingFrequency,
      defaultTrackingRange,
      identity,
     });
@@ -76,10 +76,11 @@ export const deviceAPI = async (app: express.Application) => {
    next: express.NextFunction
   ) => {
    try {
-    const { reportingFrequency, defaultTrackingRange, identity } = req.body;
+    const { defaultReportingFrequency, defaultTrackingRange, identity } =
+     req.body;
 
     const data = await device.ChangeDefaults({
-     reportingFrequency,
+     defaultReportingFrequency,
      defaultTrackingRange,
      identity,
      purchaseId: req.params.id,
