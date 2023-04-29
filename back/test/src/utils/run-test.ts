@@ -20,6 +20,7 @@ export const runTestingForDuration = (duration) => {
    res.push(data);
   });
   setTimeout(() => {
+   port.close();
    resolve(res);
   }, duration);
  });
