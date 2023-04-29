@@ -3,21 +3,15 @@ import { ResultModel } from "../database/models/Result";
 
 export class ResultService {
  async CreateResult({ testId }: { testId: string }) {
-  return new Promise((resolve, reject) => {
-   // Вызов функции в начале, чтобы результат был сохранен сразу
-   this.ExecuteTest(testId);
+  const intervalId = setInterval(async () => {
+   await this.ExecuteTest(testId);
+  }, 6000);
 
-   // Запуск интервала с периодом 5 секунд
-   const intervalId = setInterval(async () => {
-    await this.ExecuteTest(testId);
-   }, 5000);
+  setTimeout(() => {
+   clearInterval(intervalId);
+  }, 300000);
 
-   // Остановка интервала через 5 минут
-   setTimeout(() => {
-    clearInterval(intervalId);
-    resolve({ success: true });
-   }, 300000);
-  });
+  return Promise.resolve({ success: true });
  }
 
  async ExecuteTest(testId: string) {
