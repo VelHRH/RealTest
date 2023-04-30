@@ -6,6 +6,7 @@ import { BASE_URL } from "../config";
 export class TestService {
  async CreateTest(data: {
   purchaseId: string;
+  name: string;
   testStart: string;
   testEnd: string;
   reportingFrequency: string;
@@ -16,6 +17,7 @@ export class TestService {
    const {
     purchaseId,
     testStart,
+    name,
     testEnd,
     reportingFrequency,
     trackingRange,
@@ -26,6 +28,7 @@ export class TestService {
     !purchaseId ||
     !testStart ||
     !testEnd ||
+    !name ||
     !reportingFrequency ||
     !trackingRange
    ) {
@@ -34,6 +37,7 @@ export class TestService {
    await this.CheckCompanyByPurchase(purchaseId, identity);
    const test = new TestModel({
     purchaseId,
+    name,
     testStart,
     testEnd,
     reportingFrequency,

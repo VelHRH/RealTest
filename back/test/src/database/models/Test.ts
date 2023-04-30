@@ -5,18 +5,16 @@ const TestSchema = new mongoose.Schema({
   type: String,
   required: true,
  },
+ name: {
+  type: String,
+  required: true,
+ },
  testCreator: {
   type: String,
   required: true,
  },
- testStart: {
-  type: Date,
-  required: true,
- },
- testEnd: {
-  type: Date,
-  required: true,
- },
+ testStart: Date,
+ testEnd: Date,
  reportingFrequency: {
   type: String,
   required: true,
