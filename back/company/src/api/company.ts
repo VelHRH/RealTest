@@ -42,6 +42,24 @@ export const companyAPI = async (app: express.Application) => {
   }
  );
 
+ app.get(
+  "/:id",
+  async (
+   req: express.Request,
+   res: express.Response,
+   next: express.NextFunction
+  ) => {
+   try {
+    const data = await service.GetCompany({
+     companyId: req.params.id,
+    });
+    res.status(200).json(data);
+   } catch (err) {
+    next(err);
+   }
+  }
+ );
+
  app.delete(
   "/:id",
   checkAuth,

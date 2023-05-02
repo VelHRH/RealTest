@@ -1,5 +1,6 @@
 import { AppError } from "../utils/app-errors";
 import { CompanyModel } from "../database/models/Company";
+import mongoose from "mongoose";
 
 export class CompanyService {
  async CreateCompany(data: { name: string; owner: string; avatarUrl: string }) {
@@ -43,5 +44,33 @@ export class CompanyService {
   } catch (err) {
    throw err;
   }
+ }
+
+ async GetCompany({ companyId }: { companyId: string }) {
+  try {
+   const company = await CompanyModel.findById(companyId);
+   if (!company) {
+    throw AppError.badRequest("The company doesn't exist!");
+   }
+   return company;
+  } catch (err) {
+   throw err;
+  }
+ }
+
+ async SubscribeEvents(payload: {
+  event: string;
+  data: { companyId: string };
+ }) {
+  const { event, data } = payload;
+  let result;
+  switch (event) {
+   case "GET_COMPANY_BY_ID":
+    result = await this.GetCompany({ companyId: data.companyId });
+    break;
+   default:
+    break;
+  }
+  return result;
  }
 }

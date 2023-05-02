@@ -119,7 +119,7 @@ export class TestService {
     !company.data.admins.includes(identity) &&
     company.data.owner !== identity
    ) {
-    throw AppError.badRequest("You've got no rights to delete this test!");
+    throw AppError.badRequest("You've got no rights to moderate this company!");
    }
    return true;
   } catch (err) {
