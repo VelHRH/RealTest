@@ -5,6 +5,10 @@ const TestSchema = new mongoose.Schema({
   type: String,
   required: true,
  },
+ productId: {
+  type: String,
+  required: true,
+ },
  name: {
   type: String,
   required: true,
@@ -19,9 +23,10 @@ const TestSchema = new mongoose.Schema({
   type: String,
   required: true,
  },
- trackingRange: {
-  type: Number,
-  required: true,
+ trackingRange: Number,
+ isExecuted: {
+  type: Boolean,
+  default: false,
  },
 });
 

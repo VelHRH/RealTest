@@ -37,7 +37,7 @@ export class ResultService {
    }
    await TestModel.findOneAndUpdate(
     { _id: testId },
-    { testStart: start, testEnd: end }
+    { testStart: start, testEnd: end, isExecuted: true }
    );
    const intervalId = setInterval(async () => {
     await this.ExecuteTest(testId, reportingFrequency);

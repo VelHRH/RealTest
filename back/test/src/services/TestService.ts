@@ -7,8 +7,7 @@ export class TestService {
  async CreateTest(data: {
   purchaseId: string;
   name: string;
-  testStart: string;
-  testEnd: string;
+  productId: string;
   reportingFrequency: string;
   trackingRange: number;
   identity: string;
@@ -16,30 +15,31 @@ export class TestService {
   try {
    const {
     purchaseId,
-    testStart,
     name,
-    testEnd,
+    productId,
     reportingFrequency,
     trackingRange,
     identity,
    } = data;
 
-   if (
-    !purchaseId ||
-    !testStart ||
-    !testEnd ||
-    !name ||
-    !reportingFrequency ||
-    !trackingRange
-   ) {
+   if (!purchaseId || !productId || !name || !reportingFrequency) {
     throw AppError.badRequest("All fields should be filled!");
+   }
+   const existingTest = await TestModel.find({
+    productId,
+    purchaseId,
+    isExecuted: false,
+   });
+   if (existingTest.length !== 0) {
+    throw AppError.badRequest(
+     "You already have a test for the product with the device"
+    );
    }
    await this.CheckCompanyByPurchase(purchaseId, identity);
    const test = new TestModel({
     purchaseId,
     name,
-    testStart,
-    testEnd,
+    productId,
     reportingFrequency,
     trackingRange,
     testCreator: identity,
@@ -123,6 +123,11 @@ export class TestService {
    }
    return true;
   } catch (err) {
+   if (err.response && err.response.status === 500) {
+    throw AppError.internal(
+     "The foreign service is unavailable at this time. Please try again later."
+    );
+   }
    throw err;
   }
  }

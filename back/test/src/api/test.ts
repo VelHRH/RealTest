@@ -15,9 +15,8 @@ export const testAPI = async (app: express.Application) => {
    try {
     const {
      purchaseId,
-     testStart,
+     productId,
      name,
-     testEnd,
      reportingFrequency,
      trackingRange,
      identity,
@@ -26,8 +25,7 @@ export const testAPI = async (app: express.Application) => {
     const data = await service.CreateTest({
      purchaseId,
      name,
-     testStart,
-     testEnd,
+     productId,
      reportingFrequency,
      trackingRange,
      identity,
