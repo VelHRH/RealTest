@@ -4,6 +4,7 @@ import Head from "next/head";
 import "@fortawesome/fontawesome-svg-core/styles.css";
 import { config } from "@fortawesome/fontawesome-svg-core";
 import Navbar from "@/components/Navbar";
+import { Toaster } from "react-hot-toast";
 
 config.autoAddCss = false;
 
@@ -31,6 +32,7 @@ export default function RootLayout({
     />
    </Head>
    <body className={`${inter.className} px-10 pt-5 bg-zinc-900 font-sans`}>
+    <Toaster position="bottom-right" reverseOrder={false} />
     <Navbar />
     {children}
    </body>

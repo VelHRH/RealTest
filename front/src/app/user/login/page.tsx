@@ -1,5 +1,6 @@
 "use client";
 import { FC, useState } from "react";
+import { toast } from "react-hot-toast";
 
 const Page: FC = ({}) => {
  const [login, setLogin] = useState<string>("");
@@ -16,8 +17,12 @@ const Page: FC = ({}) => {
    body: JSON.stringify({ login, password }),
    cache: "no-store",
   });
-  const data = res.json();
-  console.log(data);
+  const data = await res.json();
+  if (data.error) {
+   toast.error("Ошибка авторизации!");
+  } else {
+   window.location.href = "/";
+  }
  };
 
  return (
