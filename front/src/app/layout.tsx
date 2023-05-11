@@ -33,6 +33,7 @@ export default function RootLayout({
    </Head>
    <body className={`${inter.className} px-10 pt-5 bg-zinc-900 font-sans`}>
     <Toaster position="bottom-right" reverseOrder={false} />
+    {/* @ts-expect-error Server Component */}
     <Navbar />
     {children}
    </body>
