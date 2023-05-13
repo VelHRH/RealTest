@@ -7,7 +7,7 @@ import multer from "multer";
 config();
 const app = express();
 
-app.use(cors());
+app.use(cors({ credentials: true, origin: "http://localhost:3000" }));
 
 const storage = multer.diskStorage({
  destination: (_, __, cb) => {
@@ -17,7 +17,6 @@ const storage = multer.diskStorage({
   cb(null, file.originalname);
  },
 });
-
 const upload = multer({ storage });
 
 app.use(express.json());

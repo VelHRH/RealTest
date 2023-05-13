@@ -1,6 +1,5 @@
 import { AppError } from "../utils/app-errors";
 import { CompanyModel } from "../database/models/Company";
-import mongoose from "mongoose";
 
 export class CompanyService {
  async CreateCompany(data: { name: string; owner: string; avatarUrl: string }) {

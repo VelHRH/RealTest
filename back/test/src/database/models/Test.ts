@@ -19,10 +19,7 @@ const TestSchema = new mongoose.Schema({
  },
  testStart: Date,
  testEnd: Date,
- reportingFrequency: {
-  type: String,
-  required: true,
- },
+ reportingFrequency: String,
  trackingRange: Number,
  isExecuted: {
   type: Boolean,

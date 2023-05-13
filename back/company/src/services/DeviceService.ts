@@ -2,6 +2,12 @@ import { PurchaseModel } from "../database/models/Purchase";
 import { DeviceModel } from "../database/models/Device";
 import { CompanyModel } from "../database/models/Company";
 import { AppError } from "../utils/app-errors";
+import Stripe from "stripe";
+
+const stripe = new Stripe(
+ "sk_test_51N7GehIc2aHxSrSdja9QCmJfDWbpQjG5gsJ42IjLwUdIuEs0TTl5BRp4XuqYF654wLPsIrjeOM5A3kepsl7XuFmx00CRf9smQV",
+ { apiVersion: "2022-11-15" }
+);
 
 export class DeviceService {
  async CreateDevice(data: {
@@ -123,6 +129,48 @@ export class DeviceService {
    }
    const company = await CompanyModel.findById(purchase.companyId);
    return company;
+  } catch (err) {
+   throw err;
+  }
+ }
+
+ async CreatePaymentSession(data: {
+  returnUrl: string;
+  amount: number;
+  companyId: string;
+ }) {
+  try {
+   const session = await stripe.checkout.sessions.create({
+    payment_method_types: ["card"],
+    line_items: [
+     {
+      price_data: {
+       currency: "usd",
+       product_data: {
+        name: "Top up balance",
+       },
+       unit_amount: data.amount,
+      },
+      quantity: 1,
+     },
+    ],
+    mode: "payment",
+    success_url: `${data.returnUrl}/company/${data.companyId}`,
+    cancel_url: `${data.returnUrl}/company/${data.companyId}`,
+   });
+   return { id: session.id };
+  } catch (err) {
+   throw err;
+  }
+ }
+
+ async IncreaseBalance(data: { amount: number; companyId: string }) {
+  try {
+   await CompanyModel.findOneAndUpdate(
+    { _id: data.companyId },
+    { $inc: { balance: data.amount } }
+   );
+   return { success: true };
   } catch (err) {
    throw err;
   }

@@ -113,4 +113,28 @@ export const deviceAPI = async (app: express.Application) => {
    }
   }
  );
+
+ app.post(
+  "/stripe-session/:id",
+  async (
+   req: express.Request,
+   res: express.Response,
+   next: express.NextFunction
+  ) => {
+   try {
+    const data = await device.CreatePaymentSession({
+     amount: req.body.amount,
+     returnUrl: req.headers.origin,
+     companyId: req.params.id,
+    });
+    await device.IncreaseBalance({
+     amount: req.body.amount,
+     companyId: req.params.id,
+    });
+    res.status(200).json(data);
+   } catch (err) {
+    next(err);
+   }
+  }
+ );
 };

@@ -2,6 +2,7 @@ import { TestModel } from "../database/models/Test";
 import { AppError } from "../utils/app-errors";
 import axios from "axios";
 import { BASE_URL } from "../config";
+import mongoose from "mongoose";
 
 export class TestService {
  async CreateTest(data: {
@@ -54,6 +55,9 @@ export class TestService {
  async DeleteTest(data: { testId: string; identity: string }) {
   try {
    const { testId, identity } = data;
+   if (!mongoose.Types.ObjectId.isValid(testId)) {
+    throw AppError.badRequest("Wrong id format!");
+   }
    const test = await TestModel.findById(testId);
    await this.CheckCompanyByPurchase(test.purchaseId, identity);
    await TestModel.findByIdAndDelete(testId);
@@ -63,28 +67,43 @@ export class TestService {
   }
  }
 
+ async GetTestById(data: { testId: string }) {
+  try {
+   const { testId } = data;
+   if (!mongoose.Types.ObjectId.isValid(testId)) {
+    throw AppError.badRequest("Wrong id format!");
+   }
+   const test = await TestModel.findById(testId);
+   if (!test) {
+    throw AppError.badRequest("No tests found!");
+   }
+   return test;
+  } catch (err) {
+   throw err;
+  }
+ }
+
+ async GetTestByProductId(data: { productId: string }) {
+  try {
+   const { productId } = data;
+   if (!mongoose.Types.ObjectId.isValid(productId)) {
+    throw AppError.badRequest("Wrong id format!");
+   }
+   const tests = await TestModel.find({ productId });
+   return tests;
+  } catch (err) {
+   throw err;
+  }
+ }
+
  async ChangeTest(data: {
   testId: string;
-  testStart: string;
-  testEnd: string;
   reportingFrequency: string;
   trackingRange: number;
   identity: string;
  }) {
   try {
-   const {
-    testId,
-    identity,
-    testStart,
-    testEnd,
-    reportingFrequency,
-    trackingRange,
-   } = data;
-   const curDate = new Date();
-   const startDate = new Date(testStart);
-   if (curDate > startDate) {
-    throw AppError.badRequest("You can not change test after it started!");
-   }
+   const { testId, identity, reportingFrequency, trackingRange } = data;
    const test = await TestModel.findById(testId);
    if (!test) {
     throw AppError.unauthorised(
@@ -94,7 +113,7 @@ export class TestService {
    await this.CheckCompanyByPurchase(test.purchaseId, identity);
    await TestModel.findOneAndUpdate(
     { _id: testId },
-    { testStart, testEnd, reportingFrequency, trackingRange }
+    { reportingFrequency, trackingRange }
    );
    return { success: true };
   } catch (err) {

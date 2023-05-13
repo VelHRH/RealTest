@@ -40,7 +40,28 @@ export const authAPI = async (app: express.Application) => {
    try {
     const { email, login, password } = req.body;
     const { data, token } = await service.LoginUser({ email, login, password });
-    res.cookie("COOKIE_AUTH", token, { httpOnly: true, maxAge: 3600000 });
+    res.cookie("COOKIE_AUTH", token, {
+     httpOnly: true,
+     maxAge: 3600000,
+    });
+    return res.status(200).json(data);
+   } catch (err) {
+    next(err);
+   }
+  }
+ );
+
+ app.get(
+  "/me",
+  checkAuth,
+  async (
+   req: express.Request,
+   res: express.Response,
+   next: express.NextFunction
+  ) => {
+   try {
+    const { identity } = req.body;
+    const data = await service.MyInformation(identity);
     return res.status(200).json(data);
    } catch (err) {
     next(err);

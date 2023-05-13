@@ -92,6 +92,18 @@ export class AuthService {
   }
  }
 
+ async MyInformation(identity: string) {
+  try {
+   const user = await UserModel.findById(identity);
+   if (!user) {
+    throw AppError.badRequest("User not found");
+   }
+   return user;
+  } catch (err) {
+   throw err;
+  }
+ }
+
  async EditPassword(data: {
   oldPassword: string;
   newPassword: string;

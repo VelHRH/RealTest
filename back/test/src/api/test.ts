@@ -68,16 +68,51 @@ export const testAPI = async (app: express.Application) => {
    next: express.NextFunction
   ) => {
    try {
-    const { testStart, testEnd, reportingFrequency, trackingRange, identity } =
-     req.body;
+    const { reportingFrequency, trackingRange, identity } = req.body;
 
     const data = await service.ChangeTest({
-     testStart,
-     testEnd,
      reportingFrequency,
      trackingRange,
      identity,
      testId: req.params.id,
+    });
+    res.status(200).json(data);
+   } catch (err) {
+    next(err);
+   }
+  }
+ );
+
+ app.get(
+  "/:id",
+  checkAuth,
+  async (
+   req: express.Request,
+   res: express.Response,
+   next: express.NextFunction
+  ) => {
+   try {
+    const data = await service.GetTestById({
+     testId: req.params.id,
+    });
+    res.status(200).json(data);
+   } catch (err) {
+    next(err);
+   }
+  }
+ );
+
+ app.get(
+  "/getByProduct/:id",
+  checkAuth,
+  async (
+   req: express.Request,
+   res: express.Response,
+   next: express.NextFunction
+  ) => {
+   try {
+    const data = await service.GetTestByProductId({
+     productId: req.params.id,
     });
     res.status(200).json(data);
    } catch (err) {
