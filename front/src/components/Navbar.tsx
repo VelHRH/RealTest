@@ -13,7 +13,7 @@ const Navbar = async () => {
   <div className="w-full flex h-20 items-center justify-between">
    <Logo size="large" />
    <ul className="flex h-full items-center">
-    <MenuElem link="#"> companies </MenuElem>
+    <MenuElem link="/company"> companies </MenuElem>
     <MenuElem link="#"> users </MenuElem>
     {user.login ? (
      <>
