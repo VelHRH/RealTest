@@ -1,23 +1,20 @@
 import { FC } from "react";
 import Image from "next/image";
+import Link from "next/link";
 
-interface CompanyBannerProps {
- name: string;
- owner: string;
- tests: string[];
- avatarUrl: string;
- description: string;
-}
-
-const CompanyBanner: FC<CompanyBannerProps> = ({
+const CompanyBanner: FC<CompanyProps> = ({
  name,
+ _id,
  owner,
  tests,
  avatarUrl,
  description,
 }) => {
  return (
-  <div className="w-full flex flex-col cursor-pointer hover:scale-105 duration-300 h-80 shadow-lg">
+  <Link
+   href={`/company/${_id}`}
+   className="w-full flex flex-col cursor-pointer hover:scale-105 duration-300 h-80 shadow-lg"
+  >
    <Image
     alt="Company image"
     src={avatarUrl}
@@ -35,12 +32,17 @@ const CompanyBanner: FC<CompanyBannerProps> = ({
        {owner.length > 7 ? `${owner.slice(0, 7)}...` : owner}
       </div>
      </div>
-     <div className="w-full mt-3 font-medium">
+     <div className="flex-grow w-full mt-3 font-medium">
       {description.length > 60 ? `${description.slice(0, 59)}...` : description}
      </div>
+     {tests.length >= 0 && (
+      <div className="py-1 px-2 rounded-lg bg-blue-700 justify-self-end self-start">
+       3+ tests
+      </div>
+     )}
     </div>
    </div>
-  </div>
+  </Link>
  );
 };
 

@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSpinner } from "@fortawesome/free-solid-svg-icons";
 
 interface ButtonProps {
- children: string;
+ children: ReactNode;
  size?: string;
  color?: string;
  isAnimate?: boolean;
