@@ -3,7 +3,7 @@ import { FC, ReactNode } from "react";
 interface HeadlineProps {
  color?: string;
  children: ReactNode;
- classes: string;
+ classes?: string;
 }
 
 const Headline: FC<HeadlineProps> = ({ color, children, classes }) => {
