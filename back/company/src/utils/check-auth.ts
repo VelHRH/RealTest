@@ -29,7 +29,10 @@ export const checkAuth = async (
    throw AppError.unauthorised("You are not logged in.");
   }
 
-  merge(req.body, { identity: existingUser.data._id });
+  merge(req.body, {
+   identity: existingUser.data._id,
+   identityLogin: existingUser.data.login,
+  });
   return next();
  } catch (err) {
   next(err);

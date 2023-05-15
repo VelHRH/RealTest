@@ -24,7 +24,7 @@ export const companyAPI = async (app: express.Application) => {
     if (!validationErrors.isEmpty()) {
      throw AppError.badRequest(validationErrors.array()[0].msg);
     }
-    const { name, avatarUrl, identity } = req.body;
+    const { name, avatarUrl, identity, description, identityLogin } = req.body;
     const payload = {
      event: "CHANGE_ROLE",
      data: { newRole: "Owner", _id: identity },
@@ -33,7 +33,8 @@ export const companyAPI = async (app: express.Application) => {
     const data = await service.CreateCompany({
      name,
      avatarUrl,
-     owner: identity,
+     description,
+     owner: identityLogin,
     });
     res.status(200).json(data);
    } catch (err) {
@@ -79,6 +80,22 @@ export const companyAPI = async (app: express.Application) => {
      _id: req.params.id,
      owner: identity,
     });
+    res.status(200).json(data);
+   } catch (err) {
+    next(err);
+   }
+  }
+ );
+
+ app.get(
+  "/",
+  async (
+   req: express.Request,
+   res: express.Response,
+   next: express.NextFunction
+  ) => {
+   try {
+    const data = await service.GetAllCompanies();
     res.status(200).json(data);
    } catch (err) {
     next(err);

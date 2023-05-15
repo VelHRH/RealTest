@@ -8,7 +8,13 @@ export const companyValidation = [
   min: 2,
   max: 30,
  }),
- body("avatarUrl", "Invalid avatar link").isURL(),
+ body(
+  "description",
+  "Company description should contain at least 10 symbols, maximum 1000 symbols"
+ ).isLength({
+  min: 10,
+  max: 1000,
+ }),
 ];
 
 export const deviceValidation = [body("imgUrl", "Invalid avatar link").isURL()];

@@ -2,9 +2,14 @@ import { AppError } from "../utils/app-errors";
 import { CompanyModel } from "../database/models/Company";
 
 export class CompanyService {
- async CreateCompany(data: { name: string; owner: string; avatarUrl: string }) {
+ async CreateCompany(data: {
+  name: string;
+  owner: string;
+  avatarUrl: string;
+  description: string;
+ }) {
   try {
-   const { name, owner, avatarUrl } = data;
+   const { name, owner, avatarUrl, description } = data;
    if (!owner || !avatarUrl || !name) {
     throw AppError.badRequest("All fields should be filled!");
    }
@@ -16,6 +21,7 @@ export class CompanyService {
    const company = new CompanyModel({
     name,
     owner,
+    description,
     avatarUrl,
    });
    const doc = await company.save();
@@ -52,6 +58,15 @@ export class CompanyService {
     throw AppError.badRequest("The company doesn't exist!");
    }
    return company;
+  } catch (err) {
+   throw err;
+  }
+ }
+
+ async GetAllCompanies() {
+  try {
+   const companies = await CompanyModel.find();
+   return companies;
   } catch (err) {
    throw err;
   }

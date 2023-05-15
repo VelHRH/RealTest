@@ -39,9 +39,9 @@ export class UserService {
   }
  }
 
- async ChangeRole(newRole: string, _id: string) {
+ async ChangeRole(newRole: string, login: string) {
   try {
-   await UserModel.findOneAndUpdate({ _id }, { role: newRole });
+   await UserModel.findOneAndUpdate({ login }, { role: newRole });
   } catch (err) {
    throw err;
   }
@@ -58,7 +58,7 @@ export class UserService {
     result = await this.GetProfileByToken(data.token);
     break;
    case "CHANGE_ROLE":
-    result = await this.ChangeRole(data.newRole, data._id);
+    result = await this.ChangeRole(data.newRole, data.login);
     break;
    default:
     break;
