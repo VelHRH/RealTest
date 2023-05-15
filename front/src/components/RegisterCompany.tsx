@@ -1,6 +1,7 @@
 // @ts-nocheck
 "use client";
 import React, { FC, useState } from "react";
+import { useRouter } from "next/navigation";
 import Button from "./ui/Button";
 import Input from "./ui/Input";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -11,21 +12,44 @@ const RegisterCompany: FC = () => {
  const [name, setName] = useState("");
  const [desc, setDesc] = useState("");
  const [selectedImage, setSelectedImage] = useState(null);
+ const [avatarUrl, setAvatarUrl] = useState("");
+ const [isLoading, setIsLoading] = useState(false);
+ const router = useRouter();
 
  const addImageHandler = async (e: React.ChangeEvent<HTMLInputElement>) => {
   const formData = new FormData();
   const file = e.target.files[0];
   setSelectedImage(file);
   formData.append("image", e.target.files[0]);
-  await fetch(`http://localhost:8000/upload`, {
+  const res = await fetch(`http://localhost:8000/upload`, {
    method: "POST",
    body: formData,
    cache: "no-store",
   });
+  const imgUrl = await res.json();
+  setAvatarUrl(imgUrl.url);
  };
 
  const createCompany = async (e: React.React.FormEvent<HTMLFormElement>) => {
   e.preventDefault();
+  setIsLoading(true);
+  const res = await fetch(`http://localhost:8000/company/create`, {
+   method: "POST",
+   headers: { "Content-Type": "application/json" },
+   credentials: "include",
+   body: JSON.stringify({
+    name,
+    description: desc,
+    avatarUrl,
+   }),
+   cache: "no-store",
+  });
+  const company = await res.json();
+  if (company._id) {
+   router.push(`/company/${company._id}`);
+  } else {
+   setIsLoading(false);
+  }
  };
  return (
   <form className="w-full flex mt-7" onSubmit={createCompany}>
@@ -85,6 +109,7 @@ const RegisterCompany: FC = () => {
      }`}
      isAnimate={desc.length >= 2 && name.length >= 2 && selectedImage}
      isDisabled={desc.length < 2 || name.length < 2 || !selectedImage}
+     isLoading={isLoading}
     >
      Create
     </Button>
