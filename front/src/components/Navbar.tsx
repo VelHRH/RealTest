@@ -3,7 +3,7 @@ import MenuElem from "./ui/MenuElem";
 import { cookies } from "next/headers";
 
 const Navbar = async () => {
- const res = await fetch("http://localhost:8000/user/me", {
+ const res = await fetch(`${process.env.API_HOST}/user/me`, {
   headers: {
    Cookie: `COOKIE_AUTH=${cookies().get("COOKIE_AUTH")?.value}`,
   },

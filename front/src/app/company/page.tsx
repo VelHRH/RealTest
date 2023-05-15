@@ -6,7 +6,7 @@ import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import Link from "next/link";
 
 const page = async () => {
- const res = await fetch("http://localhost:8000/company", {
+ const res = await fetch(`${process.env.API_HOST}/company`, {
   cache: "no-store",
  });
  const companies = await res.json();

@@ -8,7 +8,7 @@ const Page: FC = ({}) => {
 
  const handleSubmit = async (e: React.FormEvent<EventTarget>) => {
   e.preventDefault();
-  const res = await fetch("http://localhost:8000/user/login", {
+  const res = await fetch(`${process.env.API_HOST}/user/login`, {
    method: "POST",
    credentials: "include",
    headers: {

@@ -21,7 +21,7 @@ const RegisterCompany: FC = () => {
   const file = e.target.files[0];
   setSelectedImage(file);
   formData.append("image", e.target.files[0]);
-  const res = await fetch(`http://localhost:8000/upload`, {
+  const res = await fetch(`${process.env.API_HOST}/upload`, {
    method: "POST",
    body: formData,
    cache: "no-store",
@@ -33,7 +33,7 @@ const RegisterCompany: FC = () => {
  const createCompany = async (e: React.React.FormEvent<HTMLFormElement>) => {
   e.preventDefault();
   setIsLoading(true);
-  const res = await fetch(`http://localhost:8000/company/create`, {
+  const res = await fetch(`${process.env.API_HOST}/company/create`, {
    method: "POST",
    headers: { "Content-Type": "application/json" },
    credentials: "include",

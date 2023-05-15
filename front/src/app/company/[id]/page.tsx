@@ -21,7 +21,7 @@ const page: FC<pageProps> = ({ params }) => {
   const stripe = await stripePromise;
 
   const res = await fetch(
-   `http://localhost:8000/company/stripe-session/${params.id}`,
+   `${process.env.API_HOST}/company/stripe-session/${params.id}`,
    {
     method: "POST",
     headers: {
