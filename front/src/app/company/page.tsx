@@ -15,9 +15,15 @@ const page = async () => {
    <Headline classes="text-5xl font-bold mt-16 lowercase mb-5" color="yellow">
     companies
    </Headline>
-   <Button color="yellow" size="small" icon={<FontAwesomeIcon icon={faPlus} />}>
-    <Link href="/company/add">Add</Link>
-   </Button>
+   <Link href="/company/add">
+    <Button
+     color="yellow"
+     size="small"
+     icon={<FontAwesomeIcon icon={faPlus} />}
+    >
+     Add
+    </Button>
+   </Link>
    <div className="grid w-full grid-cols-5 gap-5 mt-16 mb-5">
     {companies.map((company: CompanyProps) => (
      <CompanyBanner

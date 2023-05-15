@@ -17,7 +17,7 @@ const Input: FC<InputProps> = ({
 }) => {
  return (
   <div
-   className={`w-1/2 bg-gradient-to-r ${
+   className={`w-full bg-gradient-to-r ${
     color === "blue"
      ? "from-blue-500 to-blue-700"
      : color === "red"

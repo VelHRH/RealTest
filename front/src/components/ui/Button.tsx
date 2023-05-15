@@ -9,6 +9,7 @@ interface ButtonProps {
  isAnimate?: boolean;
  isLoading?: boolean;
  icon?: ReactNode;
+ isDisabled?: boolean;
 }
 
 const Button: FC<ButtonProps> = ({
@@ -17,20 +18,21 @@ const Button: FC<ButtonProps> = ({
  color,
  isAnimate,
  isLoading,
+ isDisabled,
  icon,
 }) => {
  return (
   <button
-   disabled={isLoading}
-   className={`uppercase flex items-center justify-center font-bold ${
-    !isLoading && "hover:text-white hover:ring-white"
-   } duration-300 ring-4 bg-gradient-to-r text-gray-100 ${
+   disabled={isLoading || isDisabled}
+   className={`uppercase flex items-center justify-center font-bold duration-300 ring-4 bg-gradient-to-r text-gray-100 ${
     size === "small"
      ? "font-semibold text-xl rounded-sm w-32 gap-2 py-1 "
      : size === "medium"
      ? "text-2xl rounded-md w-44 py-2 gap-3"
      : "text-4xl rounded-lg w-64 py-3 gap-4"
    } ${isAnimate && !isLoading && "animate-bounce"} ${
+    !isLoading && !isDisabled && "hover:text-white hover:ring-white"
+   } ${
     color === "blue"
      ? "from-blue-500 to-blue-700 ring-blue-400"
      : color === "red"
