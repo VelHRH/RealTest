@@ -13,12 +13,17 @@ export const checkAuth = async (cookie: string | undefined) => {
 
 export async function middleware(request: NextRequest) {
  const user = await checkAuth(request.cookies.get("COOKIE_AUTH")?.value);
- if (
-  (request.nextUrl.pathname.startsWith("/user/login") ||
-   request.nextUrl.pathname.startsWith("/user/register")) &&
-  user.login
- ) {
-  return NextResponse.redirect(new URL("/", request.url));
+ if (user.login) {
+  if (
+   request.nextUrl.pathname.startsWith("/user/login") ||
+   request.nextUrl.pathname.startsWith("/user/register")
+  ) {
+   return NextResponse.redirect(new URL("/", request.url));
+  }
+ } else {
+  if (request.nextUrl.pathname.includes("/add")) {
+   return NextResponse.redirect(new URL("/", request.url));
+  }
  }
 }
 

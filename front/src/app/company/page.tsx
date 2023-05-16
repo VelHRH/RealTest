@@ -1,4 +1,4 @@
-import CompanyBanner from "@/components/CompanyBanner";
+import CompanyBanner from "@/components/company/CompanyBanner";
 import Button from "@/components/ui/Button";
 import Headline from "@/components/ui/Headline";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
