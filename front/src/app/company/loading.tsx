@@ -8,7 +8,7 @@ export default function Loading() {
     companies
    </Headline>
    <div className="grid w-full grid-cols-5 gap-5 mt-16 mb-5">
-    {[...Array(10).keys()].map((i) => (
+    {[...Array(5).keys()].map((i) => (
      <Skeleton key={i} width="w-full" height="h-80" />
     ))}
    </div>

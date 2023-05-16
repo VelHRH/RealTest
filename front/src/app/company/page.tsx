@@ -4,8 +4,11 @@ import Headline from "@/components/ui/Headline";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import Link from "next/link";
+import { checkAuth } from "@/middleware";
+import { cookies } from "next/headers";
 
 const page = async () => {
+ const user = await checkAuth(cookies().get("COOKIE_AUTH")?.value);
  const res = await fetch(`${process.env.API_HOST}/company`, {
   cache: "no-store",
  });
@@ -15,22 +18,25 @@ const page = async () => {
    <Headline classes="text-5xl font-bold mt-16 lowercase mb-5" color="yellow">
     companies
    </Headline>
-   <Link href="/company/add">
-    <Button
-     color="yellow"
-     size="small"
-     icon={<FontAwesomeIcon icon={faPlus} />}
-    >
-     Add
-    </Button>
-   </Link>
+   {user.login && (
+    <Link href="/company/add">
+     <Button
+      color="yellow"
+      size="small"
+      icon={<FontAwesomeIcon icon={faPlus} />}
+     >
+      Add
+     </Button>
+    </Link>
+   )}
+
    <div className="grid w-full grid-cols-5 gap-5 mt-16 mb-5">
-    {companies.map((company: CompanyProps) => (
+    {companies.reverse().map((company: CompanyProps) => (
      <CompanyBanner
       key={company._id}
       description={company.description}
       name={company.name}
-      avatarUrl="https://fireship.io/lessons/image-search-engine/img/featured.webp"
+      avatarUrl={`${process.env.API_HOST}/${company.avatarUrl}`}
       owner={company.owner}
       tests={company.tests}
       _id={company._id}

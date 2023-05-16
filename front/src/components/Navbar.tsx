@@ -1,14 +1,10 @@
+import { checkAuth } from "@/middleware";
+import { cookies } from "next/headers";
 import Logo from "./ui/Logo";
 import MenuElem from "./ui/MenuElem";
-import { cookies } from "next/headers";
 
 const Navbar = async () => {
- const res = await fetch(`${process.env.API_HOST}/user/me`, {
-  headers: {
-   Cookie: `COOKIE_AUTH=${cookies().get("COOKIE_AUTH")?.value}`,
-  },
- });
- const user = await res.json();
+ const user = await checkAuth(cookies().get("COOKIE_AUTH")?.value);
  return (
   <div className="w-full flex h-20 items-center justify-between">
    <Logo size="large" />
