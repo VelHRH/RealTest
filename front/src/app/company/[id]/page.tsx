@@ -6,13 +6,16 @@ import Image from "next/image";
 import Link from "next/link";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faGear } from "@fortawesome/free-solid-svg-icons";
+import StarRating from "@/components/StarRating";
+import { checkAuth } from "@/middleware";
+import { cookies } from "next/headers";
 
 const page = async ({ params }: { params: { id: string } }) => {
  const res = await fetch(`${process.env.API_HOST}/company/${params.id}`, {
   cache: "no-store",
  });
  const company = await res.json();
-
+ const user = await checkAuth(cookies().get("COOKIE_AUTH")?.value);
  return (
   <div className="flex w-full gap-6 mt-5">
    <div className="w-1/4 flex flex-col items-center">
@@ -21,6 +24,7 @@ const page = async ({ params }: { params: { id: string } }) => {
      src={`${process.env.API_HOST}/${company.avatarUrl}`}
      width={700}
      height={700}
+     priority
      className="w-full aspect-square object-cover rounded-lg shadow-lg mb-2"
     />
     <Headline color="yellow" classes="text-5xl font-bold mb-7">
@@ -40,16 +44,25 @@ const page = async ({ params }: { params: { id: string } }) => {
    <div className="flex-1 flex flex-col">
     <fieldset className="w-full border-2 border-zinc-700 p-4 text-white rounded-lg flex items-center justify-between">
      <legend className="px-2 text-zinc-500 font-semibold">rating</legend>
-     <div className="text-2xl font-semibold">Your rating:</div>
-     <Headline classes="text-5xl font-semibold" color="yellow">
-      4.75
+     {user.login && (
+      <StarRating
+       companyId={params.id}
+       defaultRating={
+        company.ratings.find(
+         (r: { userId: string; value: number }) => r.userId === user._id
+        )?.value || 0
+       }
+      />
+     )}
+     <Headline classes="text-5xl font-bold" color="yellow">
+      {company.avgRating === 0 ? "--" : company.avgRating}
      </Headline>
     </fieldset>
     <fieldset className="w-full border-2 border-zinc-700 p-4 text-white rounded-lg text-lg mt-4">
      <legend className="px-2 text-zinc-500 font-semibold">description</legend>
      {company.description}
     </fieldset>
-    {company.admins.length > 0 && (
+    {company.admins?.length > 0 && (
      <fieldset className="w-full border-2 border-zinc-700 p-4 text-white rounded-lg text-lg mt-4 flex gap-4 flex-wrap">
       <legend className="px-2 text-zinc-500 font-semibold">admins</legend>
       {company.admins.map((admin: string) => (

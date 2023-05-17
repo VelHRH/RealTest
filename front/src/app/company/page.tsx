@@ -15,21 +15,22 @@ const page = async () => {
  const companies = await res.json();
  return (
   <div className="flex flex-col items-center">
-   <Headline classes="text-5xl font-bold mt-16 lowercase mb-5" color="yellow">
-    companies
-   </Headline>
-   {user.login && (
-    <Link href="/company/add">
-     <Button
-      color="yellow"
-      size="small"
-      icon={<FontAwesomeIcon icon={faPlus} />}
-     >
-      Add
-     </Button>
-    </Link>
-   )}
-
+   <div className="mt-16 flex w-full justify-between items-center mb-5">
+    <Headline classes="text-5xl font-bold lowercase" color="yellow">
+     companies
+    </Headline>
+    {user.login && (
+     <Link href="/company/add">
+      <Button
+       color="yellow"
+       size="small"
+       icon={<FontAwesomeIcon icon={faPlus} />}
+      >
+       Add
+      </Button>
+     </Link>
+    )}
+   </div>
    <div className="grid w-full grid-cols-5 gap-5 mt-16 mb-5">
     {companies.reverse().map((company: CompanyProps) => (
      <CompanyBanner
