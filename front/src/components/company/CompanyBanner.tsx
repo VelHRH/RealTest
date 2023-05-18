@@ -9,6 +9,7 @@ const CompanyBanner: FC<CompanyProps> = ({
  tests,
  avatarUrl,
  description,
+ avgRating,
 }) => {
  return (
   <Link
@@ -23,7 +24,7 @@ const CompanyBanner: FC<CompanyProps> = ({
     className="w-full h-2/5 object-cover rounded-t-md"
    />
    <div className="flex-1 bg-gradient-to-r from-amber-400 to-amber-600 rounded-b-md">
-    <div className="w-full h-full bg-black text-white opacity-70 p-4 flex flex-col font-bold items-center">
+    <div className="w-full h-full bg-black text-white opacity-80 p-4 flex flex-col font-bold items-center">
      <div className="flex w-full justify-between items-center pb-3 border-b-2 border-amber-100">
       <div className="text-2xl">
        {name.length > 13 ? `${name.slice(0, 11)}...` : name}
@@ -35,11 +36,20 @@ const CompanyBanner: FC<CompanyProps> = ({
      <div className="flex-grow w-full mt-3 font-medium">
       {description.length > 60 ? `${description.slice(0, 59)}...` : description}
      </div>
-     {tests.length >= 0 && (
-      <div className="py-1 px-2 rounded-lg bg-blue-700 justify-self-end self-start">
-       3+ tests
+     <div className="flex gap-2 w-full">
+      <div
+       className={`py-1 px-2 rounded-lg ${
+        avgRating && avgRating < 3 ? "bg-red-500" : "bg-green-500"
+       } text-black`}
+      >
+       {avgRating} stars
       </div>
-     )}
+      {tests.length >= 0 && (
+       <div className="py-1 px-2 rounded-lg bg-sky-500 text-black">
+        {tests.length} tests
+       </div>
+      )}
+     </div>
     </div>
    </div>
   </Link>

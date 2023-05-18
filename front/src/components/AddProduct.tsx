@@ -8,7 +8,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUpload } from "@fortawesome/free-solid-svg-icons";
 import Image from "next/image";
 
-const RegisterCompany: FC = () => {
+const AddProduct: FC = () => {
  const [name, setName] = useState("");
  const [desc, setDesc] = useState("");
  const [selectedImage, setSelectedImage] = useState(null);
@@ -120,4 +120,4 @@ const RegisterCompany: FC = () => {
  );
 };
 
-export default RegisterCompany;
+export default AddProduct;

@@ -6,4 +6,5 @@ interface CompanyProps {
  tests: string[];
  avatarUrl: string;
  description: string;
+ avgRating?: number;
 }

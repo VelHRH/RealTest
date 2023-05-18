@@ -40,6 +40,7 @@ const page = async () => {
       avatarUrl={`${process.env.API_HOST}/${company.avatarUrl}`}
       owner={company.owner}
       tests={company.tests}
+      avgRating={company.avgRating}
       _id={company._id}
      />
     ))}

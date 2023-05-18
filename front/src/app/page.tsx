@@ -12,20 +12,24 @@ export default function Home() {
      <TypedBanner text="Create your account to rate products' quality and get access to unique information about companies" />
     </Headline>
     <div className="w-1/2 flex justify-center">
-     <Button
-      color="blue"
-      isAnimate
-      icon={<FontAwesomeIcon icon={faUserPlus} />}
-     >
-      Sing Up
-     </Button>
+     <div className="w-1/3">
+      <Button
+       color="blue"
+       isAnimate
+       icon={<FontAwesomeIcon icon={faUserPlus} />}
+      >
+       Sing Up
+      </Button>
+     </div>
     </div>
    </div>
    <div className="min-h-screen w-full flex items-center">
     <div className="w-1/2 flex justify-center">
-     <Button color="red" isAnimate>
-      Register
-     </Button>
+     <div className="w-1/3">
+      <Button color="red" isAnimate>
+       Register
+      </Button>
+     </div>
     </div>
     <Headline classes="font-bold text-7xl h-full w-1/2 lowercase" color="red">
      <TypedBanner text="Register your company and be among the first to receive unique data about your product" />

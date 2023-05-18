@@ -24,12 +24,12 @@ const Button: FC<ButtonProps> = ({
  return (
   <button
    disabled={isLoading || isDisabled}
-   className={`uppercase flex items-center justify-center font-bold duration-300 ring-4 bg-gradient-to-r text-gray-100 ${
+   className={`uppercase flex items-center w-full px-1 justify-center font-bold duration-300 ring-4 bg-gradient-to-r text-gray-100 ${
     size === "small"
-     ? "font-semibold text-xl rounded-sm w-32 gap-2 py-1 "
+     ? "font-semibold text-xl rounded-sm gap-2 py-1 "
      : size === "medium"
-     ? "text-2xl rounded-md w-44 py-2 gap-3"
-     : "text-4xl rounded-lg w-64 py-3 gap-4"
+     ? "text-2xl rounded-md py-2 gap-3"
+     : "text-4xl rounded-lg py-3 gap-4"
    } ${isAnimate && !isLoading && "animate-bounce"} ${
     !isLoading && !isDisabled && "hover:text-white hover:ring-white"
    } ${
