@@ -6,6 +6,7 @@ interface InputProps {
  setValue: (value: string) => void;
  placeholder?: string;
  isDisplay?: boolean;
+ type?: string;
 }
 
 const Input: FC<InputProps> = ({
@@ -14,6 +15,7 @@ const Input: FC<InputProps> = ({
  color,
  placeholder,
  isDisplay,
+ type,
 }) => {
  return (
   <div
@@ -34,6 +36,7 @@ const Input: FC<InputProps> = ({
     }`}
     onChange={(e) => setValue(e.target.value)}
     value={value}
+    type={type || "text"}
    />
   </div>
  );

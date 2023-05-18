@@ -6,7 +6,8 @@ import { FC, useState } from "react";
 
 interface StarRatingProps {
  defaultRating: number;
- companyId: string;
+ _id: string;
+ item: string;
 }
 
 const rateCompany = async ({
@@ -42,19 +43,64 @@ const deleteCompanyRating = async ({ companyId }: { companyId: string }) => {
  return company;
 };
 
-const StarRating: FC<StarRatingProps> = ({ defaultRating, companyId }) => {
+const rateProduct = async ({
+ rating,
+ productId,
+}: {
+ rating: number;
+ productId: string;
+}) => {
+ const res = await fetch(
+  `${process.env.API_HOST}/test/product/rate/${productId}`,
+  {
+   method: "POST",
+   headers: {
+    "Content-Type": "application/json;charset=utf-8",
+   },
+   credentials: "include",
+   body: JSON.stringify({
+    rating,
+   }),
+  }
+ );
+ const product = await res.json();
+ return product;
+};
+
+const deleteProductRating = async ({ productId }: { productId: string }) => {
+ const res = await fetch(
+  `${process.env.API_HOST}/test/product/rate/${productId}`,
+  {
+   method: "DELETE",
+   headers: {
+    "Content-Type": "application/json;charset=utf-8",
+   },
+   credentials: "include",
+  }
+ );
+ const product = await res.json();
+ return product;
+};
+
+const StarRating: FC<StarRatingProps> = ({ defaultRating, _id, item }) => {
  const [curHover, SetCurHover] = useState(0);
  const [rating, setRating] = useState(defaultRating);
  const handleClick = async (r: number) => {
   if (r === 0) {
-   const company = await deleteCompanyRating({ companyId });
-   if (company._id) {
+   const ratedItem =
+    item === "company"
+     ? await deleteCompanyRating({ companyId: _id })
+     : await deleteProductRating({ productId: _id });
+   if (ratedItem._id) {
     setRating(r);
    }
   } else {
    if (rating === 0) {
-    const company = await rateCompany({ rating: r, companyId });
-    if (company._id) {
+    const ratedItem =
+     item === "company"
+      ? await rateCompany({ rating: r, companyId: _id })
+      : await rateProduct({ rating: r, productId: _id });
+    if (ratedItem._id) {
      setRating(r);
     }
    }

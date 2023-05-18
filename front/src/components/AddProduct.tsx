@@ -8,11 +8,18 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUpload } from "@fortawesome/free-solid-svg-icons";
 import Image from "next/image";
 
-const AddProduct: FC = () => {
+const AddProduct: FC = ({
+ companyName,
+ companyId,
+}: {
+ companyName?: string;
+ companyId?: string;
+}) => {
  const [name, setName] = useState("");
- const [desc, setDesc] = useState("");
+ const [description, setDescription] = useState("");
+ const [price, setPrice] = useState(0);
  const [selectedImage, setSelectedImage] = useState(null);
- const [avatarUrl, setAvatarUrl] = useState("");
+ const [imgUrl, setImgUrl] = useState("");
  const [isLoading, setIsLoading] = useState(false);
  const router = useRouter();
 
@@ -27,46 +34,67 @@ const AddProduct: FC = () => {
    cache: "no-store",
   });
   const imgUrl = await res.json();
-  setAvatarUrl(imgUrl.url);
+  setImgUrl(imgUrl.url);
  };
 
- const createCompany = async (e: React.React.FormEvent<HTMLFormElement>) => {
+ const createProduct = async (e: React.React.FormEvent<HTMLFormElement>) => {
   e.preventDefault();
   setIsLoading(true);
-  const res = await fetch(`${process.env.API_HOST}/company/create`, {
+  const res = await fetch(`${process.env.API_HOST}/test/product/create`, {
    method: "POST",
    headers: { "Content-Type": "application/json" },
    credentials: "include",
    body: JSON.stringify({
     name,
-    description: desc,
-    avatarUrl,
+    price,
+    companyId,
+    imgUrl,
    }),
    cache: "no-store",
   });
-  const company = await res.json();
-  if (company._id) {
-   router.push(`/company/${company._id}`);
+  const product = await res.json();
+  if (product._id) {
+   router.push(`/product/${product._id}`);
   } else {
    setIsLoading(false);
   }
  };
  return (
-  <form className="w-full flex mt-7" onSubmit={createCompany}>
+  <form className="w-full flex my-7" onSubmit={createProduct}>
    <div className="flex flex-col items-center w-1/2">
+    <div className="w-full p-1 mt-4 bg-gradient-to-r from-blue-500 to-blue-700">
+     <div className="flex bg-zinc-900 w-full h-full items-center">
+      <input
+       type="text"
+       value={companyName}
+       disabled={companyName}
+       className={`w-full outline-none bg-zinc-900 h-full p-2 ${
+        companyName ? "text-blue-500" : "text-white"
+       } font-medium text-lg `}
+      />
+     </div>
+    </div>
     <Input
      value={name}
      setValue={setName}
-     placeholder="Company name"
-     color="yellow"
+     placeholder="Product name"
+     color="blue"
      isDisplay
     />
     <Input
-     value={desc}
-     setValue={setDesc}
-     placeholder="Company description"
-     color="yellow"
+     value={description}
+     setValue={setDescription}
+     placeholder="Product name"
+     color="blue"
      isDisplay={name.length >= 2}
+    />
+    <Input
+     value={price}
+     setValue={setPrice}
+     placeholder="Your price"
+     color="blue"
+     isDisplay={name.length >= 2 && description.length >= 3}
+     type="number"
     />
     {selectedImage ? (
      <Image
@@ -79,13 +107,13 @@ const AddProduct: FC = () => {
     ) : (
      <div
       className={`w-full mt-4 hover:scale-105 duration-300 ${
-       desc.length < 2 || name.length < 2 ? "opacity-0" : "opacity-100"
-      } duration-500 bg-gradient-to-r from-amber-400 to-amber-600 p-2 rounded-lg`}
+       price === 0 || name.length < 2 ? "opacity-0" : "opacity-100"
+      } duration-500 bg-gradient-to-r from-blue-400 to-blue-600 p-2 rounded-lg`}
      >
       <label
        htmlFor="uploadImg"
        className={`mr-2 flex w-full justify-between text-zinc-900 items-center cursor-pointer ${
-        desc.length < 2 || name.length < 2 ? "hidden" : "flex"
+        price === 0 || name.length < 2 ? "hidden" : "flex"
        }`}
       >
        <div className="text-2xl font-semibold">Upload your company image</div>
@@ -106,10 +134,10 @@ const AddProduct: FC = () => {
      <Button
       size="big"
       color={`${
-       desc.length >= 2 && name.length >= 2 && selectedImage ? "yellow" : "grey"
+       price > 0 && name.length >= 2 && selectedImage ? "blue" : "grey"
       }`}
-      isAnimate={desc.length >= 2 && name.length >= 2 && selectedImage}
-      isDisabled={desc.length < 2 || name.length < 2 || !selectedImage}
+      isAnimate={price >= 2 && name.length >= 2 && selectedImage}
+      isDisabled={price === 0 || name.length < 2 || !selectedImage}
       isLoading={isLoading}
      >
       Create

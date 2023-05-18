@@ -57,7 +57,7 @@ const page = async ({ params }: { params: { id: string } }) => {
       <Link
        href={{
         pathname: `/product/add`,
-        query: { companyId: company.id, companyName: company.name },
+        query: { companyId: company._id, companyName: company.name },
        }}
        className={`flex-1 ${!isAdmin && "w-full"}`}
       >
@@ -81,7 +81,8 @@ const page = async ({ params }: { params: { id: string } }) => {
      <legend className="px-2 text-zinc-500 font-semibold">rating</legend>
      {user.login && (
       <StarRating
-       companyId={params.id}
+       item="company"
+       _id={params.id}
        defaultRating={
         company.ratings.find(
          (r: { userId: string; value: number }) => r.userId === user._id
