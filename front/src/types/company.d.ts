@@ -1,10 +1,11 @@
-interface CompanyProps {
- _id?: string;
- balance?: number;
+interface ICompany {
+ _id: string;
+ balance: number;
  name: string;
  owner: string;
- tests: string[];
+ ratings: { userId: string; value: number }[];
+ admins: string[];
  avatarUrl: string;
  description: string;
- avgRating?: number;
+ avgRating: number;
 }

@@ -1,4 +1,4 @@
-interface UserProps {
+interface IUser {
  _id: string;
  login: string;
  name: string;

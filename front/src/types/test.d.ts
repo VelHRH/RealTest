@@ -1,4 +1,4 @@
-interface TestProps {
+interface ITest {
  _id: string;
  purchaseId: string;
  productId: string;

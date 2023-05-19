@@ -7,12 +7,17 @@ import Link from "next/link";
 import { checkAuth } from "@/middleware";
 import { cookies } from "next/headers";
 
+export const metadata = {
+ title: "Companies",
+ description: "All registered companies.",
+};
+
 const page = async () => {
  const user = await checkAuth(cookies().get("COOKIE_AUTH")?.value);
  const res = await fetch(`${process.env.API_HOST}/company`, {
   cache: "no-store",
  });
- const companies = await res.json();
+ const companies = (await res.json()) as ICompany[];
  return (
   <div className="flex flex-col items-center">
    <div className="mt-16 flex w-full justify-between items-center mb-5">
@@ -32,7 +37,7 @@ const page = async () => {
     )}
    </div>
    <div className="grid w-full grid-cols-5 gap-5 mt-16 mb-5">
-    {companies.reverse().map((company: CompanyProps) => (
+    {companies.reverse().map((company: ICompany) => (
      <CompanyBanner
       key={company._id}
       description={company.description}

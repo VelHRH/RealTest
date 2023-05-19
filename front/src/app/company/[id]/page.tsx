@@ -1,22 +1,44 @@
 import CompanyAdmin from "@/components/company/CompanyAdmin";
-import DeleteBtn from "@/components/company/DeleteBtn";
+import ConfirmBtn from "@/components/ui/ConfirmBtn";
 import Button from "@/components/ui/Button";
 import Headline from "@/components/ui/Headline";
 import Image from "next/image";
 import Link from "next/link";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlus } from "@fortawesome/free-solid-svg-icons";
+import { faPlus, faTrash } from "@fortawesome/free-solid-svg-icons";
 import StarRating from "@/components/StarRating";
 import { checkAdmin, checkAuth, checkOwner } from "@/middleware";
 import { cookies } from "next/headers";
 import StripePayment from "@/components/StripePayment";
 import ProductCard from "@/components/ProductCard";
+import CompanyDeviceCard from "@/components/device/CompanyDeviceCard";
 
-const page = async ({ params }: { params: { id: string } }) => {
- const res = await fetch(`${process.env.API_HOST}/company/${params.id}`, {
+const getCompany = async (id: string) => {
+ const res = await fetch(`${process.env.API_HOST}/company/${id}`, {
   cache: "no-store",
  });
  const company = await res.json();
+ return company;
+};
+
+const getProductsByCompany = async (id: string) => {
+ const res = await fetch(`${process.env.API_HOST}/test/products/${id}`, {
+  cache: "no-store",
+ });
+ const products = await res.json();
+ return products;
+};
+
+const getDevicesByCompany = async (id: string) => {
+ const res = await fetch(`${process.env.API_HOST}/company/purchases/${id}`, {
+  cache: "no-store",
+ });
+ const devices = await res.json();
+ return devices;
+};
+
+const page = async ({ params }: { params: { id: string } }) => {
+ const company = (await getCompany(params.id)) as ICompany;
  const user = await checkAuth(cookies().get("COOKIE_AUTH")?.value);
  const isAdmin = await checkAdmin({
   userLogin: user.login,
@@ -26,6 +48,8 @@ const page = async ({ params }: { params: { id: string } }) => {
   userLogin: user.login,
   companyId: company._id,
  });
+ const products = (await getProductsByCompany(params.id)) as IProduct[];
+ const devices = await getDevicesByCompany(params.id);
  return (
   <div className="flex w-full gap-6 mt-5">
    <div className="w-1/4 flex flex-col items-center">
@@ -73,7 +97,15 @@ const page = async ({ params }: { params: { id: string } }) => {
      {isAdmin && (
       <StripePayment companyId={params.id} balance={company.balance} />
      )}
-     {isOwner && <DeleteBtn companyId={company._id} />}
+     {isOwner && (
+      <ConfirmBtn
+       companyId={company._id}
+       icon={<FontAwesomeIcon icon={faTrash} />}
+       action="DELETE_COMPANY"
+      >
+       Delete
+      </ConfirmBtn>
+     )}
     </div>
    </div>
    <div className="flex-1 flex flex-col">
@@ -111,13 +143,26 @@ const page = async ({ params }: { params: { id: string } }) => {
      </fieldset>
     )}
 
-    <fieldset className="w-full border-2 border-zinc-700 p-4 text-white rounded-lg text-lg mt-4 grid grid-cols-3 gap-3">
-     <legend className="px-2 text-zinc-500 font-semibold">products</legend>
-     <ProductCard rating={3}>iPhone</ProductCard>
-     <ProductCard rating={3}>iPhone</ProductCard>
-     <ProductCard rating={3}>iPhone</ProductCard>
-     <ProductCard rating={3}>iPhone</ProductCard>
-    </fieldset>
+    {products.length !== 0 && (
+     <fieldset className="w-full border-2 border-zinc-700 p-4 text-white rounded-lg text-lg mt-4 grid grid-cols-3 gap-3">
+      <legend className="px-2 text-zinc-500 font-semibold">products</legend>
+      {products.map((prod: IProduct) => (
+       <ProductCard key={prod._id} _id={prod._id} rating={prod.avgRating}>
+        {prod.name}
+       </ProductCard>
+      ))}
+     </fieldset>
+    )}
+    {devices.length !== 0 && (
+     <fieldset className="w-full border-2 border-zinc-700 p-4 text-white rounded-lg text-lg mt-4 flex flex-wrap gap-3">
+      <legend className="px-2 text-zinc-500 font-semibold">devices</legend>
+      {devices.map((device: { name: string; _id: string }) => (
+       <CompanyDeviceCard key={device._id} _id={device._id}>
+        {device.name}
+       </CompanyDeviceCard>
+      ))}
+     </fieldset>
+    )}
    </div>
   </div>
  );

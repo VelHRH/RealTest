@@ -2,11 +2,10 @@ import { FC } from "react";
 import Image from "next/image";
 import Link from "next/link";
 
-const CompanyBanner: FC<CompanyProps> = ({
+const CompanyBanner: FC<ICompany> = ({
  name,
  _id,
  owner,
- tests,
  avatarUrl,
  description,
  avgRating,
@@ -44,11 +43,7 @@ const CompanyBanner: FC<CompanyProps> = ({
       >
        {avgRating} stars
       </div>
-      {tests.length >= 0 && (
-       <div className="py-1 px-2 rounded-lg bg-sky-500 text-black">
-        {tests.length} tests
-       </div>
-      )}
+      <div className="py-1 px-2 rounded-lg bg-sky-500 text-black">tests</div>
      </div>
     </div>
    </div>

@@ -1,14 +1,16 @@
 "use client";
-import { FC, useState } from "react";
+import { FC, ReactNode, useState } from "react";
 import Button from "../ui/Button";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTrash } from "@fortawesome/free-solid-svg-icons";
 
-interface DeleteBtnProps {
+interface ConfirmBtnProps {
  companyId: string;
+ deviceId?: string;
+ icon?: ReactNode;
+ children: string;
+ action: string;
 }
 
-const deleteCompany = async ({ companyId }: { companyId: string }) => {
+const deleteCompany = async (companyId: string) => {
  const res = await fetch(`${process.env.API_HOST}/company/${companyId}`, {
   method: "DELETE",
   headers: {
@@ -20,24 +22,47 @@ const deleteCompany = async ({ companyId }: { companyId: string }) => {
  return company;
 };
 
-const DeleteBtn: FC<DeleteBtnProps> = ({ companyId }) => {
+const purchaseDevice = async (companyId: string, deviceId: string) => {
+ const res = await fetch(`${process.env.API_HOST}/company/purchase/create`, {
+  method: "POST",
+  headers: {
+   "Content-Type": "application/json;charset=utf-8",
+  },
+  body: JSON.stringify({ companyId, deviceId }),
+  credentials: "include",
+ });
+ const device = await res.json();
+ return device;
+};
+
+const ConfirmBtn: FC<ConfirmBtnProps> = ({
+ companyId,
+ deviceId,
+ icon,
+ children,
+ action,
+}) => {
  const [areYouSure, setAreYouSure] = useState(false);
  const handleClick = async () => {
-  const res = await deleteCompany({ companyId });
-  if (res.success) {
-   window.location.href = "/";
+  if (action === "DELETE_COMPANY") {
+   const res = await deleteCompany(companyId);
+   if (res.success) {
+    window.location.href = "/company";
+   }
+  }
+  if (action === "PURCHASE_DEVICE") {
+   const res = await purchaseDevice(companyId, deviceId || "");
+   if (res._id) {
+    window.location.reload();
+   }
   }
  };
  return (
   <div className="w-full flex flex-col items-center mb-7">
    {!areYouSure ? (
     <div onClick={() => setAreYouSure(true)} className="w-full">
-     <Button
-      size="medium"
-      color="red"
-      icon={<FontAwesomeIcon icon={faTrash} />}
-     >
-      Delete
+     <Button size="medium" color="red" icon={icon}>
+      {children}
      </Button>
     </div>
    ) : (
@@ -63,4 +88,4 @@ const DeleteBtn: FC<DeleteBtnProps> = ({ companyId }) => {
  );
 };
 
-export default DeleteBtn;
+export default ConfirmBtn;
