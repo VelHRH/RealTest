@@ -70,7 +70,7 @@ export const companyAPI = async (app: express.Application) => {
    next: express.NextFunction
   ) => {
    try {
-    const { identity } = req.body;
+    const { identity, identityLogin } = req.body;
     const payload = {
      event: "CHANGE_ROLE",
      data: { newRole: "User", _id: identity },
@@ -78,7 +78,7 @@ export const companyAPI = async (app: express.Application) => {
     await axios.post(`${BASE_URL}/user/app-events/`, { payload });
     const data = await service.DeleteCompany({
      _id: req.params.id,
-     owner: identity,
+     owner: identityLogin,
     });
     res.status(200).json(data);
    } catch (err) {
@@ -96,6 +96,49 @@ export const companyAPI = async (app: express.Application) => {
   ) => {
    try {
     const data = await service.GetAllCompanies();
+    res.status(200).json(data);
+   } catch (err) {
+    next(err);
+   }
+  }
+ );
+
+ app.post(
+  "/rate/:id",
+  checkAuth,
+  async (
+   req: express.Request,
+   res: express.Response,
+   next: express.NextFunction
+  ) => {
+   try {
+    const { identity, rating } = req.body;
+    const data = await service.RateCompany({
+     companyId: req.params.id,
+     identity,
+     rating,
+    });
+    res.status(200).json(data);
+   } catch (err) {
+    next(err);
+   }
+  }
+ );
+
+ app.delete(
+  "/rate/:id",
+  checkAuth,
+  async (
+   req: express.Request,
+   res: express.Response,
+   next: express.NextFunction
+  ) => {
+   try {
+    const { identity } = req.body;
+    const data = await service.DeleteRating({
+     companyId: req.params.id,
+     identity,
+    });
     res.status(200).json(data);
    } catch (err) {
     next(err);

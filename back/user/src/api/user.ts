@@ -22,6 +22,23 @@ export const userAPI = async (app: express.Application) => {
  );
 
  app.get(
+  "/getByLogin/:login",
+  async (
+   req: express.Request,
+   res: express.Response,
+   next: express.NextFunction
+  ) => {
+   try {
+    const login = req.params.login;
+    const data = await service.GetProfileByLogin(login);
+    return res.status(200).json(data);
+   } catch (err) {
+    next(err);
+   }
+  }
+ );
+
+ app.get(
   "/",
   async (
    req: express.Request,

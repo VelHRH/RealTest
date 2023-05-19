@@ -50,7 +50,7 @@ export const deviceAPI = async (app: express.Application) => {
      deviceId,
      defaultReportingFrequency,
      defaultTrackingRange,
-     identity,
+     identityLogin,
     } = req.body;
 
     const data = await device.PurchaseDevice({
@@ -58,7 +58,7 @@ export const deviceAPI = async (app: express.Application) => {
      deviceId,
      defaultReportingFrequency,
      defaultTrackingRange,
-     identity,
+     identityLogin,
     });
     res.status(200).json(data);
    } catch (err) {
@@ -76,13 +76,13 @@ export const deviceAPI = async (app: express.Application) => {
    next: express.NextFunction
   ) => {
    try {
-    const { defaultReportingFrequency, defaultTrackingRange, identity } =
+    const { defaultReportingFrequency, defaultTrackingRange, identityLogin } =
      req.body;
 
     const data = await device.ChangeDefaults({
      defaultReportingFrequency,
      defaultTrackingRange,
-     identity,
+     identityLogin,
      purchaseId: req.params.id,
     });
     res.status(200).json(data);
@@ -101,11 +101,29 @@ export const deviceAPI = async (app: express.Application) => {
    next: express.NextFunction
   ) => {
    try {
-    const { identity } = req.body;
+    const { identityLogin } = req.body;
 
     const data = await device.GetPurchase({
-     identity,
+     identityLogin,
      purchaseId: req.params.id,
+    });
+    res.status(200).json(data);
+   } catch (err) {
+    next(err);
+   }
+  }
+ );
+
+ app.get(
+  "/purchases/:id",
+  async (
+   req: express.Request,
+   res: express.Response,
+   next: express.NextFunction
+  ) => {
+   try {
+    const data = await device.GetPurchasesByCompany({
+     companyId: req.params.id,
     });
     res.status(200).json(data);
    } catch (err) {

@@ -13,14 +13,14 @@ export const productAPI = async (app: express.Application) => {
    next: express.NextFunction
   ) => {
    try {
-    const { name, price, companyId, imgUrl, identity } = req.body;
+    const { name, price, companyId, imgUrl, identityLogin } = req.body;
 
     const data = await service.CreateProduct({
      name,
      price,
      companyId,
      imgUrl,
-     identity,
+     identityLogin,
     });
     res.status(200).json(data);
    } catch (err) {

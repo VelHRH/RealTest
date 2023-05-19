@@ -10,14 +10,14 @@ export class ProductService {
   price: number;
   companyId: string;
   imgUrl: string;
-  identity: string;
+  identityLogin: string;
  }) {
   try {
-   const { name, price, companyId, imgUrl, identity } = data;
+   const { name, price, companyId, imgUrl, identityLogin } = data;
    if (!name || !price || !companyId || !imgUrl) {
     throw AppError.badRequest("All fields should be filled!");
    }
-   await this.CheckCompanyById({ companyId, identity });
+   await this.CheckCompanyById({ companyId, identityLogin });
    const product = new ProductModel({
     name,
     price,
@@ -80,7 +80,12 @@ export class ProductService {
    }
    const updatedProduct = await ProductModel.findOneAndUpdate(
     { _id: data.productId },
-    { $push: { ratings: { userId: identity, rating } } },
+    {
+     $push: { ratings: { userId: identity, value: rating } },
+     avgRating:
+      (product.avgRating * product.ratings.length + rating) /
+      (product.ratings.length + 1),
+    },
     { returnOriginal: false }
    );
    return updatedProduct;
@@ -102,6 +107,10 @@ export class ProductService {
    if (product.ratings.filter((r) => r.userId === identity).length === 0) {
     throw AppError.badRequest("You have not rated yet!");
    }
+   product.avgRating =
+    (product.avgRating * product.ratings.length -
+     product.ratings.find((r) => r.userId === identity).value) /
+     (product.ratings.length - 1) || 0;
    product.ratings.splice(
     product.ratings.findIndex((r) => r.userId === identity),
     1
@@ -115,10 +124,10 @@ export class ProductService {
 
  async CheckCompanyById({
   companyId,
-  identity,
+  identityLogin,
  }: {
   companyId: string;
-  identity: string;
+  identityLogin: string;
  }) {
   try {
    const payload = {
@@ -130,8 +139,8 @@ export class ProductService {
    })) as { data: { owner: string; admins: string[] } };
 
    if (
-    !company.data.admins.includes(identity) &&
-    company.data.owner !== identity
+    !company.data.admins.includes(identityLogin) &&
+    company.data.owner !== identityLogin
    ) {
     throw AppError.badRequest("You've got no rights to moderate this company!");
    }

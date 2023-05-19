@@ -309,6 +309,13 @@
     "@types/mime" "^1"
     "@types/node" "*"
 
+"@types/serialport@^8.0.2":
+  "integrity" "sha512-z4b1I8/vdZE3upgCcAL9VAWlVVFUVn5uo3faAHavkVfK/Hb1LUxKwp9YCtA5AZqEUCWoSWl20SRTOvAI/5fQWQ=="
+  "resolved" "https://registry.npmjs.org/@types/serialport/-/serialport-8.0.2.tgz"
+  "version" "8.0.2"
+  dependencies:
+    "@types/node" "*"
+
 "@types/serve-static@*":
   "integrity" "sha512-NUo5XNiAdULrJENtJXZZ3fHtfMolzZwczzBbnAeBbqBwG+LaG6YaJtuwzwGSQZ2wsCrxjEhNNjAkKigy3n8teQ=="
   "resolved" "https://registry.npmjs.org/@types/serve-static/-/serve-static-1.15.1.tgz"

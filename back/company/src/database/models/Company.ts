@@ -18,9 +18,9 @@ const CompanySchema = new mongoose.Schema({
   type: Array,
   default: [],
  },
- tests: {
-  type: Array,
-  default: [],
+ avgRating: {
+  type: Number,
+  default: 0,
  },
  description: {
   type: String,

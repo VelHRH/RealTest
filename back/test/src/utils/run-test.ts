@@ -1,9 +1,9 @@
 // @ts-nocheck
 
 import SerialPort from "serialport";
-export const runTestingForDuration = (duration) => {
+export const runTestingForDuration = (duration: number) => {
  return new Promise((resolve, reject) => {
-  let res = [];
+  let res = [] as string[];
   const parsers = SerialPort.parsers;
   const parser = new parsers.Readline({
    delimiter: "\r\n",

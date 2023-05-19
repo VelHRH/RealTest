@@ -34,7 +34,7 @@ export class DeviceService {
   deviceId: string;
   defaultReportingFrequency: string;
   defaultTrackingRange: number;
-  identity: string;
+  identityLogin: string;
  }) {
   try {
    const {
@@ -42,14 +42,17 @@ export class DeviceService {
     deviceId,
     defaultReportingFrequency,
     defaultTrackingRange,
-    identity,
+    identityLogin,
    } = data;
 
    const company = await CompanyModel.findById(companyId);
    if (!company) {
     throw AppError.badRequest("The company doesn't exist!");
    }
-   if (company.owner !== identity && !company.admins.includes(identity)) {
+   if (
+    company.owner !== identityLogin &&
+    !company.admins.includes(identityLogin)
+   ) {
     throw AppError.badRequest("You don't work in the company!");
    }
 
@@ -83,18 +86,21 @@ export class DeviceService {
  async ChangeDefaults(data: {
   defaultReportingFrequency: string;
   defaultTrackingRange: number;
-  identity: string;
+  identityLogin: string;
   purchaseId: string;
  }) {
   try {
    const {
     defaultReportingFrequency,
     defaultTrackingRange,
-    identity,
+    identityLogin,
     purchaseId,
    } = data;
    const company = await this.GetCompanyByPurchaseId(purchaseId);
-   if (company.owner !== identity && !company.admins.includes(identity)) {
+   if (
+    company.owner !== identityLogin &&
+    !company.admins.includes(identityLogin)
+   ) {
     throw AppError.badRequest("You don't work in the company!");
    }
    await PurchaseModel.findOneAndUpdate(
@@ -107,15 +113,33 @@ export class DeviceService {
   }
  }
 
- async GetPurchase(data: { identity: string; purchaseId: string }) {
+ async GetPurchase(data: { identityLogin: string; purchaseId: string }) {
   try {
-   const { identity, purchaseId } = data;
+   const { identityLogin, purchaseId } = data;
    const company = await this.GetCompanyByPurchaseId(purchaseId);
-   if (company.owner !== identity && !company.admins.includes(identity)) {
+   if (
+    company.owner !== identityLogin &&
+    !company.admins.includes(identityLogin)
+   ) {
     throw AppError.badRequest("You don't work in the company!");
    }
    const purchase = await PurchaseModel.findById(purchaseId);
    return purchase;
+  } catch (err) {
+   throw err;
+  }
+ }
+
+ async GetPurchasesByCompany(data: { companyId: string }) {
+  try {
+   const { companyId } = data;
+   let returnData = [];
+   const purchases = await PurchaseModel.find({ companyId });
+   for (let purchase of purchases) {
+    const device = await DeviceModel.findById(purchase.deviceId);
+    returnData.push({ _id: purchase._id, name: device.name });
+   }
+   return returnData;
   } catch (err) {
    throw err;
   }
@@ -149,7 +173,7 @@ export class DeviceService {
        product_data: {
         name: "Top up balance",
        },
-       unit_amount: data.amount,
+       unit_amount: data.amount * 100,
       },
       quantity: 1,
      },
@@ -178,14 +202,14 @@ export class DeviceService {
 
  async SubscribeEvents(payload: {
   event: string;
-  data: { identity: string; purchaseId: string };
+  data: { identityLogin: string; purchaseId: string };
  }) {
   const { event, data } = payload;
-  const { identity, purchaseId } = data;
+  const { identityLogin, purchaseId } = data;
   let result;
   switch (event) {
    case "GET_PURCHASE_BY_ID":
-    result = await this.GetPurchase({ identity, purchaseId });
+    result = await this.GetPurchase({ identityLogin, purchaseId });
     break;
    case "GET_COMPANY_BY_PURCHASE":
     result = await this.GetCompanyByPurchaseId(purchaseId);

@@ -16,6 +16,18 @@ export class UserService {
   }
  }
 
+ async GetProfileByLogin(login: string) {
+  try {
+   const existingUser = await UserModel.findOne({ login });
+   if (!existingUser) {
+    throw AppError.badRequest("User doesn't exist");
+   }
+   return existingUser;
+  } catch (err) {
+   throw err;
+  }
+ }
+
  async GetAllProfiles() {
   try {
    const existingUsers = await UserModel.find();
