@@ -19,7 +19,7 @@ export const testAPI = async (app: express.Application) => {
      name,
      reportingFrequency,
      trackingRange,
-     identity,
+     identityLogin,
     } = req.body;
 
     const data = await service.CreateTest({
@@ -28,7 +28,7 @@ export const testAPI = async (app: express.Application) => {
      productId,
      reportingFrequency,
      trackingRange,
-     identity,
+     identityLogin,
     });
     res.status(200).json(data);
    } catch (err) {

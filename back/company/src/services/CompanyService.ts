@@ -73,6 +73,18 @@ export class CompanyService {
   }
  }
 
+ async GetMyCompanies({ userLogin }: { userLogin: string }) {
+  try {
+   const companies = await CompanyModel.find();
+   return companies.filter(
+    (company) =>
+     company.owner === userLogin || company.admins.includes(userLogin)
+   );
+  } catch (err) {
+   throw err;
+  }
+ }
+
  async RateCompany(data: {
   companyId: string;
   identity: string;

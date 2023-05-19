@@ -29,6 +29,16 @@ export class DeviceService {
   }
  }
 
+ async GetDevice(data: { deviceId: string }) {
+  try {
+   const { deviceId } = data;
+   const device = await DeviceModel.findById(deviceId);
+   return device;
+  } catch (err) {
+   throw err;
+  }
+ }
+
  async PurchaseDevice(data: {
   companyId: string;
   deviceId: string;
@@ -158,6 +168,20 @@ export class DeviceService {
   }
  }
 
+ async SwitchPurchaseStatus({ purchaseId }: { purchaseId: string }) {
+  try {
+   const purchase = await PurchaseModel.findById(purchaseId);
+   if (!purchase) {
+    throw AppError.badRequest("The device is unavilable!");
+   }
+   purchase.isFree = !purchase.isFree;
+   await purchase.save();
+   return { success: true };
+  } catch (err) {
+   throw err;
+  }
+ }
+
  async CreatePaymentSession(data: {
   returnUrl: string;
   amount: number;
@@ -213,6 +237,9 @@ export class DeviceService {
     break;
    case "GET_COMPANY_BY_PURCHASE":
     result = await this.GetCompanyByPurchaseId(purchaseId);
+    break;
+   case "SWITCH_PURCHASE_STATUS":
+    result = await this.SwitchPurchaseStatus({ purchaseId });
     break;
    default:
     break;

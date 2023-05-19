@@ -11,7 +11,7 @@ export class TestService {
   productId: string;
   reportingFrequency: string;
   trackingRange: number;
-  identity: string;
+  identityLogin: string;
  }) {
   try {
    const {
@@ -20,7 +20,7 @@ export class TestService {
     productId,
     reportingFrequency,
     trackingRange,
-    identity,
+    identityLogin,
    } = data;
 
    if (!purchaseId || !productId || !name || !reportingFrequency) {
@@ -36,16 +36,23 @@ export class TestService {
      "You already have a test for the product with the device"
     );
    }
-   await this.CheckCompanyByPurchase(purchaseId, identity);
+   await this.CheckCompanyByPurchase(purchaseId, identityLogin);
    const test = new TestModel({
     purchaseId,
     name,
     productId,
     reportingFrequency,
     trackingRange,
-    testCreator: identity,
+    testCreator: identityLogin,
    });
    const doc = await test.save();
+   const payload = {
+    event: "SWITCH_PURCHASE_STATUS",
+    data: { purchaseId },
+   };
+   await axios.post(`${BASE_URL}/company/app-events/`, {
+    payload,
+   });
    return doc;
   } catch (err) {
    throw err;
@@ -121,7 +128,7 @@ export class TestService {
   }
  }
 
- async CheckCompanyByPurchase(purchaseId: string, identity: string) {
+ async CheckCompanyByPurchase(purchaseId: string, identityLogin: string) {
   try {
    const payload = {
     event: "GET_COMPANY_BY_PURCHASE",
@@ -135,8 +142,8 @@ export class TestService {
     throw AppError.badRequest("You don't have the device in your company!");
    }
    if (
-    !company.data.admins.includes(identity) &&
-    company.data.owner !== identity
+    !company.data.admins.includes(identityLogin) &&
+    company.data.owner !== identityLogin
    ) {
     throw AppError.badRequest("You've got no rights to moderate this company!");
    }

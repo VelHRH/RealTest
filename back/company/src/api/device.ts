@@ -36,6 +36,24 @@ export const deviceAPI = async (app: express.Application) => {
   }
  );
 
+ app.get(
+  "/device/:id",
+  async (
+   req: express.Request,
+   res: express.Response,
+   next: express.NextFunction
+  ) => {
+   try {
+    const data = await device.GetDevice({
+     deviceId: req.params.id,
+    });
+    res.status(200).json(data);
+   } catch (err) {
+    next(err);
+   }
+  }
+ );
+
  app.post(
   "/purchase/create",
   checkAuth,

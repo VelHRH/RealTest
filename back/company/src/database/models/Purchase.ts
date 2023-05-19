@@ -9,9 +9,13 @@ const PurchaseSchema = new mongoose.Schema({
   type: String,
   required: true,
  },
+ isFree: {
+  type: Boolean,
+  default: true,
+ },
  defaultReportingFrequency: {
   type: String,
-  default: "Daily",
+  default: "Every hour",
  },
  defaultTrackingRange: {
   type: Number,
