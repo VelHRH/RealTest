@@ -17,7 +17,7 @@ export const checkAdmin = async ({
  companyId,
 }: {
  userLogin: string;
- companyId: string;
+ companyId?: string;
 }) => {
  const res = await fetch(`${process.env.API_HOST}/company/${companyId}`, {
   cache: "no-store",
@@ -60,6 +60,9 @@ export async function middleware(request: NextRequest) {
   }
  } else {
   if (request.nextUrl.pathname.includes("/add")) {
+   return NextResponse.redirect(new URL("/", request.url));
+  }
+  if (request.nextUrl.pathname.includes("/test")) {
    return NextResponse.redirect(new URL("/", request.url));
   }
  }

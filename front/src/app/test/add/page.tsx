@@ -1,6 +1,13 @@
 import AddTest from "@/components/test/AddTest";
 import Headline from "@/components/ui/Headline";
+import { checkAdmin, checkAuth } from "@/middleware";
 import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
+
+export const metadata = {
+ title: "Create test",
+ description: "Creating new test",
+};
 
 interface PageProps {
  searchParams: { companyId?: string };
@@ -55,7 +62,15 @@ const Page = async ({ searchParams }: PageProps) => {
  const purchases = (await getPurchasesByCompany(
   searchParams.companyId || ""
  )) as IPurchase[];
- console.log(purchases);
+ const user = (await checkAuth(cookies().get("COOKIE_AUTH")?.value)) as IUser;
+ if (
+  !(await checkAdmin({
+   userLogin: user.login,
+   companyId: searchParams.companyId,
+  }))
+ ) {
+  redirect(`/company/${searchParams.companyId || ""}`);
+ }
  return (
   <div className="flex flex-col w-full items-center mt-5">
    <Headline color="yellow" classes="text-4xl font-bold">

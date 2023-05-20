@@ -24,7 +24,7 @@ const Page: FC = ({}) => {
    toast.error("Ошибка авторизации!");
   } else {
    router.back();
-   location.reload();
+   router.refresh();
   }
  };
 
