@@ -13,7 +13,7 @@ const Headline: FC<HeadlineProps> = ({ color, children, classes }) => {
     color === "blue"
      ? "from-blue-500 to-blue-700"
      : color === "red"
-     ? "from-red-400 to-red-600"
+     ? "from-red-500 to-red-600"
      : color === "yellow"
      ? "from-amber-400 to-amber-600"
      : "text-white"

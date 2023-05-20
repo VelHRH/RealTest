@@ -39,7 +39,7 @@ const page = async ({ params }: { params: { id: string } }) => {
    imgUrl={device.imgUrl}
    isBought={true}
    price={device.price}
-   companyId={purchase.companyId}
+   isFree={purchase.isFree}
   />
  );
 };

@@ -1,10 +1,12 @@
 "use client";
+import { useRouter } from "next/navigation";
 import { FC, useState } from "react";
 import { toast } from "react-hot-toast";
 
 const Page: FC = ({}) => {
  const [login, setLogin] = useState<string>("");
  const [password, setPassword] = useState<string>("");
+ const router = useRouter();
 
  const handleSubmit = async (e: React.FormEvent<EventTarget>) => {
   e.preventDefault();
@@ -21,7 +23,8 @@ const Page: FC = ({}) => {
   if (data.error) {
    toast.error("Ошибка авторизации!");
   } else {
-   window.location.href = "/";
+   router.back();
+   location.reload();
   }
  };
 

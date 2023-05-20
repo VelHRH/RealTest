@@ -67,7 +67,13 @@ const page = async ({ params }: { params: { id: string } }) => {
 
     <div className="w-full flex flex-wrap gap-5">
      {isAdmin && (
-      <Link href={`/`} className="w-2/5">
+      <Link
+       href={{
+        pathname: `/test/add`,
+        query: { companyId: company._id },
+       }}
+       className="w-2/5"
+      >
        <Button
         size="medium"
         color="blue"
@@ -156,8 +162,12 @@ const page = async ({ params }: { params: { id: string } }) => {
     {devices.length !== 0 && (
      <fieldset className="w-full border-2 border-zinc-700 p-4 text-white rounded-lg text-lg mt-4 flex flex-wrap gap-3">
       <legend className="px-2 text-zinc-500 font-semibold">devices</legend>
-      {devices.map((device: { name: string; _id: string }) => (
-       <CompanyDeviceCard key={device._id} _id={device._id}>
+      {devices.map((device: { name: string; _id: string; isFree: boolean }) => (
+       <CompanyDeviceCard
+        key={device._id}
+        _id={device._id}
+        isFree={device.isFree}
+       >
         {device.name}
        </CompanyDeviceCard>
       ))}

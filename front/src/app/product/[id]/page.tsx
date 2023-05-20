@@ -7,7 +7,7 @@ import { cookies } from "next/headers";
 import { checkAuth } from "@/middleware";
 import Link from "next/link";
 import Button from "@/components/ui/Button";
-import TestCard from "@/components/TestCard";
+import TestCard from "@/components/test/TestCard";
 
 interface Params {
  params: { id: string };

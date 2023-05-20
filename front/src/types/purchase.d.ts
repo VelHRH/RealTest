@@ -5,4 +5,5 @@ interface IPurchase {
  defaultReportingFrequency: string;
  defaultTrackingRange: number;
  delivered: boolean;
+ isFree: boolean;
 }

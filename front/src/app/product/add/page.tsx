@@ -7,9 +7,8 @@ interface PageProps {
 }
 
 const Page: FC<PageProps> = ({ searchParams }) => {
- console.log(searchParams.companyName);
  return (
-  <div className="flex flex-col w-full items-center">
+  <div className="flex flex-col w-full items-center mt-5">
    <Headline color="blue" classes="text-4xl font-bold">
     Adding new product...
    </Headline>

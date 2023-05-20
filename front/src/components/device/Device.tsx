@@ -1,7 +1,11 @@
 "use client";
 import { FC, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCheck, faGear } from "@fortawesome/free-solid-svg-icons";
+import {
+ faCheck,
+ faGear,
+ faExclamation,
+} from "@fortawesome/free-solid-svg-icons";
 import Image from "next/image";
 import Button from "../ui/Button";
 import FrequencyButton from "./FrequencyButton";
@@ -15,7 +19,9 @@ interface DeviceProps {
  rFr?: string;
  isBought?: boolean;
  deviceId: string;
- companyId?: string;
+ companies?: ICompany[];
+ isBtnHidden?: boolean;
+ isFree?: boolean;
 }
 
 const changeDevice = async (id: string, defaultReportingFrequency: string) => {
@@ -41,7 +47,9 @@ const Device: FC<DeviceProps> = ({
  isBought,
  rFr,
  deviceId,
- companyId,
+ companies,
+ isBtnHidden,
+ isFree,
 }) => {
  const [changing, setChanging] = useState(false);
  const [reportingFrequency, setReportingFrequency] = useState(rFr || "");
@@ -55,10 +63,17 @@ const Device: FC<DeviceProps> = ({
   <div className="flex flex-col">
    {isBought && (
     <div className="flex justify-around my-5 items-center font-bold text-2xl text-white border-y-2 border-zinc-700 py-3">
-     <div className="flex items-center text-green-500 py-1">
-      <FontAwesomeIcon icon={faCheck} className="mr-2" />
-      <div>free to use now</div>
-     </div>
+     {isFree ? (
+      <div className={`flex items-center text-green-500 py-1`}>
+       <FontAwesomeIcon icon={faCheck} className="mr-2" />
+       <div>free to use now</div>
+      </div>
+     ) : (
+      <div className={`flex items-center text-red-500 py-1`}>
+       <FontAwesomeIcon icon={faExclamation} className="mr-2" />
+       <div>already in use</div>
+      </div>
+     )}
      {changing ? (
       <div className="flex w-2/5 text-lg gap-4">
        <FrequencyButton
@@ -124,13 +139,17 @@ const Device: FC<DeviceProps> = ({
         </div>
        )
       ) : (
-       <ConfirmBtn
-        action="PURCHASE_DEVICE"
-        companyId={companyId || ""}
-        deviceId={deviceId}
-       >
-        {`Buy - ${price.toString()}$`}
-       </ConfirmBtn>
+       !isBtnHidden &&
+       companies?.map((company) => (
+        <ConfirmBtn
+         key={company._id}
+         action="PURCHASE_DEVICE"
+         companyId={company._id}
+         deviceId={deviceId}
+        >
+         {`Buy for ${company.name} - ${price.toString()}$`}
+        </ConfirmBtn>
+       ))
       )}
      </div>
     </div>

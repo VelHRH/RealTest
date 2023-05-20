@@ -53,7 +53,7 @@ const ConfirmBtn: FC<ConfirmBtnProps> = ({
   if (action === "PURCHASE_DEVICE") {
    const res = await purchaseDevice(companyId, deviceId || "");
    if (res._id) {
-    window.location.reload();
+    window.location.href = `/device/bought/${res._id}`;
    }
   }
  };
@@ -61,7 +61,11 @@ const ConfirmBtn: FC<ConfirmBtnProps> = ({
   <div className="w-full flex flex-col items-center mb-7">
    {!areYouSure ? (
     <div onClick={() => setAreYouSure(true)} className="w-full">
-     <Button size="medium" color="red" icon={icon}>
+     <Button
+      size="medium"
+      color={action.includes("DELETE") ? "red" : "blue"}
+      icon={icon}
+     >
       {children}
      </Button>
     </div>
