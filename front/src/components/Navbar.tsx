@@ -10,7 +10,7 @@ const Navbar = async () => {
    <Logo size="large" />
    <ul className="flex h-full items-center">
     <MenuElem link="/company"> companies </MenuElem>
-    <MenuElem link="#"> users </MenuElem>
+    <MenuElem link="/user"> users </MenuElem>
     {user.login ? (
      <>
       <MenuElem link="#"> my </MenuElem>

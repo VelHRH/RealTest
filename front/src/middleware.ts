@@ -60,14 +60,12 @@ export async function middleware(request: NextRequest) {
   }
  } else {
   if (request.nextUrl.pathname.includes("/add")) {
-   return NextResponse.redirect(new URL("/", request.url));
+   return NextResponse.redirect(new URL("/user/login", request.url));
   }
   if (request.nextUrl.pathname.includes("/test")) {
-   return NextResponse.redirect(new URL("/", request.url));
+   return NextResponse.redirect(new URL("/user/login", request.url));
   }
  }
 }
 
-export const config = {
- matcher: ["/user/login", "/user/regidter"],
-};
+export const config = {};

@@ -47,7 +47,6 @@ const Dropdown: FC<DropdownProps> = ({
      <button
       key={item._id}
       onClick={() => {
-       console.log(item.name);
        setValue(item.name);
        setIsSelect(false);
       }}

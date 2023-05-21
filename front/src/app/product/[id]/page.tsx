@@ -121,7 +121,12 @@ const page = async ({ params }: Params) => {
      </div>
      <div className="mt-5 grid grid-cols-6 text-base gap-5">
       {tests.map((test: ITest) => (
-       <TestCard key={test._id} name={test.name} isExecuted={test.isExecuted} />
+       <TestCard
+        key={test._id}
+        _id={test._id}
+        name={test.name}
+        isExecuted={test.isExecuted}
+       />
       ))}
      </div>
     </div>
