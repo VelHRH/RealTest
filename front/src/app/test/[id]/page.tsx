@@ -55,7 +55,7 @@ const page = async ({ params }: { params: { id: string } }) => {
      </div>
      <div className="text-xl mb-5 flex items-center">
       <div className="font-semibold mr-2">Product:</div>
-      <div className="w-1/2">
+      <div>
        <ProductCard _id={product._id} rating={product.avgRating}>
         {product.name}
        </ProductCard>

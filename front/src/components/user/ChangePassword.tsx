@@ -10,6 +10,20 @@ const ChangePassword: FC = () => {
  const [newPassword, setNewPassword] = useState<string>("");
  const [repeatPassword, setRepeatPassword] = useState<string>("");
 
+ const logout = async () => {
+  const res = await fetch(`${process.env.API_HOST}/user/logout`, {
+   method: "POST",
+   headers: {
+    "Content-Type": "application/json;charset=utf-8",
+   },
+   credentials: "include",
+  });
+  const response = await res.json();
+  if (response.success) {
+   window.location.reload();
+  }
+ };
+
  const handleSubmit = async () => {
   const res = await fetch(`${process.env.API_HOST}/user/changePassword`, {
    method: "PUT",
@@ -37,10 +51,19 @@ const ChangePassword: FC = () => {
  return (
   <div className="w-full mt-4 flex justify-center">
    {!isChanging ? (
-    <div onClick={() => setIsChanging(true)} className="w-1/2 flex-col">
-     <Button size="small" color="yellow">
-      Change password
-     </Button>
+    <div className="w-full">
+     <div className="flex justify-around w-full">
+      <div onClick={() => setIsChanging(true)} className="w-1/3">
+       <Button size="small" color="yellow">
+        Change password
+       </Button>
+      </div>
+      <div onClick={async () => await logout()} className="w-1/3">
+       <Button color="red" size="small">
+        Logout
+       </Button>
+      </div>
+     </div>
      {result !== "" && (
       <h3
        className={`text-lg text-center mt-2 ${

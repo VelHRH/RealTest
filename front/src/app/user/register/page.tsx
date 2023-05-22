@@ -1,5 +1,5 @@
 import Headline from "@/components/ui/Headline";
-import LoginUser from "@/components/user/LoginUser";
+import RegisterUser from "@/components/user/RegisterUser";
 import Link from "next/link";
 
 const page = () => {
@@ -7,16 +7,16 @@ const page = () => {
   <div className="flex flex-col w-full items-center mt-10">
    <div className="flex justify-between items-end w-[40%] text-white">
     <Headline color="yellow" classes="text-4xl font-bold">
-     Logging in
+     Registration
     </Headline>
     <Link
-     href={`/user/register`}
+     href={`/user/login`}
      className="font-semibold duration-300 hover:underline text-lg"
     >
-     Not registered yet?
+     Already registered?
     </Link>
    </div>
-   <LoginUser />
+   <RegisterUser />
   </div>
  );
 };

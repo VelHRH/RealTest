@@ -72,7 +72,7 @@ const Page = async ({ searchParams }: PageProps) => {
   redirect(`/company/${searchParams.companyId || ""}`);
  }
  return (
-  <div className="flex flex-col w-full items-center mt-5">
+  <div className="flex flex-col w-full items-center mt-10">
    <Headline color="yellow" classes="text-4xl font-bold">
     Adding new test...
    </Headline>

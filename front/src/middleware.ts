@@ -25,7 +25,7 @@ export const checkAdmin = async ({
  const company = await res.json();
  if (
   company.owner === userLogin ||
-  company.admins.find((a: string) => a === userLogin)
+  company.admins?.find((a: string) => a === userLogin)
  ) {
   return true;
  }

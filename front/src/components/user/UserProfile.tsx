@@ -37,11 +37,15 @@ const UserProfile: FC<UserProfileProps> = ({
     <Headline color="yellow" classes="font-bold text-4xl">
      {login}
     </Headline>
-    <h1 className="font-semibold">{email}</h1>
-    <h1 className="font-bold pb-2 border-b-2 border-zinc-700 w-full text-center mb-2">
+    {email && (
+     <h1 className="pt-2 border-t-2 border-zinc-700 w-full text-center mt-2">
+      {email}
+     </h1>
+    )}
+    <h1 className="font-bold pt-2 border-t-2 border-zinc-700 w-full text-center mt-2">
      {name}
     </h1>
-    <h2>
+    <h2 className="pt-2 border-t-2 border-zinc-700 w-full text-center mt-2">
      {role === "User" ? (
       role
      ) : (

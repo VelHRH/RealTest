@@ -13,7 +13,7 @@ const ProductCard: FC<ProductCardProps> = ({ children, rating, _id }) => {
  return (
   <Link
    href={`/product/${_id}`}
-   className="w-full cursor-pointer font-bold py-2 text-2xl p-2 rounded-md flex justify-between bg-gradient-to-r from-blue-500 to-blue-700 duration-300 hover:scale-105"
+   className="w-full cursor-pointer font-bold py-2 text-2xl p-2 rounded-md flex gap-10 justify-between bg-gradient-to-r from-blue-500 to-blue-700 duration-300 hover:scale-105"
   >
    {children}
    <div className="font-semibold flex gap-1 items-center">
