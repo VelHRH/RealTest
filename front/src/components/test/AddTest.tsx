@@ -65,7 +65,7 @@ const AddTest: FC<AddTestProps> = ({ companyName, products, purchases }) => {
  };
 
  return (
-  <div className="w-1/2 flex flex-col items-center">
+  <div className="w-1/2 flex flex-col items-center gap-4">
    <div className="w-full p-1 mt-4 bg-gradient-to-r from-amber-400 to-amber-600">
     <div className="flex bg-zinc-900 w-full h-full items-center">
      <input

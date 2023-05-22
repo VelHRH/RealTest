@@ -1,8 +1,10 @@
 import CompanyDeviceCard from "@/components/device/CompanyDeviceCard";
 import ProductCard from "@/components/ProductCard";
-import StartTest from "@/components/StartTest";
+import StartTest from "@/components/test/StartTest";
+import DeleteTest from "@/components/test/DeleteTest";
 import { checkAdmin, checkAuth } from "@/middleware";
 import { cookies } from "next/headers";
+import Result from "@/components/Result";
 
 const getTest = async (id: string) => {
  const res = await fetch(`${process.env.API_HOST}/test/${id}`, {
@@ -34,6 +36,17 @@ const getProduct = async (id: string) => {
  return product;
 };
 
+const getResults = async (id: string) => {
+ const res = await fetch(`${process.env.API_HOST}/test/${id}/result`, {
+  headers: {
+   Cookie: `COOKIE_AUTH=${cookies().get("COOKIE_AUTH")?.value}`,
+  },
+  cache: "no-store",
+ });
+ const results = await res.json();
+ return results;
+};
+
 const page = async ({ params }: { params: { id: string } }) => {
  const test = (await getTest(params.id)) as ITest;
  const purchase = (await getPurchase(test.purchaseId)) as IPurchase;
@@ -43,7 +56,8 @@ const page = async ({ params }: { params: { id: string } }) => {
   userLogin: user.login,
   companyId: product.companyId,
  });
-
+ const results = (await getResults(params.id)) as IResult[];
+ console.log(results);
  return (
   <>
    <div className="flex gap-2 items-center">
@@ -74,7 +88,10 @@ const page = async ({ params }: { params: { id: string } }) => {
     </div>
     <div className="flex-1 flex justify-center">
      {!test.testStart ? (
-      <StartTest testId={test._id} />
+      <div className={`flex flex-col w-1/2 gap-6`}>
+       <StartTest testId={test._id} />
+       <DeleteTest testId={test._id} />
+      </div>
      ) : (
       <div className="w-2/3 text-2xl text-zinc-200 flex flex-col gap-3">
        <h1>
@@ -91,11 +108,19 @@ const page = async ({ params }: { params: { id: string } }) => {
      )}
     </div>
    </div>
-   {test.testStart && (
-    <div className="flex flex-col mt-7">
+   {isAdmin && test.testStart && (
+    <div className="flex flex-col gap-4 mt-7 w-full mb-7">
      <h1 className="mb-3 pb-2 border-b-2 border-zinc-700 font-bold text-3xl text-zinc-100">
       Results:
      </h1>
+     {results.map((result) => (
+      <Result
+       key={result._id}
+       appoaches={result.approaches}
+       resultEnd={result.resultEnd}
+       resultSatrt={result.resultStart}
+      />
+     ))}
     </div>
    )}
   </>

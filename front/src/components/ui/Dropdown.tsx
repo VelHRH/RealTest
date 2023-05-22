@@ -24,7 +24,7 @@ const Dropdown: FC<DropdownProps> = ({
 }) => {
  return (
   <div
-   className={`w-full p-1 mt-4 bg-gradient-to-r ${
+   className={`w-full p-1 bg-gradient-to-r ${
     color === "blue"
      ? "from-blue-400 to-blue-600"
      : color === "red"

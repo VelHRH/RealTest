@@ -1,6 +1,6 @@
 "use client";
 import { FC, useState } from "react";
-import Button from "./ui/Button";
+import Button from "../ui/Button";
 
 interface StartTestProps {
  testId: string;
@@ -30,7 +30,7 @@ const StartTest: FC<StartTestProps> = ({ testId }) => {
   }
  };
  return (
-  <div className="w-1/2 flex gap-2 items-center">
+  <div className="w-full flex gap-2 items-center">
    <div className={`${isDate ? "w-2/3" : "w-full"}`} onClick={handleSubmit}>
     <Button color="yellow" size="medium">
      Start test
