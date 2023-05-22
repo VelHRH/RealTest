@@ -13,21 +13,14 @@ export const testAPI = async (app: express.Application) => {
    next: express.NextFunction
   ) => {
    try {
-    const {
-     purchaseId,
-     productId,
-     name,
-     reportingFrequency,
-     trackingRange,
-     identityLogin,
-    } = req.body;
+    const { purchaseId, productId, name, reportingFrequency, identityLogin } =
+     req.body;
 
     const data = await service.CreateTest({
      purchaseId,
      name,
      productId,
      reportingFrequency,
-     trackingRange,
      identityLogin,
     });
     res.status(200).json(data);
@@ -46,10 +39,10 @@ export const testAPI = async (app: express.Application) => {
    next: express.NextFunction
   ) => {
    try {
-    const { identity } = req.body;
+    const { identityLogin } = req.body;
 
     const data = await service.DeleteTest({
-     identity,
+     identityLogin,
      testId: req.params.id,
     });
     res.status(200).json(data);
@@ -95,6 +88,23 @@ export const testAPI = async (app: express.Application) => {
     const data = await service.GetTestById({
      testId: req.params.id,
     });
+    res.status(200).json(data);
+   } catch (err) {
+    next(err);
+   }
+  }
+ );
+
+ app.get(
+  "/",
+  checkAuth,
+  async (
+   req: express.Request,
+   res: express.Response,
+   next: express.NextFunction
+  ) => {
+   try {
+    const data = await service.GetAllTests();
     res.status(200).json(data);
    } catch (err) {
     next(err);

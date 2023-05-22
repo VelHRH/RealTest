@@ -133,8 +133,18 @@ export class DeviceService {
    ) {
     throw AppError.badRequest("You don't work in the company!");
    }
+   let returnPurchase = {};
    const purchase = await PurchaseModel.findById(purchaseId);
-   return purchase;
+   const device = await DeviceModel.findById(purchase.deviceId);
+   returnPurchase = {
+    _id: purchase._id,
+    isFree: purchase.isFree,
+    companyId: purchase.companyId,
+    deviceId: purchase.deviceId,
+    defaultReportingFrequency: purchase.defaultReportingFrequency,
+    name: device.name,
+   };
+   return returnPurchase;
   } catch (err) {
    throw err;
   }
@@ -147,7 +157,11 @@ export class DeviceService {
    const purchases = await PurchaseModel.find({ companyId });
    for (let purchase of purchases) {
     const device = await DeviceModel.findById(purchase.deviceId);
-    returnData.push({ _id: purchase._id, name: device.name });
+    returnData.push({
+     _id: purchase._id,
+     name: device.name,
+     isFree: purchase.isFree,
+    });
    }
    return returnData;
   } catch (err) {

@@ -10,18 +10,11 @@ export class TestService {
   name: string;
   productId: string;
   reportingFrequency: string;
-  trackingRange: number;
   identityLogin: string;
  }) {
   try {
-   const {
-    purchaseId,
-    name,
-    productId,
-    reportingFrequency,
-    trackingRange,
-    identityLogin,
-   } = data;
+   const { purchaseId, name, productId, reportingFrequency, identityLogin } =
+    data;
 
    if (!purchaseId || !productId || !name || !reportingFrequency) {
     throw AppError.badRequest("All fields should be filled!");
@@ -42,7 +35,6 @@ export class TestService {
     name,
     productId,
     reportingFrequency,
-    trackingRange,
     testCreator: identityLogin,
    });
    const doc = await test.save();
@@ -59,15 +51,22 @@ export class TestService {
   }
  }
 
- async DeleteTest(data: { testId: string; identity: string }) {
+ async DeleteTest(data: { testId: string; identityLogin: string }) {
   try {
-   const { testId, identity } = data;
+   const { testId, identityLogin } = data;
    if (!mongoose.Types.ObjectId.isValid(testId)) {
     throw AppError.badRequest("Wrong id format!");
    }
    const test = await TestModel.findById(testId);
-   await this.CheckCompanyByPurchase(test.purchaseId, identity);
+   await this.CheckCompanyByPurchase(test.purchaseId, identityLogin);
    await TestModel.findByIdAndDelete(testId);
+   const payload = {
+    event: "SWITCH_PURCHASE_STATUS",
+    data: { purchaseId: test.purchaseId },
+   };
+   await axios.post(`${BASE_URL}/company/app-events/`, {
+    payload,
+   });
    return { success: true };
   } catch (err) {
    throw err;
@@ -81,6 +80,18 @@ export class TestService {
     throw AppError.badRequest("Wrong id format!");
    }
    const test = await TestModel.findById(testId);
+   if (!test) {
+    throw AppError.badRequest("No tests found!");
+   }
+   return test;
+  } catch (err) {
+   throw err;
+  }
+ }
+
+ async GetAllTests() {
+  try {
+   const test = await TestModel.find();
    if (!test) {
     throw AppError.badRequest("No tests found!");
    }

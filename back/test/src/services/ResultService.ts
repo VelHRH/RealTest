@@ -2,6 +2,8 @@ import { runTestingForDuration } from "../utils/run-test";
 import { ResultModel } from "../database/models/Result";
 import { TestModel } from "../database/models/Test";
 import { AppError } from "../utils/app-errors";
+import axios from "axios";
+import { BASE_URL } from "../config";
 
 export class ResultService {
  async StartCreatingResults({
@@ -23,7 +25,7 @@ export class ResultService {
    }
    const reportingFrequency =
     test.reportingFrequency === "Every 15 minutes"
-     ? 15 * 60 * 1000
+     ? 60 * 1000
      : test.reportingFrequency === "Every 30 minutes"
      ? 30 * 60 * 1000
      : 60 * 60 * 1000;
@@ -43,7 +45,14 @@ export class ResultService {
     await this.ExecuteTest(testId, reportingFrequency);
    }, reportingFrequency + 1000);
 
-   setTimeout(() => {
+   setTimeout(async () => {
+    const payload = {
+     event: "SWITCH_PURCHASE_STATUS",
+     data: { purchaseId: test.purchaseId },
+    };
+    await axios.post(`${BASE_URL}/company/app-events/`, {
+     payload,
+    });
     clearInterval(intervalId);
    }, timeDifference);
 
