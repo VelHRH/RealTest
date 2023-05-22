@@ -4,7 +4,7 @@ import Logo from "./ui/Logo";
 import MenuElem from "./ui/MenuElem";
 
 const Navbar = async () => {
- const user = await checkAuth(cookies().get("COOKIE_AUTH")?.value);
+ const user = (await checkAuth(cookies().get("COOKIE_AUTH")?.value)) as IUser;
  return (
   <div className="w-full flex h-20 items-center justify-between">
    <Logo size="large" />
@@ -13,9 +13,8 @@ const Navbar = async () => {
     <MenuElem link="/user"> users </MenuElem>
     {user.login ? (
      <>
-      <MenuElem link="#"> my </MenuElem>
-      <MenuElem link="#"> me </MenuElem>
-      <MenuElem link="/user/login" isLast>
+      <MenuElem link="/test"> tests </MenuElem>
+      <MenuElem link={`/user/${user._id}`} isLast>
        {user.name}
       </MenuElem>
      </>

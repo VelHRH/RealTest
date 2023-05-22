@@ -9,7 +9,6 @@ interface StartTestProps {
 const StartTest: FC<StartTestProps> = ({ testId }) => {
  const [isDate, setIsDate] = useState<boolean>(false);
  const [endDate, setEndDate] = useState<string>("");
- console.log(endDate);
  const handleSubmit = async () => {
   if (!isDate) {
    setIsDate((prev) => !prev);

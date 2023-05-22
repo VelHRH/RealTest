@@ -13,9 +13,9 @@ const UserCard: FC<UserCardProps> = ({ _id, login, avatarUrl, role }) => {
  return (
   <Link
    href={`/user/${_id}`}
-   className="w-full h-64 bg-gradient-to-r from-amber-400 to-amber-400 hover:to-amber-600 p-1 rounded-xl"
+   className="w-full h-64 bg-gradient-to-r from-amber-400 to-amber-400 hover:to-amber-600 p-1 rounded-2xl"
   >
-   <div className="w-full h-full flex flex-col rounded-xl bg-zinc-900 cursor-pointer items-center">
+   <div className="w-full h-full flex flex-col rounded-2xl bg-zinc-900 cursor-pointer items-center">
     <Image
      alt="Profile image"
      src={`${process.env.API_HOST}/${

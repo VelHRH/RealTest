@@ -27,7 +27,7 @@ const Input: FC<InputProps> = ({
      : color === "yellow"
      ? "from-amber-400 to-amber-600"
      : "from-slate-500 to-slate-700"
-   } p-1 mt-4 ${isDisplay ? "opacity-100" : "opacity-0"} duration-500`}
+   } p-1 ${isDisplay ? "opacity-100" : "opacity-0"} duration-500`}
   >
    <input
     placeholder={placeholder}
