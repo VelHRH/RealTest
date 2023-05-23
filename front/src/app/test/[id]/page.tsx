@@ -57,7 +57,6 @@ const page = async ({ params }: { params: { id: string } }) => {
   companyId: product.companyId,
  });
  const results = (await getResults(params.id)) as IResult[];
- console.log(results);
  return (
   <>
    <div className="flex gap-2 items-center">
