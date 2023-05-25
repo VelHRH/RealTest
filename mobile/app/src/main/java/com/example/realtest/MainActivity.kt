@@ -24,7 +24,10 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         val companiesButton = findViewById<Button>(R.id.companiesButton)
-        val companyNameTextView = findViewById<TextView>(R.id.companyNameTextView)
+        val companyRecyclerView = findViewById<RecyclerView>(R.id.companyRecyclerView)
+
+        val adapter = CompanyAdapter(emptyList())
+        companyRecyclerView.adapter = adapter
 
         val retrofit = Retrofit.Builder()
             .baseUrl("http://192.168.0.104:8000/")
@@ -41,9 +44,8 @@ class MainActivity : AppCompatActivity() {
                         val companies = response.body()
                         println("========================Request successful ${companies?.get(0)?.name}")
                         if (companies != null) {
-                            val firstCompanyName = companies?.get(0)?.name
-                            companyNameTextView.text = firstCompanyName
-                            companyNameTextView.visibility = View.VISIBLE
+                            adapter.updateData(companies)
+                            adapter.notifyDataSetChanged()
                         }
                     } else {
                         println("========================Request failed")
@@ -55,6 +57,38 @@ class MainActivity : AppCompatActivity() {
                 }
             })
         }
+    }
+}
+
+class CompanyAdapter(private var companies: List<Company>) :
+    RecyclerView.Adapter<CompanyAdapter.ViewHolder>() {
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_company, parent, false)
+        return ViewHolder(view)
+    }
+
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        val company = companies[position]
+
+        holder.companyNameTextView.text = company.name
+        holder.companyDescriptionTextView.text = company.description
+
+        Picasso.get().load("http://192.168.0.104:8000/${company.avatarUrl}").into(holder.companyImageView)
+    }
+
+    fun updateData(newCompanies: List<Company>) {
+        companies = newCompanies
+    }
+
+    override fun getItemCount(): Int {
+        return companies.size
+    }
+
+    inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        val companyNameTextView: TextView = itemView.findViewById(R.id.companyNameTextView)
+        val companyDescriptionTextView: TextView = itemView.findViewById(R.id.companyDescriptionTextView)
+        val companyImageView: ImageView = itemView.findViewById(R.id.companyImageView)
     }
 }
 
