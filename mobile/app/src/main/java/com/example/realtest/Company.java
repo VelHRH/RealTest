@@ -8,7 +8,7 @@ public class Company {
     private String owner;
     private List<String> admins;
     private String avatarUrl;
-    private List<Integer> ratings;
+    private List<Rating> ratings;
     private List<String> tests;
     private int balance;
     private String description;
@@ -69,11 +69,11 @@ public class Company {
         this.tests = tests;
     }
 
-    public List<Integer> getRatings() {
+    public List<Rating> getRatings() {
         return ratings;
     }
 
-    public void setRatings(List<Integer> ratings) {
+    public void setRatings(List<Rating> ratings) {
         this.ratings = ratings;
     }
 
