@@ -48,7 +48,7 @@ const page = async ({ params }: { params: { id: string } }) => {
   userLogin: user.login,
   companyId: company._id,
  });
- const products = (await getProductsByCompany(params.id)) as IProduct[];
+ const products = await getProductsByCompany(params.id);
  const devices = await getDevicesByCompany(params.id);
  return (
   <div className="flex w-full gap-6 mt-5">

@@ -56,7 +56,7 @@ const page = async ({ params }: { params: { id: string } }) => {
   userLogin: user.login,
   companyId: product.companyId,
  });
- const results = (await getResults(params.id)) as IResult[];
+ const results = await getResults(params.id);
  return (
   <>
    <div className="flex gap-2 items-center">
@@ -113,7 +113,7 @@ const page = async ({ params }: { params: { id: string } }) => {
       Results:
      </h1>
      {!results.error &&
-      results.map((result) => (
+      results.map((result: IResult) => (
        <Result
         key={result._id}
         appoaches={result.approaches}

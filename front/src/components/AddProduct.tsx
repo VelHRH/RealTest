@@ -1,6 +1,6 @@
 // @ts-nocheck
 "use client";
-import React, { FC, useState } from "react";
+import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import Button from "./ui/Button";
 import Input from "./ui/Input";
@@ -8,7 +8,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUpload } from "@fortawesome/free-solid-svg-icons";
 import Image from "next/image";
 
-const AddProduct: FC = ({
+const AddProduct = ({
  companyName,
  companyId,
 }: {

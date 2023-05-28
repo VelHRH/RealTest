@@ -88,7 +88,9 @@ const AddTest: FC<AddTestProps> = ({ companyName, products, purchases }) => {
    />
    {product !== "" && (
     <Dropdown
-     array={purchases}
+     array={purchases.map((purchase) => {
+      return { name: purchase.name, _id: purchase._id };
+     })}
      value={device}
      setValue={setDevice}
      isSelect={isDeviceSelect}

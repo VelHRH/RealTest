@@ -11,8 +11,8 @@ const page = async () => {
  const users = (await getUsers()) as IUser[];
  return (
   <>
-   <Headline color="yellow" classes="font-bold text-4xl mb-7 mt-10">
-    All profiles:
+   <Headline color="yellow" classes="font-bold text-4xl mb-10 mt-16">
+    all profiles:
    </Headline>
    <div className="grid grid-cols-6 gap-3">
     {users.map((user) => (

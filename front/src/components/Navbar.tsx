@@ -14,6 +14,7 @@ const Navbar = async () => {
     {user.login ? (
      <>
       <MenuElem link="/test"> tests </MenuElem>
+      <MenuElem link="/device/644bc87ee1a1e68a4f6ec7f0"> devices </MenuElem>
       <MenuElem link={`/user/${user._id}`} isLast>
        {user.name}
       </MenuElem>

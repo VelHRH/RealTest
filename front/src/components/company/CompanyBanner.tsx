@@ -2,7 +2,16 @@ import { FC } from "react";
 import Image from "next/image";
 import Link from "next/link";
 
-const CompanyBanner: FC<ICompany> = ({
+interface CompanyBannerProps {
+ _id: string;
+ name: string;
+ owner: string;
+ avatarUrl: string;
+ description: string;
+ avgRating: number;
+}
+
+const CompanyBanner: FC<CompanyBannerProps> = ({
  name,
  _id,
  owner,

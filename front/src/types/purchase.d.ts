@@ -6,5 +6,5 @@ interface IPurchase {
  defaultTrackingRange: number;
  delivered: boolean;
  isFree: boolean;
- name?: string;
+ name: string;
 }
