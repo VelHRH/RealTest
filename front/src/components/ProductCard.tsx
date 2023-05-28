@@ -17,7 +17,7 @@ const ProductCard: FC<ProductCardProps> = ({ children, rating, _id }) => {
   >
    {children}
    <div className="font-semibold flex gap-1 items-center">
-    {rating} <FontAwesomeIcon icon={faStar} className="text-xl" />
+    {rating.toFixed(2)} <FontAwesomeIcon icon={faStar} className="text-xl" />
    </div>
   </Link>
  );

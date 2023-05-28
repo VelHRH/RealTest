@@ -112,14 +112,15 @@ const page = async ({ params }: { params: { id: string } }) => {
      <h1 className="mb-3 pb-2 border-b-2 border-zinc-700 font-bold text-3xl text-zinc-100">
       Results:
      </h1>
-     {results.map((result) => (
-      <Result
-       key={result._id}
-       appoaches={result.approaches}
-       resultEnd={result.resultEnd}
-       resultSatrt={result.resultStart}
-      />
-     ))}
+     {!results.error &&
+      results.map((result) => (
+       <Result
+        key={result._id}
+        appoaches={result.approaches}
+        resultEnd={result.resultEnd}
+        resultSatrt={result.resultStart}
+       />
+      ))}
     </div>
    )}
   </>

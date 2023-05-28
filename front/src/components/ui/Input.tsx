@@ -18,27 +18,30 @@ const Input: FC<InputProps> = ({
  type,
 }) => {
  return (
-  <div
-   className={`w-full bg-gradient-to-r ${
+  <fieldset
+   className={`relative border-[3px] p-3 w-full ${
     color === "blue"
-     ? "from-blue-500 to-blue-700"
+     ? "border-blue-500"
      : color === "red"
-     ? "from-red-400 to-red-600"
+     ? "border-red-500"
      : color === "yellow"
-     ? "from-amber-400 to-amber-600"
-     : "from-slate-500 to-slate-700"
+     ? "border-amber-400"
+     : "border-zinc-400"
    } p-1 ${isDisplay ? "opacity-100" : "opacity-0"} duration-500`}
   >
    <input
     placeholder={placeholder}
-    className={`bg-zinc-900 w-full h-full p-2 text-white font-medium text-lg outline-none ${
+    className={`bg-zinc-900 w-full h-full text-white font-medium text-lg outline-none ${
      isDisplay ? "flex" : "hidden"
-    }`}
+    } peer  focus:placeholder-zinc-900`}
     onChange={(e) => setValue(e.target.value)}
     value={value}
     type={type || "text"}
    />
-  </div>
+   <legend className="px-2 font-semibold text-amber-400 hidden peer-focus:flex leading-[.16rem]">
+    {placeholder}
+   </legend>
+  </fieldset>
  );
 };
 
