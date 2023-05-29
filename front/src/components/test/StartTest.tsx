@@ -4,9 +4,10 @@ import Button from "../ui/Button";
 
 interface StartTestProps {
  testId: string;
+ text: string;
 }
 
-const StartTest: FC<StartTestProps> = ({ testId }) => {
+const StartTest: FC<StartTestProps> = ({ testId, text }) => {
  const [isDate, setIsDate] = useState<boolean>(false);
  const [endDate, setEndDate] = useState<string>("");
  const handleSubmit = async () => {
@@ -33,7 +34,7 @@ const StartTest: FC<StartTestProps> = ({ testId }) => {
   <div className="w-full flex gap-2 items-center">
    <div className={`${isDate ? "w-2/3" : "w-full"}`} onClick={handleSubmit}>
     <Button color="yellow" size="medium">
-     Start test
+     {text}
     </Button>
    </div>
    {isDate && (

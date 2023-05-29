@@ -12,7 +12,7 @@ export const LanguageSwitcher = ({ lng }: { lng?: string }) => {
  return (
   <div
    onClick={() => setIsLoading(true)}
-   className="cursor-pointer hover:bg-amber-600 duration-300 rounded-full font-bold text-2xl px-2 pt-1 pb-2 text-zinc-900 bg-gradient-to-r from-amber-400 to-amber-500"
+   className="cursor-pointer hover:to-amber-600 duration-300 rounded-full font-bold text-2xl px-2 pt-1 pb-2 text-zinc-900 bg-gradient-to-r from-amber-400 to-amber-500"
   >
    {languages
     .filter((l) => lng !== l)

@@ -33,7 +33,7 @@ const LoginUser = ({ lng }: { lng: string }) => {
   });
   const data = await res.json();
   if (data.error) {
-   toast.error("Login error!");
+   toast.error(t("Login error!"));
   } else {
    router.back();
    router.refresh();

@@ -4,7 +4,7 @@ interface InputProps {
  color?: string;
  value: string;
  setValue: (value: string) => void;
- placeholder?: string;
+ placeholder: string;
  isDisplay?: boolean;
  type?: string;
 }

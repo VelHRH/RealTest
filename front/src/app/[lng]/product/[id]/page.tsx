@@ -129,6 +129,7 @@ const Product = async ({ params }: Params) => {
       {tests.map((test: ITest) => (
        <TestCard
         key={test._id}
+        lng={params.lng}
         _id={test._id}
         name={test.name}
         isExecuted={test.isExecuted}

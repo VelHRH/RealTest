@@ -5,6 +5,7 @@ import DeleteTest from "@/components/test/DeleteTest";
 import { checkAdmin, checkAuth } from "@/middleware";
 import { cookies } from "next/headers";
 import Result from "@/components/Result";
+import { useTranslation } from "../../../i18n";
 
 const getTest = async (id: string) => {
  const res = await fetch(`${process.env.API_HOST}/test/${id}`, {
@@ -47,7 +48,7 @@ const getResults = async (id: string) => {
  return results;
 };
 
-const page = async ({ params }: { params: { id: string } }) => {
+const Test = async ({ params }: { params: { id: string; lng: string } }) => {
  const test = (await getTest(params.id)) as ITest;
  const purchase = (await getPurchase(test.purchaseId)) as IPurchase;
  const product = (await getProduct(test.productId)) as IProduct;
@@ -57,17 +58,18 @@ const page = async ({ params }: { params: { id: string } }) => {
   companyId: product.companyId,
  });
  const results = await getResults(params.id);
+ const { t } = (await useTranslation(params.lng)) as TranslationResult;
  return (
   <>
    <div className="flex gap-2 items-center">
     <div className="w-1/2 text-white border-4 border-zinc-700 rounded-2xl p-5 mt-7">
      <div className="font-bold text-4xl mb-10">{test.name}</div>
      <div className="text-xl mb-4 flex items-center">
-      <div className="font-semibold mr-2">Creator:</div>
+      <div className="font-semibold mr-2">{t("Creator")}:</div>
       <div>{test.testCreator}</div>
      </div>
      <div className="text-xl mb-5 flex items-center">
-      <div className="font-semibold mr-2">Product:</div>
+      <div className="font-semibold mr-2">{t("Product")}:</div>
       <div>
        <ProductCard _id={product._id} rating={product.avgRating}>
         {product.name}
@@ -75,32 +77,36 @@ const page = async ({ params }: { params: { id: string } }) => {
       </div>
      </div>
      <div className="text-xl mb-4 flex items-center">
-      <div className="font-semibold mr-2">Device:</div>
-      <CompanyDeviceCard _id={purchase._id} isFree={purchase.isFree}>
+      <div className="font-semibold mr-2">{t("Device")}:</div>
+      <CompanyDeviceCard
+       _id={purchase._id}
+       isFree={purchase.isFree}
+       lng={params.lng}
+      >
        {purchase.name || ""}
       </CompanyDeviceCard>
      </div>
      <div className="text-xl mb-4 flex items-center">
-      <div className="font-semibold mr-2">Reporting:</div>
+      <div className="font-semibold mr-2">{t("Reporting")}:</div>
       <div>{test.reportingFrequency}</div>
      </div>
     </div>
     <div className="flex-1 flex justify-center">
      {!test.testStart ? (
       <div className={`flex flex-col w-1/2 gap-6`}>
-       <StartTest testId={test._id} />
-       <DeleteTest testId={test._id} />
+       <StartTest testId={test._id} text={t("Start test")} />
+       <DeleteTest testId={test._id} text={t("Delete test")} />
       </div>
      ) : (
       <div className="w-2/3 text-2xl text-zinc-200 flex flex-col gap-3">
        <h1>
         <span className="font-semibold">
-         Started: {new Date(test.testStart).toLocaleString()}
+         {t("Started")}: {new Date(test.testStart).toLocaleString()}
         </span>
        </h1>
        <h1>
         <span className="font-semibold">
-         Ending: {new Date(test.testEnd!).toLocaleString()}
+         {t("Ending")}: {new Date(test.testEnd!).toLocaleString()}
         </span>
        </h1>
       </div>
@@ -110,12 +116,13 @@ const page = async ({ params }: { params: { id: string } }) => {
    {isAdmin && test.testStart && (
     <div className="flex flex-col gap-4 mt-7 w-full mb-7">
      <h1 className="mb-3 pb-2 border-b-2 border-zinc-700 font-bold text-3xl text-zinc-100">
-      Results:
+      {t("Results")}:
      </h1>
      {!results.error &&
       results.map((result: IResult) => (
        <Result
         key={result._id}
+        lng={params.lng}
         appoaches={result.approaches}
         resultEnd={result.resultEnd}
         resultSatrt={result.resultStart}
@@ -127,4 +134,4 @@ const page = async ({ params }: { params: { id: string } }) => {
  );
 };
 
-export default page;
+export default Test;

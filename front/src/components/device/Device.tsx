@@ -1,5 +1,5 @@
 "use client";
-import { FC, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
  faCheck,
@@ -10,6 +10,7 @@ import Image from "next/image";
 import Button from "../ui/Button";
 import FrequencyButton from "./FrequencyButton";
 import ConfirmBtn from "../ui/ConfirmBtn";
+import { useTranslation } from "../../app/i18n/client";
 
 interface DeviceProps {
  name: string;
@@ -22,6 +23,7 @@ interface DeviceProps {
  companies?: ICompany[];
  isBtnHidden?: boolean;
  isFree?: boolean;
+ lng: string;
 }
 
 const changeDevice = async (id: string, defaultReportingFrequency: string) => {
@@ -50,6 +52,7 @@ const Device: FC<DeviceProps> = ({
  companies,
  isBtnHidden,
  isFree,
+ lng,
 }) => {
  const [changing, setChanging] = useState(false);
  const [reportingFrequency, setReportingFrequency] = useState(rFr || "");
@@ -59,6 +62,14 @@ const Device: FC<DeviceProps> = ({
    window.location.reload();
   }
  };
+ const { t } = useTranslation(lng);
+ const [hydrated, setHydrated] = useState(false);
+ useEffect(() => {
+  setHydrated(true);
+ }, []);
+ if (!hydrated) {
+  return null;
+ }
  return (
   <div className="flex flex-col">
    {isBought && (
@@ -66,12 +77,12 @@ const Device: FC<DeviceProps> = ({
      {isFree ? (
       <div className={`flex items-center text-green-500 py-1`}>
        <FontAwesomeIcon icon={faCheck} className="mr-2" />
-       <div>free to use now</div>
+       <div>{t("free to use now")}</div>
       </div>
      ) : (
       <div className={`flex items-center text-red-500 py-1`}>
        <FontAwesomeIcon icon={faExclamation} className="mr-2" />
-       <div>already in use</div>
+       <div>{t("already in use")}</div>
       </div>
      )}
      {changing ? (
@@ -96,16 +107,20 @@ const Device: FC<DeviceProps> = ({
        </FrequencyButton>
       </div>
      ) : (
-      <h1>reporting {rFr}</h1>
+      <h1>
+       {t("Reporting")} {rFr}
+      </h1>
      )}
     </div>
    )}
    <div className="flex w-full gap-5 mt-5 text-white mb-5">
     <div className="flex flex-col flex-1">
-     <div className="w-full text-4xl font-bold mb-3">{name}</div>
+     <div className="w-full text-4xl font-bold mb-3">{t(name)}</div>
      <fieldset className="w-full border-2 border-zinc-700 p-4 text-white rounded-lg text-lg mt-4">
-      <legend className="px-2 text-zinc-500 font-semibold">description</legend>
-      {description}
+      <legend className="px-2 text-zinc-500 font-semibold">
+       {t("description")}
+      </legend>
+      {t(description)}
      </fieldset>
      <div className="flex flex-col items-center mt-9 w-1/3">
       {isBought ? (
@@ -116,24 +131,24 @@ const Device: FC<DeviceProps> = ({
           color="yellow"
           icon={<FontAwesomeIcon icon={faGear} />}
          >
-          Change
+          {t("Change")}
          </Button>
         </div>
        ) : (
         <div className="flex flex-col items-center w-full text-white text-3xl font-bold">
-         <div>Confirm?</div>
+         <div>{t("Confirm?")}</div>
          <div className="w-full flex gap-2 mt-2">
           <button
            onClick={() => handleClick()}
            className="w-1/2 py-1 bg-green-600 rounded-md hover:bg-green-800"
           >
-           Yes
+           {t("Yes")}
           </button>
           <button
            className="w-1/2 py-1 bg-red-500 rounded-md hover:bg-red-800"
            onClick={() => setChanging(false)}
           >
-           No
+           {t("No")}
           </button>
          </div>
         </div>
@@ -146,8 +161,9 @@ const Device: FC<DeviceProps> = ({
          action="PURCHASE_DEVICE"
          companyId={company._id}
          deviceId={deviceId}
+         lng={lng}
         >
-         {`Buy for ${company.name} - ${price.toString()}$`}
+         {`${t("Buy for")} ${company.name} - ${price.toString()}$`}
         </ConfirmBtn>
        ))
       )}

@@ -1,6 +1,7 @@
 "use client";
-import { FC, ReactNode, useState } from "react";
+import { FC, ReactNode, useEffect, useState } from "react";
 import Button from "../ui/Button";
+import { useTranslation } from "../../app/i18n/client";
 
 interface ConfirmBtnProps {
  companyId: string;
@@ -8,6 +9,7 @@ interface ConfirmBtnProps {
  icon?: ReactNode;
  children: string;
  action: string;
+ lng: string;
 }
 
 const deleteCompany = async (companyId: string) => {
@@ -41,8 +43,18 @@ const ConfirmBtn: FC<ConfirmBtnProps> = ({
  icon,
  children,
  action,
+ lng,
 }) => {
  const [areYouSure, setAreYouSure] = useState(false);
+
+ const { t } = useTranslation(lng);
+ const [hydrated, setHydrated] = useState(false);
+ useEffect(() => {
+  setHydrated(true);
+ }, []);
+ if (!hydrated) {
+  return null;
+ }
  const handleClick = async () => {
   if (action === "DELETE_COMPANY") {
    const res = await deleteCompany(companyId);
@@ -71,19 +83,19 @@ const ConfirmBtn: FC<ConfirmBtnProps> = ({
     </div>
    ) : (
     <div className="flex flex-col items-center w-full text-white text-3xl font-bold">
-     <div>Are you sure?</div>
+     <div>{t("Confirm?")}</div>
      <div className="w-full flex gap-2 mt-2">
       <button
        onClick={() => handleClick()}
        className="w-1/2 py-1 bg-green-600 rounded-md hover:bg-green-800"
       >
-       Yes
+       {t("Yes")}
       </button>
       <button
        className="w-1/2 py-1 bg-red-500 rounded-md hover:bg-red-800"
        onClick={() => setAreYouSure(false)}
       >
-       No
+       {t("No")}
       </button>
      </div>
     </div>

@@ -1,8 +1,11 @@
-import { FC } from "react";
+"use client";
+
+import { FC, useEffect, useState } from "react";
 import Image from "next/image";
 import Headline from "../ui/Headline";
 import Link from "next/link";
 import ChangePassword from "./ChangePassword";
+import { useTranslation } from "../../app/i18n/client";
 
 interface UserProfileProps {
  name: string;
@@ -11,6 +14,7 @@ interface UserProfileProps {
  email?: string;
  login: string;
  company?: ICompany;
+ lng: string;
 }
 
 const UserProfile: FC<UserProfileProps> = ({
@@ -20,7 +24,16 @@ const UserProfile: FC<UserProfileProps> = ({
  login,
  email,
  company,
+ lng,
 }) => {
+ const { t } = useTranslation(lng);
+ const [hydrated, setHydrated] = useState(false);
+ useEffect(() => {
+  setHydrated(true);
+ }, []);
+ if (!hydrated) {
+  return null;
+ }
  return (
   <div className="w-1/2 mt-5 ml-1/2 translate-x-[50%] bg-gradient-to-r from-amber-400 to-amber-600 p-2 rounded-3xl">
    <div className="w-full h-full flex flex-col rounded-3xl bg-zinc-900 items-center text-white p-5 text-2xl font-semibold">
@@ -50,7 +63,7 @@ const UserProfile: FC<UserProfileProps> = ({
       role
      ) : (
       <div>
-       {role} of{" "}
+       {t(`${role} of`)}{" "}
        {
         <Link
          href={`/company/${company?._id}`}
@@ -62,7 +75,7 @@ const UserProfile: FC<UserProfileProps> = ({
       </div>
      )}
     </h2>
-    {email && <ChangePassword />}
+    {email && <ChangePassword lng={lng} />}
    </div>
   </div>
  );

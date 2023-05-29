@@ -21,7 +21,7 @@ const getDevice = async (id: string) => {
  return device;
 };
 
-const page = async ({ params }: { params: { id: string } }) => {
+const page = async ({ params }: { params: { id: string; lng: string } }) => {
  const purchase = (await getPurchase(
   params.id,
   cookies().get("COOKIE_AUTH")?.value || ""
@@ -40,6 +40,7 @@ const page = async ({ params }: { params: { id: string } }) => {
    isBought={true}
    price={device.price}
    isFree={purchase.isFree}
+   lng={params.lng}
   />
  );
 };

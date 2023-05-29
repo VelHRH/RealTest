@@ -71,7 +71,7 @@ const Company = async ({ params }: { params: { id: string; lng: string } }) => {
      {isAdmin && (
       <Link
        href={{
-        pathname: `/test/add`,
+        pathname: `${params.lng}/test/add`,
         query: { companyId: company._id },
        }}
        className="w-2/5"
@@ -88,7 +88,7 @@ const Company = async ({ params }: { params: { id: string; lng: string } }) => {
      {isAdmin && (
       <Link
        href={{
-        pathname: `/product/add`,
+        pathname: `${params.lng}/product/add`,
         query: { companyId: company._id, companyName: company.name },
        }}
        className={`flex-1 ${!isAdmin && "w-full"}`}
@@ -103,10 +103,15 @@ const Company = async ({ params }: { params: { id: string; lng: string } }) => {
       </Link>
      )}
      {isAdmin && (
-      <StripePayment companyId={params.id} balance={company.balance} />
+      <StripePayment
+       companyId={params.id}
+       balance={company.balance}
+       lng={params.lng}
+      />
      )}
      {isOwner && (
       <ConfirmBtn
+       lng={params.lng}
        companyId={company._id}
        icon={<FontAwesomeIcon icon={faTrash} />}
        action="DELETE_COMPANY"
@@ -178,6 +183,7 @@ const Company = async ({ params }: { params: { id: string; lng: string } }) => {
         key={device._id}
         _id={device._id}
         isFree={device.isFree}
+        lng={params.lng}
        >
         {device.name}
        </CompanyDeviceCard>

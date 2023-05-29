@@ -10,7 +10,7 @@ interface DropdownProps {
  setValue: (value: string) => void;
  isSelect: boolean;
  setIsSelect: (value: boolean) => void;
- placeholder?: string;
+ placeholder: string;
 }
 
 const Dropdown: FC<DropdownProps> = ({

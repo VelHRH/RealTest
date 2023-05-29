@@ -1,12 +1,13 @@
 // @ts-nocheck
 "use client";
 
-import { FC, useState } from "react";
+import { FC, useState, useEffect } from "react";
 import { loadStripe } from "@stripe/stripe-js";
 import { Elements } from "@stripe/react-stripe-js";
 import Button from "./ui/Button";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCoins } from "@fortawesome/free-solid-svg-icons";
+import { useTranslation } from "../app/i18n/client";
 
 const stripePromise = loadStripe(
  "pk_test_51N7GehIc2aHxSrSdwHJPaaatpNGOgwZMJkEnQTRIdQ9gjCd6YCZCBrO82u0gzVbICbqrnCip9FCFBGtNJX4J5kNC00uUgNR62c"
@@ -14,9 +15,10 @@ const stripePromise = loadStripe(
 interface StripePaymentProps {
  companyId: string;
  balance: number;
+ lng: string;
 }
 
-const StripePayment: FC<StripePaymentProps> = ({ companyId, balance }) => {
+const StripePayment: FC<StripePaymentProps> = ({ companyId, balance, lng }) => {
  const handleStripe = async (
   e: React.FormEvent<HTMLFormElement>,
   amount: number
@@ -41,6 +43,15 @@ const StripePayment: FC<StripePaymentProps> = ({ companyId, balance }) => {
 
  const [isConfirm, setIsConfirm] = useState<boolean>(false);
  const [amount, setAmount] = useState<number>(0);
+
+ const { t } = useTranslation(lng);
+ const [hydrated, setHydrated] = useState(false);
+ useEffect(() => {
+  setHydrated(true);
+ }, []);
+ if (!hydrated) {
+  return null;
+ }
  return (
   <Elements stripe={stripePromise}>
    <div className="w-full flex gap-3 items-center">
@@ -58,7 +69,7 @@ const StripePayment: FC<StripePaymentProps> = ({ companyId, balance }) => {
       color="yellow"
       icon={<FontAwesomeIcon icon={faCoins} />}
      >
-      {isConfirm ? "Confirm" : `${balance} $`}
+      {isConfirm ? t("Confirm?") : `${balance} $`}
      </Button>
     </div>
     {isConfirm && (

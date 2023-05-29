@@ -21,8 +21,8 @@ const getMyCompanies = async () => {
  return companies;
 };
 
-const page = async ({ params }: { params: { id: string } }) => {
- const device = (await getDevice(params.id)) as IDevice;
+const page = async ({ params }: { params: { id: string; lng: string } }) => {
+ const device = await getDevice(params.id);
  const user = (await checkAuth(
   cookies().get("COOKIE_AUTH")?.value || ""
  )) as IUser;
@@ -37,6 +37,7 @@ const page = async ({ params }: { params: { id: string } }) => {
    imgUrl={device.imgUrl}
    price={device.price}
    isBtnHidden={user._id ? false : true}
+   lng={params.lng}
   />
  );
 };

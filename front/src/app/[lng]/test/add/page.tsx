@@ -3,6 +3,7 @@ import Headline from "@/components/ui/Headline";
 import { checkAdmin, checkAuth } from "@/middleware";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
+import { useTranslation } from "../../../i18n";
 
 export const metadata = {
  title: "Create test",
@@ -11,6 +12,7 @@ export const metadata = {
 
 interface PageProps {
  searchParams: { companyId?: string };
+ params: { lng: string };
 }
 
 const getCompany = async (id: string) => {
@@ -37,6 +39,7 @@ const getPurchasesByCompany = async (id: string) => {
   },
  });
  const purchases = await res.json();
+ console.log(purchases);
  let returnPurchases = [];
  for (let i of purchases) {
   const res2 = await fetch(
@@ -54,7 +57,7 @@ const getPurchasesByCompany = async (id: string) => {
  return returnPurchases;
 };
 
-const Page = async ({ searchParams }: PageProps) => {
+const Page = async ({ searchParams, params }: PageProps) => {
  const company = (await getCompany(searchParams.companyId || "")) as ICompany;
  const products = (await getProductsByCompany(
   searchParams.companyId || ""
@@ -69,17 +72,19 @@ const Page = async ({ searchParams }: PageProps) => {
    companyId: searchParams.companyId,
   }))
  ) {
-  redirect(`/company/${searchParams.companyId || ""}`);
+  redirect(`${params.lng}/company/${searchParams.companyId || ""}`);
  }
+ const { t } = (await useTranslation(params.lng)) as TranslationResult;
  return (
   <div className="flex flex-col w-full items-center mt-10">
    <Headline color="yellow" classes="text-4xl font-bold">
-    Adding new test...
+    {t("Adding new test...")}
    </Headline>
    <AddTest
     companyName={company.name}
     products={products}
     purchases={purchases}
+    lng={params.lng}
    />
   </div>
  );

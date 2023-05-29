@@ -6,16 +6,21 @@ import { useRouter } from "next/navigation";
 import Dropdown from "../ui/Dropdown";
 import Button from "../ui/Button";
 import toast from "react-hot-toast";
-
-const CreateTest = async () => {};
+import { useTranslation } from "../../app/i18n/client";
 
 interface AddTestProps {
  companyName: string | undefined;
  products: IProduct[];
  purchases: IPurchase[];
+ lng: string;
 }
 
-const AddTest: FC<AddTestProps> = ({ companyName, products, purchases }) => {
+const AddTest: FC<AddTestProps> = ({
+ companyName,
+ products,
+ purchases,
+ lng,
+}) => {
  const [product, setProduct] = useState<string>("");
  const [isProductSelect, setIsProductSelect] = useState<boolean>(false);
  const [device, setDevice] = useState<string>("");
@@ -27,13 +32,20 @@ const AddTest: FC<AddTestProps> = ({ companyName, products, purchases }) => {
  if (!companyName) {
   router.back();
  }
-
+ const { t } = useTranslation(lng);
+ const [hydrated, setHydrated] = useState(false);
  useEffect(() => {
   setFrequency(
    purchases.find((purchase) => purchase.name === device)
     ?.defaultReportingFrequency || ""
   );
  }, [device]);
+ useEffect(() => {
+  setHydrated(true);
+ }, []);
+ if (!hydrated) {
+  return null;
+ }
 
  const frequencies = [
   { _id: "1", name: "Every 15 minutes" },
@@ -58,7 +70,7 @@ const AddTest: FC<AddTestProps> = ({ companyName, products, purchases }) => {
   });
   const data = await res.json();
   if (data.error) {
-   toast.error("Ошибка авторизации!");
+   toast.error(t("Login error!"));
   } else {
    router.push(`/test/${data._id}`);
   }
@@ -84,7 +96,7 @@ const AddTest: FC<AddTestProps> = ({ companyName, products, purchases }) => {
     setValue={setProduct}
     isSelect={isProductSelect}
     setIsSelect={setIsProductSelect}
-    placeholder="Choose product to test..."
+    placeholder={t("Choose product to test...")}
    />
    {product !== "" && (
     <Dropdown
@@ -95,7 +107,7 @@ const AddTest: FC<AddTestProps> = ({ companyName, products, purchases }) => {
      setValue={setDevice}
      isSelect={isDeviceSelect}
      setIsSelect={setIsDeviceSelect}
-     placeholder="Choose device..."
+     placeholder={t("Choose device...")}
     />
    )}
    {device !== "" && (
@@ -105,13 +117,13 @@ const AddTest: FC<AddTestProps> = ({ companyName, products, purchases }) => {
      setValue={setFrequency}
      isSelect={isFrequencySelect}
      setIsSelect={setIsFrequencySelect}
-     placeholder={`Choose reporting frequency...`}
+     placeholder={t(`Choose reporting frequency...`)}
     />
    )}
 
    <Input
     type="text"
-    placeholder="Name your test..."
+    placeholder={t("Name your test...")}
     color="yellow"
     value={name}
     setValue={setName}
@@ -120,7 +132,7 @@ const AddTest: FC<AddTestProps> = ({ companyName, products, purchases }) => {
    {name.length >= 2 && (
     <div onClick={handleSubmit} className="w-1/3 mt-5">
      <Button color="yellow" size="medium">
-      Create
+      {t("Create")}
      </Button>
     </div>
    )}

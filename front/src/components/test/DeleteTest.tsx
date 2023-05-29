@@ -6,9 +6,10 @@ import Button from "../ui/Button";
 
 interface DeleteTestProps {
  testId: string;
+ text: string;
 }
 
-const DeleteTest: FC<DeleteTestProps> = ({ testId }) => {
+const DeleteTest: FC<DeleteTestProps> = ({ testId, text }) => {
  const router = useRouter();
  const handleSubmit = async () => {
   const res = await fetch(`${process.env.API_HOST}/test/${testId}`, {
@@ -28,7 +29,7 @@ const DeleteTest: FC<DeleteTestProps> = ({ testId }) => {
  return (
   <div onClick={handleSubmit} className="w-full">
    <Button color="red" size="medium">
-    Delete test
+    {text}
    </Button>
   </div>
  );

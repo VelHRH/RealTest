@@ -1,9 +1,10 @@
 "use client";
-import { FC, useState } from "react";
+import { useEffect, useState } from "react";
 import Button from "../ui/Button";
 import Input from "../ui/Input";
+import { useTranslation } from "../../app/i18n/client";
 
-const ChangePassword: FC = () => {
+const ChangePassword = ({ lng }: { lng: string }) => {
  const [isChanging, setIsChanging] = useState<boolean>(false);
  const [result, setResult] = useState<string>("");
  const [oldPassword, setOldPassword] = useState<string>("");
@@ -48,6 +49,16 @@ const ChangePassword: FC = () => {
    setResult(response.error);
   }
  };
+
+ const { t } = useTranslation(lng);
+ const [hydrated, setHydrated] = useState(false);
+ useEffect(() => {
+  setHydrated(true);
+ }, []);
+ if (!hydrated) {
+  return null;
+ }
+
  return (
   <div className="w-full mt-4 flex justify-center">
    {!isChanging ? (
@@ -55,12 +66,12 @@ const ChangePassword: FC = () => {
      <div className="flex justify-around w-full">
       <div onClick={() => setIsChanging(true)} className="w-1/3">
        <Button size="small" color="yellow">
-        Change password
+        {t("Change password")}
        </Button>
       </div>
       <div onClick={async () => await logout()} className="w-1/3">
        <Button color="red" size="small">
-        Logout
+        {t("Logout")}
        </Button>
       </div>
      </div>

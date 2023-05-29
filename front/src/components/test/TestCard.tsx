@@ -5,12 +5,13 @@ interface TestCardProps {
  isExecuted?: boolean;
  name: string;
  _id: string;
+ lng: string;
 }
 
-const TestCard: FC<TestCardProps> = ({ isExecuted, name, _id }) => {
+const TestCard: FC<TestCardProps> = ({ isExecuted, name, _id, lng }) => {
  return (
   <Link
-   href={`/test/${_id}`}
+   href={`${lng}/test/${_id}`}
    className="border-2 border-zinc-700 p-5 flex flex-col w-full rounded-xl text-gray-100 hover:border-zinc-100 hover:text-white duration-300 cursor-pointer"
   >
    <h1 className="text-xl font-semibold">{name}</h1>

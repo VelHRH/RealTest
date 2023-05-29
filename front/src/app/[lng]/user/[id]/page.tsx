@@ -5,6 +5,7 @@ import { cookies } from "next/headers";
 interface pageProps {
  params: {
   id: string;
+  lng: string;
  };
 }
 
@@ -34,7 +35,7 @@ const getCompany = async (login: string, role: string) => {
  }
 };
 
-const page = async ({ params }: pageProps) => {
+const User = async ({ params }: pageProps) => {
  const user = (await getUser(params.id)) as IUser;
  const company =
   user.role !== "User" ? await getCompany(user.login, user.role) : null;
@@ -47,8 +48,9 @@ const page = async ({ params }: pageProps) => {
    email={me._id === user._id ? user.email : undefined}
    login={user.login}
    company={user.role !== "User" ? company! : undefined}
+   lng={params.lng}
   />
  );
 };
 
-export default page;
+export default User;
