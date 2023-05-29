@@ -3,13 +3,18 @@ import TypedBanner from "@/components/ui/TypedBanner";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUserPlus } from "@fortawesome/free-solid-svg-icons";
 import Headline from "@/components/ui/Headline";
+import { useTranslation } from "../i18n";
 
-export default function Home() {
+export default async function Home({ params }: { params: { lng: string } }) {
+ const { t } = (await useTranslation(
+  params.lng,
+  "start-page"
+ )) as TranslationResult;
  return (
   <>
    <div className="min-h-[86vh] w-full flex items-center">
     <Headline classes="font-bold text-7xl h-full w-1/2 lowercase" color="blue">
-     <TypedBanner text="Create your account to rate products' quality and get access to unique information about companies" />
+     <TypedBanner text={t("banner1")} />
     </Headline>
     <div className="w-1/2 flex justify-center">
      <div className="w-1/3">

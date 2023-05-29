@@ -25,7 +25,7 @@ const page = async () => {
      companies
     </Headline>
     {user.login && (
-     <Link href="/company/add">
+     <Link href="[lng]/company/add">
       <Button
        color="yellow"
        size="small"

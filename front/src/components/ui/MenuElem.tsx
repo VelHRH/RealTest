@@ -1,8 +1,8 @@
-import { FC } from "react";
+import { FC, ReactNode } from "react";
 import Link from "next/link";
 
 interface MenuElemProps {
- children: string;
+ children: ReactNode;
  link: string;
  isLast?: boolean;
 }
