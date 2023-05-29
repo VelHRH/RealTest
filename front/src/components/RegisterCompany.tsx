@@ -1,20 +1,29 @@
-// @ts-nocheck
+//@ts-nocheck
 "use client";
-import React, { FC, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Button from "./ui/Button";
 import Input from "./ui/Input";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUpload } from "@fortawesome/free-solid-svg-icons";
 import Image from "next/image";
+import { useTranslation } from "../app/i18n/client";
 
-const RegisterCompany: FC = () => {
+const RegisterCompany = ({ lng }: { lng: string }) => {
  const [name, setName] = useState("");
  const [desc, setDesc] = useState("");
  const [selectedImage, setSelectedImage] = useState(null);
  const [avatarUrl, setAvatarUrl] = useState("");
  const [isLoading, setIsLoading] = useState(false);
  const router = useRouter();
+ const { t } = useTranslation(lng);
+ const [hydrated, setHydrated] = useState(false);
+ useEffect(() => {
+  setHydrated(true);
+ }, []);
+ if (!hydrated) {
+  return null;
+ }
 
  const addImageHandler = async (e: React.ChangeEvent<HTMLInputElement>) => {
   const formData = new FormData();
@@ -53,18 +62,18 @@ const RegisterCompany: FC = () => {
  };
  return (
   <form className="w-full flex mt-7" onSubmit={createCompany}>
-   <div className="flex flex-col items-center w-1/2">
+   <div className="flex flex-col items-center w-1/2 gap-5">
     <Input
      value={name}
      setValue={setName}
-     placeholder="Company name"
+     placeholder={t("Company name")}
      color="yellow"
      isDisplay
     />
     <Input
      value={desc}
      setValue={setDesc}
-     placeholder="Company description"
+     placeholder={t("Company description")}
      color="yellow"
      isDisplay={name.length >= 2}
     />
@@ -88,7 +97,9 @@ const RegisterCompany: FC = () => {
         desc.length < 2 || name.length < 2 ? "hidden" : "flex"
        }`}
       >
-       <div className="text-2xl font-semibold">Upload your company image</div>
+       <div className="text-2xl font-semibold">
+        {t("Upload your company image")}
+       </div>
        <FontAwesomeIcon icon={faUpload} className={`text-4xl`} />
       </label>
       <input
@@ -112,7 +123,7 @@ const RegisterCompany: FC = () => {
       isDisabled={desc.length < 2 || name.length < 2 || !selectedImage}
       isLoading={isLoading}
      >
-      Create
+      {t("Create")}
      </Button>
     </div>
    </div>

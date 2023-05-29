@@ -1,24 +1,26 @@
 import Headline from "@/components/ui/Headline";
 import LoginUser from "@/components/user/LoginUser";
 import Link from "next/link";
+import { useTranslation } from "../../../i18n";
 
-const page = () => {
+const UserLogin = async ({ params }: { params: { lng: string } }) => {
+ const { t } = (await useTranslation(params.lng)) as TranslationResult;
  return (
   <div className="flex flex-col w-full items-center mt-10">
    <div className="flex justify-between items-end w-[40%] text-white">
     <Headline color="yellow" classes="text-4xl font-bold">
-     Logging in
+     {t("Logging in")}
     </Headline>
     <Link
-     href={`/user/register`}
+     href={`${params.lng}/user/register`}
      className="font-semibold duration-300 hover:underline text-lg"
     >
-     Not registered yet?
+     {t("Not registered yet?")}
     </Link>
    </div>
-   <LoginUser />
+   <LoginUser lng={params.lng} />
   </div>
  );
 };
 
-export default page;
+export default UserLogin;

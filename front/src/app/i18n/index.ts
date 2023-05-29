@@ -19,7 +19,7 @@ const initI18next: InitI18nextFn = async (lng, ns) => {
 
 export async function useTranslation(
  lng: string,
- ns: string | string[],
+ ns?: string | string[],
  options: { keyPrefix?: string } = {}
 ) {
  const i18nextInstance = await initI18next(lng, ns);

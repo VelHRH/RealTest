@@ -58,6 +58,23 @@ export const checkOwner = async ({
 };
 
 export async function middleware(request: NextRequest) {
+ const user = await checkAuth(request.cookies.get("COOKIE_AUTH")?.value);
+ if (user.login) {
+  if (
+   request.nextUrl.pathname.startsWith("/user/login") ||
+   request.nextUrl.pathname.startsWith("/user/register")
+  ) {
+   return NextResponse.redirect(new URL("/", request.url));
+  }
+ } else {
+  if (request.nextUrl.pathname.includes("/add")) {
+   return NextResponse.redirect(new URL("/user/login", request.url));
+  }
+  if (request.nextUrl.pathname.includes("/test")) {
+   return NextResponse.redirect(new URL("/user/login", request.url));
+  }
+ }
+
  let lng;
  if (request.cookies.has(cookieName))
   lng = acceptLanguage.get(request.cookies.get(cookieName)?.value);
@@ -82,21 +99,6 @@ export async function middleware(request: NextRequest) {
   if (lngInReferer) response.cookies.set(cookieName, lngInReferer);
   return response;
  }
- const user = await checkAuth(request.cookies.get("COOKIE_AUTH")?.value);
- if (user.login) {
-  if (
-   request.nextUrl.pathname.startsWith("/user/login") ||
-   request.nextUrl.pathname.startsWith("/user/register")
-  ) {
-   return NextResponse.redirect(new URL("/", request.url));
-  }
- } else {
-  if (request.nextUrl.pathname.includes("/add")) {
-   return NextResponse.redirect(new URL("/user/login", request.url));
-  }
-  if (request.nextUrl.pathname.includes("/test")) {
-   return NextResponse.redirect(new URL("/user/login", request.url));
-  }
- }
+
  return NextResponse.next();
 }

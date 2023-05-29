@@ -24,7 +24,7 @@ export default async function RootLayout({
  children: React.ReactNode;
  params: { lng: string };
 }) {
- const { t } = await useTranslation(params.lng, "navbar");
+ const { t } = await useTranslation(params.lng);
  return (
   <html lang={params.lng} dir={dir(params.lng)}>
    <Head>

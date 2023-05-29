@@ -2,12 +2,14 @@
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faStar } from "@fortawesome/free-solid-svg-icons";
-import { FC, useState } from "react";
+import { FC, useEffect, useState } from "react";
+import { useTranslation } from "../app/i18n/client";
 
 interface StarRatingProps {
  defaultRating: number;
  _id: string;
  item: string;
+ lng: string;
 }
 
 const rateCompany = async ({
@@ -82,9 +84,19 @@ const deleteProductRating = async ({ productId }: { productId: string }) => {
  return product;
 };
 
-const StarRating: FC<StarRatingProps> = ({ defaultRating, _id, item }) => {
+const StarRating: FC<StarRatingProps> = ({ defaultRating, _id, item, lng }) => {
  const [curHover, SetCurHover] = useState(0);
  const [rating, setRating] = useState(defaultRating);
+
+ const { t } = useTranslation(lng);
+ const [hydrated, setHydrated] = useState(false);
+ useEffect(() => {
+  setHydrated(true);
+ }, []);
+ if (!hydrated) {
+  return null;
+ }
+
  const handleClick = async (r: number) => {
   if (r === 0) {
    const ratedItem =
@@ -159,7 +171,7 @@ const StarRating: FC<StarRatingProps> = ({ defaultRating, _id, item }) => {
     onClick={() => handleClick(0)}
     className={`text-amber-400 ${rating === 0 ? "hidden" : "flex"}`}
    >
-    Change my rating
+    {t("Change my rating")}
    </button>
   </div>
  );

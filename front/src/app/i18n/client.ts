@@ -30,8 +30,8 @@ i18next
 
 export function useTranslation(
  lng: string,
- ns: string | string[],
- options: any
+ ns?: string | string[],
+ options: any = {}
 ) {
  useEffect(() => {
   if (i18next.resolvedLanguage === lng) return;

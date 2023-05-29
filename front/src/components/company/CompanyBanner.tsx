@@ -1,4 +1,4 @@
-import { FC } from "react";
+import { useTranslation } from "../../app/i18n";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -9,19 +9,23 @@ interface CompanyBannerProps {
  avatarUrl: string;
  description: string;
  avgRating: number;
+ lng: string;
 }
 
-const CompanyBanner: FC<CompanyBannerProps> = ({
+const CompanyBanner = async ({
  name,
  _id,
  owner,
  avatarUrl,
  description,
  avgRating,
-}) => {
+ lng,
+}: CompanyBannerProps) => {
+ const { t } = (await useTranslation(lng)) as TranslationResult;
+
  return (
   <Link
-   href={`/company/${_id}`}
+   href={`${lng}/company/${_id}`}
    className="w-full flex flex-col cursor-pointer hover:scale-105 duration-300 h-80 shadow-lg"
   >
    <Image
@@ -50,9 +54,11 @@ const CompanyBanner: FC<CompanyBannerProps> = ({
         avgRating && avgRating < 3 ? "bg-red-500" : "bg-green-500"
        } text-black`}
       >
-       {avgRating} stars
+       {avgRating} {t("stars")}
       </div>
-      <div className="py-1 px-2 rounded-lg bg-sky-500 text-black">tests</div>
+      <div className="py-1 px-2 rounded-lg bg-sky-500 text-black">
+       {t("tests")}
+      </div>
      </div>
     </div>
    </div>

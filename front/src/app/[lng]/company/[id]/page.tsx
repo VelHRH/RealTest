@@ -12,6 +12,7 @@ import { cookies } from "next/headers";
 import StripePayment from "@/components/StripePayment";
 import ProductCard from "@/components/ProductCard";
 import CompanyDeviceCard from "@/components/device/CompanyDeviceCard";
+import { useTranslation } from "../../../i18n";
 
 const getCompany = async (id: string) => {
  const res = await fetch(`${process.env.API_HOST}/company/${id}`, {
@@ -37,7 +38,7 @@ const getDevicesByCompany = async (id: string) => {
  return devices;
 };
 
-const page = async ({ params }: { params: { id: string } }) => {
+const Company = async ({ params }: { params: { id: string; lng: string } }) => {
  const company = (await getCompany(params.id)) as ICompany;
  const user = await checkAuth(cookies().get("COOKIE_AUTH")?.value);
  const isAdmin = await checkAdmin({
@@ -50,6 +51,7 @@ const page = async ({ params }: { params: { id: string } }) => {
  });
  const products = await getProductsByCompany(params.id);
  const devices = await getDevicesByCompany(params.id);
+ const { t } = (await useTranslation(params.lng)) as TranslationResult;
  return (
   <div className="flex w-full gap-6 mt-5">
    <div className="w-1/4 flex flex-col items-center">
@@ -79,7 +81,7 @@ const page = async ({ params }: { params: { id: string } }) => {
         color="blue"
         icon={<FontAwesomeIcon icon={faPlus} />}
        >
-        Test
+        {t("Test")}
        </Button>
       </Link>
      )}
@@ -96,7 +98,7 @@ const page = async ({ params }: { params: { id: string } }) => {
         color="blue"
         icon={isAdmin && <FontAwesomeIcon icon={faPlus} />}
        >
-        Product
+        {t("Product")}
        </Button>
       </Link>
      )}
@@ -109,17 +111,18 @@ const page = async ({ params }: { params: { id: string } }) => {
        icon={<FontAwesomeIcon icon={faTrash} />}
        action="DELETE_COMPANY"
       >
-       Delete
+       {t("Delete")}
       </ConfirmBtn>
      )}
     </div>
    </div>
    <div className="flex-1 flex flex-col">
     <fieldset className="w-full border-2 border-zinc-700 p-4 text-white rounded-lg flex items-center justify-between">
-     <legend className="px-2 text-zinc-500 font-semibold">rating</legend>
+     <legend className="px-2 text-zinc-500 font-semibold">{t("rating")}</legend>
      {user.login && (
       <StarRating
        item="company"
+       lng={params.lng}
        _id={params.id}
        defaultRating={
         company.ratings.find(
@@ -134,12 +137,16 @@ const page = async ({ params }: { params: { id: string } }) => {
      </Headline>
     </fieldset>
     <fieldset className="w-full border-2 border-zinc-700 p-4 text-white rounded-lg text-lg mt-4">
-     <legend className="px-2 text-zinc-500 font-semibold">description</legend>
+     <legend className="px-2 text-zinc-500 font-semibold">
+      {t("description")}
+     </legend>
      {company.description}
     </fieldset>
     {company.admins?.length > 0 && (
      <fieldset className="w-full border-2 border-zinc-700 p-4 text-white rounded-lg text-lg mt-4 flex gap-4 flex-wrap">
-      <legend className="px-2 text-zinc-500 font-semibold">admins</legend>
+      <legend className="px-2 text-zinc-500 font-semibold">
+       {t("admins")}
+      </legend>
       {company.admins.map((admin: string) => (
        <>
         {/* @ts-expect-error Server Component */}
@@ -151,7 +158,9 @@ const page = async ({ params }: { params: { id: string } }) => {
 
     {products.length !== 0 && (
      <fieldset className="w-full border-2 border-zinc-700 p-4 text-white rounded-lg text-lg mt-4 grid grid-cols-3 gap-3">
-      <legend className="px-2 text-zinc-500 font-semibold">products</legend>
+      <legend className="px-2 text-zinc-500 font-semibold">
+       {t("products")}
+      </legend>
       {products.map((prod: IProduct) => (
        <ProductCard key={prod._id} _id={prod._id} rating={prod.avgRating}>
         {prod.name}
@@ -161,7 +170,9 @@ const page = async ({ params }: { params: { id: string } }) => {
     )}
     {devices.length !== 0 && (
      <fieldset className="w-full border-2 border-zinc-700 p-4 text-white rounded-lg text-lg mt-4 flex flex-wrap gap-3">
-      <legend className="px-2 text-zinc-500 font-semibold">devices</legend>
+      <legend className="px-2 text-zinc-500 font-semibold">
+       {t("devices")}
+      </legend>
       {devices.map((device: { name: string; _id: string; isFree: boolean }) => (
        <CompanyDeviceCard
         key={device._id}
@@ -178,4 +189,4 @@ const page = async ({ params }: { params: { id: string } }) => {
  );
 };
 
-export default page;
+export default Company;

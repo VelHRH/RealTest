@@ -1,14 +1,24 @@
 "use client";
 import { useRouter } from "next/navigation";
 import { toast } from "react-hot-toast";
-import { FC, useState } from "react";
+import { useState, useEffect } from "react";
 import Input from "../ui/Input";
 import Button from "../ui/Button";
+import { useTranslation } from "../../app/i18n/client";
 
-const LoginUser: FC = () => {
+const LoginUser = ({ lng }: { lng: string }) => {
  const [login, setLogin] = useState<string>("");
  const [password, setPassword] = useState<string>("");
  const router = useRouter();
+
+ const { t } = useTranslation(lng);
+ const [hydrated, setHydrated] = useState(false);
+ useEffect(() => {
+  setHydrated(true);
+ }, []);
+ if (!hydrated) {
+  return null;
+ }
 
  const handleSubmit = async (e: React.FormEvent<EventTarget>) => {
   e.preventDefault();
@@ -35,7 +45,7 @@ const LoginUser: FC = () => {
    onSubmit={handleSubmit}
   >
    <Input
-    placeholder="Your login..."
+    placeholder={`${t("Your login...")}`}
     value={login}
     color="yellow"
     setValue={setLogin}
@@ -43,7 +53,7 @@ const LoginUser: FC = () => {
    />
    <Input
     type="password"
-    placeholder="Your password..."
+    placeholder={`${t("Your password...")}`}
     value={password}
     color="yellow"
     setValue={setPassword}
@@ -55,7 +65,7 @@ const LoginUser: FC = () => {
     }`}
    >
     <Button size="medium" color="yellow">
-     Login
+     {t("Login")}
     </Button>
    </div>
   </form>

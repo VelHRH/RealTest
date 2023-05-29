@@ -1,5 +1,6 @@
 import { checkAuth } from "@/middleware";
 import { cookies } from "next/headers";
+import { LanguageSwitcher } from "./LanguageSwitcher";
 import Logo from "./ui/Logo";
 import MenuElem from "./ui/MenuElem";
 
@@ -7,7 +8,7 @@ const Navbar = async ({ t, lng }: TranslationResult) => {
  const user = (await checkAuth(cookies().get("COOKIE_AUTH")?.value)) as IUser;
  return (
   <div className="w-full flex h-20 items-center justify-between">
-   <Logo size="large" />
+   <Logo link={`${lng}`} size="large" />
    <ul className="flex h-full items-center">
     <MenuElem link={`${lng}/company`}> {t("companies")} </MenuElem>
     <MenuElem link={`${lng}/user`}> {t("users")} </MenuElem>
@@ -28,6 +29,7 @@ const Navbar = async ({ t, lng }: TranslationResult) => {
       </MenuElem>
      </>
     )}
+    <LanguageSwitcher lng={lng} />
    </ul>
   </div>
  );

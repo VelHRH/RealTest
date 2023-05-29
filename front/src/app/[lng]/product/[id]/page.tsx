@@ -8,9 +8,10 @@ import { checkAuth } from "@/middleware";
 import Link from "next/link";
 import Button from "@/components/ui/Button";
 import TestCard from "@/components/test/TestCard";
+import { useTranslation } from "../../../i18n";
 
 interface Params {
- params: { id: string };
+ params: { id: string; lng: string };
 }
 
 const getProduct = async (id: string) => {
@@ -45,7 +46,7 @@ const getTestsByProduct = async (id: string, cookie: string) => {
  return tests;
 };
 
-const page = async ({ params }: Params) => {
+const Product = async ({ params }: Params) => {
  const product = (await getProduct(params.id)) as IProduct;
 
  const company = (await getCompany(product.companyId)) as ICompany;
@@ -56,7 +57,7 @@ const page = async ({ params }: Params) => {
   params.id,
   cookies().get("COOKIE_AUTH")?.value || ""
  )) as ITest[] | { error: string };
-
+ const { t } = (await useTranslation(params.lng)) as TranslationResult;
  return (
   <>
    <div className="flex w-full gap-5 mt-7 text-white pb-7 mb-7 border-b-2 border-zinc-700">
@@ -71,10 +72,13 @@ const page = async ({ params }: Params) => {
       </Link>
      </div>
      <fieldset className="w-full border-2 border-zinc-700 p-4 text-white rounded-lg flex items-center justify-between">
-      <legend className="px-2 text-zinc-500 font-semibold">rating</legend>
+      <legend className="px-2 text-zinc-500 font-semibold">
+       {t("rating")}
+      </legend>
       {user.login && (
        <StarRating
         item="product"
+        lng={params.lng}
         _id={params.id}
         defaultRating={
          product.ratings.find(
@@ -85,11 +89,13 @@ const page = async ({ params }: Params) => {
       )}
 
       <Headline classes="text-5xl font-bold" color="yellow">
-       {product.avgRating === 0 ? "--" : product.avgRating}
+       {product.avgRating === 0 ? "--" : product.avgRating.toFixed(2)}
       </Headline>
      </fieldset>
      <fieldset className="w-full border-2 border-zinc-700 p-4 text-white rounded-lg text-lg mt-4">
-      <legend className="px-2 text-zinc-500 font-semibold">description</legend>
+      <legend className="px-2 text-zinc-500 font-semibold">
+       {t("description")}
+      </legend>
       {product.description}
      </fieldset>
     </div>
@@ -108,14 +114,14 @@ const page = async ({ params }: Params) => {
    {"error" in tests ? null : (
     <div className="w-full flex flex-col text-3xl text-white mb-5">
      <div className="w-full flex items-center justify-between font-semibold">
-      Tests:
-      <div className="w-24">
+      {t("Tests")}:
+      <div className="w-32">
        <Button
         size="small"
         color="blue"
         icon={<FontAwesomeIcon icon={faPlus} />}
        >
-        Add
+        {t("add")}
        </Button>
       </div>
      </div>
@@ -135,4 +141,4 @@ const page = async ({ params }: Params) => {
  );
 };
 
-export default page;
+export default Product;
