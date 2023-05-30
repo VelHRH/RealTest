@@ -42,23 +42,36 @@
             android:layout_height="wrap_content"
             android:text="Average Rating"
             android:textColor="#f59e0b"
+            android:textSize="18sp"
             android:textStyle="bold" />
     </LinearLayout>
 
-    <TextView
-        android:id="@+id/companyDescriptionTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/companyNameTextView"
-        android:layout_marginTop="8dp"
-        android:text="Company Description" />
+    <ImageView
+        android:id="@+id/companyAvatarImageView"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:layout_below="@id/backButton"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="16dp" />
 
     <TextView
-        android:id="@+id/balanceTextView"
-        android:layout_width="wrap_content"
+        android:id="@+id/companyDescriptionTextView"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/avgRatingTextView"
-        android:layout_marginTop="8dp"
-        android:text="Balance" />
+        android:layout_below="@id/companyAvatarImageView"
+        android:layout_marginTop="16dp"
+        android:textSize="18sp"
+        android:text="Company Description"
+        android:textColor="#ffffff" />
+
+    <Button
+        android:id="@+id/testsButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/companyDescriptionTextView"
+        android:layout_marginTop="16dp"
+        android:text="Tests"
+        android:textColor="#000000"
+        android:background="@drawable/button_selector" />
 
 </RelativeLayout>

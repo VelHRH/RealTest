@@ -18,6 +18,7 @@
         <activity
             android:name=".CompanyDetailsActivity"
             android:exported="false" />
+        <activity android:name=".TestListActivity" />
         <activity
             android:name=".MainActivity"
             android:exported="true">

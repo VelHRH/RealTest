@@ -25,6 +25,12 @@ class MainActivity : AppCompatActivity() {
         val companiesButton = findViewById<Button>(R.id.companiesButton)
         val companyRecyclerView = findViewById<RecyclerView>(R.id.companyRecyclerView)
 
+        val testsButton = findViewById<Button>(R.id.testsButton)
+        testsButton.setOnClickListener {
+            val intent = Intent(this, TestListActivity::class.java)
+            startActivity(intent)
+        }
+
         val adapter = CompanyAdapter(emptyList())
         companyRecyclerView.adapter = adapter
 
