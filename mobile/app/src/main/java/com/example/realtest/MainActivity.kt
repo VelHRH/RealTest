@@ -31,6 +31,12 @@ class MainActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
+        val profileButton = findViewById<Button>(R.id.profileButton)
+        profileButton.setOnClickListener  {
+            val intent = Intent(this, LoginActivity::class.java)
+            startActivity(intent)
+        }
+
         val adapter = CompanyAdapter(emptyList())
         companyRecyclerView.adapter = adapter
 

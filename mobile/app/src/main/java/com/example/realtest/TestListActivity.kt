@@ -5,14 +5,17 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import okhttp3.Call
-import okhttp3.Callback
+import okhttp3.*
+import okhttp3.CookieJar
+import okhttp3.JavaNetCookieJar
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.Response
 import org.json.JSONArray
 import org.json.JSONException
 import java.io.IOException
+import java.net.CookieManager
+import java.net.CookiePolicy
 
 class TestListActivity : AppCompatActivity() {
     private lateinit var testRecyclerView: RecyclerView
@@ -32,6 +35,7 @@ class TestListActivity : AppCompatActivity() {
             .url(testListUrl)
             .build()
 
+
         val client = OkHttpClient()
         client.newCall(request).enqueue(object : Callback {
             override fun onFailure(call: Call, e: IOException) {
@@ -39,7 +43,7 @@ class TestListActivity : AppCompatActivity() {
             }
 
             override fun onResponse(call: Call, response: Response) {
-                val responseBody = response.body()
+                val responseBody = response.body
                 if (response.isSuccessful && responseBody != null) {
 
                     val testListJson = responseBody.string()
@@ -50,7 +54,7 @@ class TestListActivity : AppCompatActivity() {
                         testAdapter.setTests(tests)
                     }
                 } else {
-                    println(responseBody.string())
+                    println(responseBody?.string())
                 }
             }
         })
@@ -58,6 +62,14 @@ class TestListActivity : AppCompatActivity() {
 
     fun onBackButtonClick(view: View?) {
         finish()
+    }
+
+    private fun buildCookieHeader(cookies: List<Cookie>): String {
+        val cookieBuilder = StringBuilder()
+        for (cookie in cookies) {
+            cookieBuilder.append(cookie.name).append("=").append(cookie.value).append("; ")
+        }
+        return cookieBuilder.toString()
     }
 
     private fun parseTestListJson(jsonString: String): List<Test> {
