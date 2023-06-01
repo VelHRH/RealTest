@@ -16,6 +16,9 @@ import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import android.webkit.CookieManager
+import okhttp3.Request
+import java.net.HttpCookie
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -24,12 +27,12 @@ class MainActivity : AppCompatActivity() {
 
         val companiesButton = findViewById<Button>(R.id.companiesButton)
         val companyRecyclerView = findViewById<RecyclerView>(R.id.companyRecyclerView)
-
         val testsButton = findViewById<Button>(R.id.testsButton)
         testsButton.setOnClickListener {
             val intent = Intent(this, TestListActivity::class.java)
             startActivity(intent)
         }
+
 
         val profileButton = findViewById<Button>(R.id.profileButton)
         profileButton.setOnClickListener  {

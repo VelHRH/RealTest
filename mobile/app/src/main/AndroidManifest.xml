@@ -20,6 +20,7 @@
             android:exported="false" />
         <activity android:name=".TestListActivity" />
         <activity android:name=".LoginActivity" />
+        <activity android:name=".TestDetailsActivity" />
         <activity
             android:name=".MainActivity"
             android:exported="true">

@@ -59,6 +59,7 @@ class LoginActivity : AppCompatActivity() {
                     val responseBody = response.body?.string()
                     if (response.isSuccessful && responseBody != null) {
                         println("========================Request successful")
+
                         val cookieJar = client.cookieJar
 
                         if (cookieJar is CookieJar) {
@@ -83,6 +84,7 @@ class LoginActivity : AppCompatActivity() {
                     }
                 }
             })
+
         }
     }
 }

@@ -35,8 +35,8 @@ class TestListActivity : AppCompatActivity() {
             .url(testListUrl)
             .build()
 
-
         val client = OkHttpClient()
+
         client.newCall(request).enqueue(object : Callback {
             override fun onFailure(call: Call, e: IOException) {
                 println("========================Request failed: ${e.message}")
@@ -49,7 +49,7 @@ class TestListActivity : AppCompatActivity() {
                     val testListJson = responseBody.string()
 
                     val tests = parseTestListJson(testListJson)
-                    println("========================Request successful ${tests?.get(0)?.name}")
+                    println("========================Request successful")
                     runOnUiThread {
                         testAdapter.setTests(tests)
                     }
@@ -62,14 +62,6 @@ class TestListActivity : AppCompatActivity() {
 
     fun onBackButtonClick(view: View?) {
         finish()
-    }
-
-    private fun buildCookieHeader(cookies: List<Cookie>): String {
-        val cookieBuilder = StringBuilder()
-        for (cookie in cookies) {
-            cookieBuilder.append(cookie.name).append("=").append(cookie.value).append("; ")
-        }
-        return cookieBuilder.toString()
     }
 
     private fun parseTestListJson(jsonString: String): List<Test> {

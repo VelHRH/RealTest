@@ -1,7 +1,7 @@
 package com.example.realtest
 
 data class Test(
-    val id: String,
+    val _id: String,
     val purchaseId: String,
     val productId: String,
     val name: String,
