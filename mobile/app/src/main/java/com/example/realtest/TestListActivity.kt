@@ -39,7 +39,7 @@ class TestListActivity : AppCompatActivity() {
 
         client.newCall(request).enqueue(object : Callback {
             override fun onFailure(call: Call, e: IOException) {
-                println("========================Request failed: ${e.message}")
+                println("Request failed: ${e.message}")
             }
 
             override fun onResponse(call: Call, response: Response) {
@@ -49,7 +49,6 @@ class TestListActivity : AppCompatActivity() {
                     val testListJson = responseBody.string()
 
                     val tests = parseTestListJson(testListJson)
-                    println("========================Request successful")
                     runOnUiThread {
                         testAdapter.setTests(tests)
                     }

@@ -1,6 +1,8 @@
 package com.example.realtest
 
 import android.os.Bundle
+import android.view.View
+import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil.setContentView
@@ -12,6 +14,10 @@ import okhttp3.Response
 import org.json.JSONException
 import org.json.JSONObject
 import java.io.IOException
+import java.text.SimpleDateFormat
+import java.util.Calendar
+import java.util.Date
+import java.util.Locale
 
 class TestDetailsActivity : AppCompatActivity() {
     private lateinit var testNameTextView: TextView
@@ -27,10 +33,11 @@ class TestDetailsActivity : AppCompatActivity() {
         testCreatorTextView = findViewById(R.id.testCreatorTextView)
         testStartTextView = findViewById(R.id.testStartTextView)
         testEndTextView = findViewById(R.id.testEndTextView)
+        val startButton = findViewById<Button>(R.id.startButton)
 
         val testId = intent.getStringExtra("testId")
         if (testId != null) {
-            val testDetailsUrl = "http://localhost:8000/test/$testId"
+            val testDetailsUrl = "http://192.168.0.104:8000/test/$testId"
             val request = Request.Builder()
                 .url(testDetailsUrl)
                 .build()
@@ -39,7 +46,7 @@ class TestDetailsActivity : AppCompatActivity() {
             client.newCall(request).enqueue(object : Callback {
                 override fun onFailure(call: Call, e: IOException) {
                     runOnUiThread {
-                        println("========================Request failed")
+                        println("Request failed")
                     }
                 }
 
@@ -52,17 +59,46 @@ class TestDetailsActivity : AppCompatActivity() {
                             testCreatorTextView.text = test?.testCreator
                             testStartTextView.text = test?.testStart
                             testEndTextView.text = test?.testEnd
+
+                            if (test?.testEnd?.length!! > 0) {
+                                testStartTextView.visibility = View.VISIBLE
+                                testEndTextView.visibility = View.VISIBLE
+                                startButton.visibility = View.GONE
+                            } else {
+                                testStartTextView.visibility = View.GONE
+                                testEndTextView.visibility = View.GONE
+                                startButton.visibility = View.VISIBLE
+                                startButton.setOnClickListener {
+                                    val currentDateTime = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(
+                                        Date()
+                                    )
+                                    val calendar = Calendar.getInstance()
+                                    calendar.add(Calendar.DAY_OF_MONTH, 1)
+                                    val nextDateTime = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(calendar.time)
+
+                                    testStartTextView.text = currentDateTime
+                                    testEndTextView.text = nextDateTime
+
+                                    testStartTextView.visibility = View.VISIBLE
+                                    testEndTextView.visibility = View.VISIBLE
+                                    startButton.visibility = View.GONE
+                                }
+                            }
                         }
                     } else {
                         runOnUiThread {
-                            println("========================Data get failed")
+                            println("Data get failed")
                         }
                     }
                 }
             })
         } else {
-            println("========================Test _id failed")
+            println("Test _id failed")
         }
+    }
+
+    fun onBackButtonClick(view: View?) {
+        finish()
     }
 
     private fun parseTestDetailsJson(jsonString: String): Test? {

@@ -56,18 +56,17 @@ class MainActivity : AppCompatActivity() {
                 override fun onResponse(call: Call<List<Company>>, response: Response<List<Company>>) {
                     if (response.isSuccessful) {
                         val companies = response.body()
-                        println("========================Request successful ${companies?.get(0)?.name}")
                         if (companies != null) {
                             adapter.updateData(companies)
                             adapter.notifyDataSetChanged()
                         }
                     } else {
-                        println("========================Request failed")
+                        println("Request failed")
                     }
                 }
 
                 override fun onFailure(call: Call<List<Company>>, t: Throwable) {
-                    println("========================Request failed: ${t.message}")
+                    println("Request failed: ${t.message}")
                 }
             })
         }

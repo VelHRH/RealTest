@@ -52,13 +52,12 @@ class LoginActivity : AppCompatActivity() {
 
             client.newCall(request).enqueue(object : Callback {
                 override fun onFailure(call: Call, e: IOException) {
-                    println("========================Request failed: ${e.message}")
+                    println("Request failed: ${e.message}")
                 }
 
                 override fun onResponse(call: Call, response: Response) {
                     val responseBody = response.body?.string()
                     if (response.isSuccessful && responseBody != null) {
-                        println("========================Request successful")
 
                         val cookieJar = client.cookieJar
 
@@ -80,7 +79,7 @@ class LoginActivity : AppCompatActivity() {
                         startActivity(intent)
                         finish()
                     } else {
-                        println("========================Request failed")
+                        println("Request failed")
                     }
                 }
             })
