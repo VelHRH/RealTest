@@ -2,7 +2,12 @@ import Headline from "@/components/ui/Headline";
 import RegisterUser from "@/components/user/RegisterUser";
 import Link from "next/link";
 
-const page = () => {
+export const metadata = {
+ title: "Register",
+ description: "Registering in the system",
+};
+
+const Register = () => {
  return (
   <div className="flex flex-col w-full items-center mt-10">
    <div className="flex justify-between items-end w-[40%] text-white">
@@ -21,4 +26,4 @@ const page = () => {
  );
 };
 
-export default page;
+export default Register;

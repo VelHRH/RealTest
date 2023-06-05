@@ -17,7 +17,7 @@ export const checkAuth = async (cookie: string | undefined) => {
   cache: "no-store",
  });
  const user = await res.json();
- return user;
+ return user as IUser;
 };
 
 export const checkAdmin = async ({

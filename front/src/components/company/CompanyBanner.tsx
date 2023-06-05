@@ -54,7 +54,7 @@ const CompanyBanner = async ({
         avgRating && avgRating < 3 ? "bg-red-500" : "bg-green-500"
        } text-black`}
       >
-       {avgRating} {t("stars")}
+       {avgRating.toFixed(2)} {t("stars")}
       </div>
       <div className="py-1 px-2 rounded-lg bg-sky-500 text-black">
        {t("tests")}

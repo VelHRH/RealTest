@@ -7,6 +7,7 @@ import Link from "next/link";
 import { checkAuth } from "@/middleware";
 import { cookies } from "next/headers";
 import { useTranslation } from "../../i18n";
+import { getCompanies } from "@/fetch/company";
 
 export const metadata = {
  title: "Companies",
@@ -15,11 +16,8 @@ export const metadata = {
 
 const Companies = async ({ params }: { params: { lng: string } }) => {
  const user = await checkAuth(cookies().get("COOKIE_AUTH")?.value);
- const res = await fetch(`${process.env.API_HOST}/company`, {
-  cache: "no-store",
- });
  const { t } = (await useTranslation(params.lng)) as TranslationResult;
- const companies = (await res.json()) as ICompany[];
+ const companies = await getCompanies();
  return (
   <div className="flex flex-col items-center">
    <div className="mt-16 flex w-full justify-between items-center mb-5">

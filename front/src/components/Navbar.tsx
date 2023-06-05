@@ -5,7 +5,7 @@ import Logo from "./ui/Logo";
 import MenuElem from "./ui/MenuElem";
 
 const Navbar = async ({ t, lng }: TranslationResult) => {
- const user = (await checkAuth(cookies().get("COOKIE_AUTH")?.value)) as IUser;
+ const user = await checkAuth(cookies().get("COOKIE_AUTH")?.value);
  return (
   <div className="w-full flex h-20 items-center justify-between">
    <Logo link={`${lng}`} size="large" />

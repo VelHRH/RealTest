@@ -1,35 +1,18 @@
 import Device from "@/components/device/Device";
-import { cookies } from "next/headers";
+import { getDevice, getPurchase } from "@/fetch/device";
 import { redirect } from "next/navigation";
 
-const getPurchase = async (id: string, cookie: string) => {
- const res = await fetch(`${process.env.API_HOST}/company/purchase/${id}`, {
-  headers: {
-   Cookie: `COOKIE_AUTH=${cookie}`,
-  },
-  cache: "no-store",
- });
- const purchase = await res.json();
- return purchase;
-};
-
-const getDevice = async (id: string) => {
- const res = await fetch(`${process.env.API_HOST}/company/device/${id}`, {
-  cache: "no-store",
- });
- const device = await res.json();
- return device;
-};
+export async function generateMetadata({ params }: IParams) {
+ const device = await getPurchase(params.id);
+ return { title: device.name };
+}
 
 const page = async ({ params }: { params: { id: string; lng: string } }) => {
- const purchase = (await getPurchase(
-  params.id,
-  cookies().get("COOKIE_AUTH")?.value || ""
- )) as IPurchase;
+ const purchase = await getPurchase(params.id);
  if ("error" in purchase) {
   redirect(`/company`);
  }
- const device = (await getDevice(purchase.deviceId)) as IDevice;
+ const device = await getDevice(purchase.deviceId);
  return (
   <Device
    deviceId={purchase._id}

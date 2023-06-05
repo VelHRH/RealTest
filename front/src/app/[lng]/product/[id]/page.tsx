@@ -9,54 +9,23 @@ import Link from "next/link";
 import Button from "@/components/ui/Button";
 import TestCard from "@/components/test/TestCard";
 import { useTranslation } from "../../../i18n";
+import { getProduct } from "@/fetch/product";
+import { getCompany } from "@/fetch/company";
+import { getTestsByProduct } from "@/fetch/test";
 
-interface Params {
- params: { id: string; lng: string };
-}
-
-const getProduct = async (id: string) => {
- const res = await fetch(`${process.env.API_HOST}/test/product/${id}`, {
-  cache: "no-store",
- });
- const product = await res.json();
- return product;
-};
-
-export async function generateMetadata({ params }: Params) {
+export async function generateMetadata({ params }: IParams) {
  const product = await getProduct(params.id);
  return { title: product.name };
 }
 
-const getCompany = async (id: string) => {
- const res = await fetch(`${process.env.API_HOST}/company/${id}`, {
-  cache: "no-store",
- });
- const company = await res.json();
- return company;
-};
+const Product = async ({ params }: IParams) => {
+ const product = await getProduct(params.id);
 
-const getTestsByProduct = async (id: string, cookie: string) => {
- const res = await fetch(`${process.env.API_HOST}/test/getByProduct/${id}`, {
-  headers: {
-   Cookie: `COOKIE_AUTH=${cookie}`,
-  },
-  cache: "no-store",
- });
- const tests = await res.json();
- return tests;
-};
+ const company = await getCompany(product.companyId);
 
-const Product = async ({ params }: Params) => {
- const product = (await getProduct(params.id)) as IProduct;
+ const user = await checkAuth(cookies().get("COOKIE_AUTH")?.value);
 
- const company = (await getCompany(product.companyId)) as ICompany;
-
- const user = (await checkAuth(cookies().get("COOKIE_AUTH")?.value)) as IUser;
-
- const tests = (await getTestsByProduct(
-  params.id,
-  cookies().get("COOKIE_AUTH")?.value || ""
- )) as ITest[] | { error: string };
+ const tests = await getTestsByProduct(params.id);
  const { t } = (await useTranslation(params.lng)) as TranslationResult;
  return (
   <>

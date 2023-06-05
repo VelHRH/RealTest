@@ -3,6 +3,11 @@ import LoginUser from "@/components/user/LoginUser";
 import Link from "next/link";
 import { useTranslation } from "../../../i18n";
 
+export const metadata = {
+ title: "Sign In",
+ description: "Signing into the system",
+};
+
 const UserLogin = async ({ params }: { params: { lng: string } }) => {
  const { t } = (await useTranslation(params.lng)) as TranslationResult;
  return (

@@ -13,33 +13,17 @@ import StripePayment from "@/components/StripePayment";
 import ProductCard from "@/components/ProductCard";
 import CompanyDeviceCard from "@/components/device/CompanyDeviceCard";
 import { useTranslation } from "../../../i18n";
+import { getCompany } from "@/fetch/company";
+import { getProductsByCompany } from "@/fetch/product";
+import { getDevicesByCompany } from "@/fetch/device";
 
-const getCompany = async (id: string) => {
- const res = await fetch(`${process.env.API_HOST}/company/${id}`, {
-  cache: "no-store",
- });
- const company = await res.json();
- return company;
-};
+export async function generateMetadata({ params }: IParams) {
+ const company = await getCompany(params.id);
+ return { title: company.name };
+}
 
-const getProductsByCompany = async (id: string) => {
- const res = await fetch(`${process.env.API_HOST}/test/products/${id}`, {
-  cache: "no-store",
- });
- const products = await res.json();
- return products;
-};
-
-const getDevicesByCompany = async (id: string) => {
- const res = await fetch(`${process.env.API_HOST}/company/purchases/${id}`, {
-  cache: "no-store",
- });
- const devices = await res.json();
- return devices;
-};
-
-const Company = async ({ params }: { params: { id: string; lng: string } }) => {
- const company = (await getCompany(params.id)) as ICompany;
+const Company = async ({ params }: IParams) => {
+ const company = await getCompany(params.id);
  const user = await checkAuth(cookies().get("COOKIE_AUTH")?.value);
  const isAdmin = await checkAdmin({
   userLogin: user.login,
@@ -138,7 +122,7 @@ const Company = async ({ params }: { params: { id: string; lng: string } }) => {
      )}
 
      <Headline classes="text-5xl font-bold" color="yellow">
-      {company.avgRating === 0 ? "--" : company.avgRating}
+      {company.avgRating === 0 ? "--" : company.avgRating.toFixed(2)}
      </Headline>
     </fieldset>
     <fieldset className="w-full border-2 border-zinc-700 p-4 text-white rounded-lg text-lg mt-4">

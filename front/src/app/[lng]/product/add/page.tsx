@@ -6,6 +6,11 @@ interface PageProps {
  searchParams: { companyName: string; companyId: string };
 }
 
+export const metadata = {
+ title: "New product",
+ description: "Adding product...",
+};
+
 const Page: FC<PageProps> = ({ searchParams }) => {
  return (
   <div className="flex flex-col w-full items-center mt-5">

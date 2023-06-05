@@ -1,32 +1,18 @@
 import Device from "@/components/device/Device";
+import { getMyCompanies } from "@/fetch/company";
+import { getDevice } from "@/fetch/device";
 import { checkAuth } from "@/middleware";
 import { cookies } from "next/headers";
 
-const getDevice = async (id: string) => {
- const res = await fetch(`${process.env.API_HOST}/company/device/${id}`, {
-  cache: "no-store",
- });
- const device = await res.json();
- return device;
-};
-
-const getMyCompanies = async () => {
- const res = await fetch(`${process.env.API_HOST}/company/my/getAll`, {
-  cache: "no-store",
-  headers: {
-   Cookie: `COOKIE_AUTH=${cookies().get("COOKIE_AUTH")?.value}`,
-  },
- });
- const companies = await res.json();
- return companies;
-};
+export async function generateMetadata({ params }: IParams) {
+ const device = await getDevice(params.id);
+ return { title: device.name };
+}
 
 const page = async ({ params }: { params: { id: string; lng: string } }) => {
  const device = await getDevice(params.id);
- const user = (await checkAuth(
-  cookies().get("COOKIE_AUTH")?.value || ""
- )) as IUser;
- const myCompanies = (await getMyCompanies()) as ICompany[];
+ const user = await checkAuth(cookies().get("COOKIE_AUTH")?.value || "");
+ const myCompanies = await getMyCompanies();
 
  return (
   <Device

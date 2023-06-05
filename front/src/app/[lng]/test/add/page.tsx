@@ -6,7 +6,7 @@ import { redirect } from "next/navigation";
 import { useTranslation } from "../../../i18n";
 
 export const metadata = {
- title: "Create test",
+ title: "New test",
  description: "Creating new test",
 };
 
@@ -65,7 +65,7 @@ const Page = async ({ searchParams, params }: PageProps) => {
  const purchases = (await getPurchasesByCompany(
   searchParams.companyId || ""
  )) as IPurchase[];
- const user = (await checkAuth(cookies().get("COOKIE_AUTH")?.value)) as IUser;
+ const user = await checkAuth(cookies().get("COOKIE_AUTH")?.value);
  if (
   !(await checkAdmin({
    userLogin: user.login,

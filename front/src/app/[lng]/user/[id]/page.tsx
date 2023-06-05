@@ -1,45 +1,21 @@
 import UserProfile from "@/components/user/UserProfile";
+import { getCompanyUnderControl } from "@/fetch/company";
+import { getUser } from "@/fetch/user";
 import { checkAuth } from "@/middleware";
 import { cookies } from "next/headers";
 
-interface pageProps {
- params: {
-  id: string;
-  lng: string;
- };
+export async function generateMetadata({ params }: IParams) {
+ const user = await getUser(params.id);
+ return { title: user.login };
 }
 
-const getUser = async (id: string) => {
- const res = await fetch(`${process.env.API_HOST}/user/getOne/${id}`, {
-  cache: "no-store",
- });
- const user = await res.json();
- return user;
-};
-
-const getCompany = async (login: string, role: string) => {
- const res = await fetch(`${process.env.API_HOST}/company`, {
-  cache: "no-store",
- });
- const companies = (await res.json()) as ICompany[];
- for (let company of companies) {
-  if (role === "Owner") {
-   if (company.owner === login) {
-    return company;
-   }
-  } else {
-   if (company.admins.includes(login)) {
-    return company;
-   }
-  }
- }
-};
-
-const User = async ({ params }: pageProps) => {
- const user = (await getUser(params.id)) as IUser;
+const User = async ({ params }: IParams) => {
+ const user = await getUser(params.id);
  const company =
-  user.role !== "User" ? await getCompany(user.login, user.role) : null;
- const me = (await checkAuth(cookies().get("COOKIE_AUTH")?.value)) as IUser;
+  user.role !== "User"
+   ? await getCompanyUnderControl(user.login, user.role)
+   : null;
+ const me = await checkAuth(cookies().get("COOKIE_AUTH")?.value);
  return (
   <UserProfile
    name={user.name}

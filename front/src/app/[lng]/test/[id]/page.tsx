@@ -6,53 +6,20 @@ import { checkAdmin, checkAuth } from "@/middleware";
 import { cookies } from "next/headers";
 import Result from "@/components/Result";
 import { useTranslation } from "../../../i18n";
+import { getResults, getTest } from "@/fetch/test";
+import { getProduct } from "@/fetch/product";
+import { getPurchase } from "@/fetch/device";
 
-const getTest = async (id: string) => {
- const res = await fetch(`${process.env.API_HOST}/test/${id}`, {
-  cache: "no-store",
-  headers: {
-   Cookie: `COOKIE_AUTH=${cookies().get("COOKIE_AUTH")?.value}`,
-  },
- });
- const test = await res.json();
- return test;
-};
-
-const getPurchase = async (id: string) => {
- const res = await fetch(`${process.env.API_HOST}/company/purchase/${id}`, {
-  headers: {
-   Cookie: `COOKIE_AUTH=${cookies().get("COOKIE_AUTH")?.value}`,
-  },
-  cache: "no-store",
- });
- const purchase = await res.json();
- return purchase;
-};
-
-const getProduct = async (id: string) => {
- const res = await fetch(`${process.env.API_HOST}/test/product/${id}`, {
-  cache: "no-store",
- });
- const product = await res.json();
- return product;
-};
-
-const getResults = async (id: string) => {
- const res = await fetch(`${process.env.API_HOST}/test/${id}/result`, {
-  headers: {
-   Cookie: `COOKIE_AUTH=${cookies().get("COOKIE_AUTH")?.value}`,
-  },
-  cache: "no-store",
- });
- const results = await res.json();
- return results;
-};
+export async function generateMetadata({ params }: IParams) {
+ const test = await getTest(params.id);
+ return { title: test.name };
+}
 
 const Test = async ({ params }: { params: { id: string; lng: string } }) => {
- const test = (await getTest(params.id)) as ITest;
- const purchase = (await getPurchase(test.purchaseId)) as IPurchase;
- const product = (await getProduct(test.productId)) as IProduct;
- const user = (await checkAuth(cookies().get("COOKIE_AUTH")?.value)) as IUser;
+ const test = await getTest(params.id);
+ const purchase = await getPurchase(test.purchaseId);
+ const product = await getProduct(test.productId);
+ const user = await checkAuth(cookies().get("COOKIE_AUTH")?.value);
  const isAdmin = await checkAdmin({
   userLogin: user.login,
   companyId: product.companyId,
