@@ -61,7 +61,11 @@ const Test = async ({ params }: { params: { id: string; lng: string } }) => {
     <div className="flex-1 flex justify-center">
      {!test.testStart ? (
       <div className={`flex flex-col w-1/2 gap-6`}>
-       <StartTest testId={test._id} text={t("Start test")} />
+       <StartTest
+        testId={test._id}
+        text={t("Start test")}
+        testName={test.name}
+       />
        <DeleteTest testId={test._id} text={t("Delete test")} />
       </div>
      ) : (
