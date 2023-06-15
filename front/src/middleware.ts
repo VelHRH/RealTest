@@ -61,8 +61,8 @@ export async function middleware(request: NextRequest) {
  const user = await checkAuth(request.cookies.get("COOKIE_AUTH")?.value);
  if (user.login) {
   if (
-   request.nextUrl.pathname.startsWith("/user/login") ||
-   request.nextUrl.pathname.startsWith("/user/register")
+   request.nextUrl.pathname.includes("/user/login") ||
+   request.nextUrl.pathname.includes("/user/register")
   ) {
    return NextResponse.redirect(new URL("/", request.url));
   }

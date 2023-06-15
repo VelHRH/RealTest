@@ -15,7 +15,7 @@ const Navbar = async ({ t, lng }: TranslationResult) => {
     {user.login ? (
      <>
       <MenuElem link={`${lng}/test`}> {t("tests")} </MenuElem>
-      <MenuElem link={`${lng}/device/644bc87ee1a1e68a4f6ec7f0`}>
+      <MenuElem link={`${lng}/device/648ae353ff53625e5a737fb3`}>
        {t("devices")}
       </MenuElem>
       <MenuElem link={`${lng}/user/${user._id}`} isLast>

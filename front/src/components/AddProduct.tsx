@@ -49,6 +49,7 @@ const AddProduct = ({
     price,
     companyId,
     imgUrl,
+    description,
    }),
    cache: "no-store",
   });
@@ -61,15 +62,15 @@ const AddProduct = ({
  };
  return (
   <form className="w-full flex my-7" onSubmit={createProduct}>
-   <div className="flex flex-col items-center w-1/2">
-    <div className="w-full p-1 mt-4 bg-gradient-to-r from-blue-500 to-blue-700">
+   <div className="flex flex-col items-center w-1/2 gap-4">
+    <div className="w-full p-1 mt-4 bg-gradient-to-r from-amber-400 to-amber-600">
      <div className="flex bg-zinc-900 w-full h-full items-center">
       <input
        type="text"
        value={companyName}
        disabled={companyName}
        className={`w-full outline-none bg-zinc-900 h-full p-2 ${
-        companyName ? "text-blue-500" : "text-white"
+        companyName ? "text-amber-500" : "text-white"
        } font-medium text-lg `}
       />
      </div>
@@ -78,21 +79,21 @@ const AddProduct = ({
      value={name}
      setValue={setName}
      placeholder="Product name"
-     color="blue"
+     color="yellow"
      isDisplay
     />
     <Input
      value={description}
      setValue={setDescription}
-     placeholder="Product name"
-     color="blue"
+     placeholder="Product description"
+     color="yellow"
      isDisplay={name.length >= 2}
     />
     <Input
      value={price}
      setValue={setPrice}
      placeholder="Your price"
-     color="blue"
+     color="yellow"
      isDisplay={name.length >= 2 && description.length >= 3}
      type="number"
     />
@@ -108,7 +109,7 @@ const AddProduct = ({
      <div
       className={`w-full mt-4 hover:scale-105 duration-300 ${
        price === 0 || name.length < 2 ? "opacity-0" : "opacity-100"
-      } duration-500 bg-gradient-to-r from-blue-400 to-blue-600 p-2 rounded-lg`}
+      } duration-500 bg-gradient-to-r from-amber-400 to-amber-600 p-2 rounded-lg`}
      >
       <label
        htmlFor="uploadImg"

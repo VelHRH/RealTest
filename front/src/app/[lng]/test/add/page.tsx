@@ -75,7 +75,7 @@ const Page = async ({ searchParams, params }: PageProps) => {
  }
  const { t } = (await useTranslation(params.lng)) as TranslationResult;
  return (
-  <div className="flex flex-col w-full items-center mt-10">
+  <div className="flex flex-col w-full items-center mt-10 mb-5">
    <Headline color="yellow" classes="text-4xl font-bold">
     {t("Adding new test...")}
    </Headline>

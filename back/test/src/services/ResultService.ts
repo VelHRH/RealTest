@@ -88,7 +88,7 @@ export class ResultService {
    let reports = [];
 
    const defaultDistance = parseInt(
-    results[0].data[0].slice(0, results[0].data[0].indexOf("cm"))
+    results[0]?.data[0].slice(0, results[0].data[0].indexOf("cm"))
    );
    for (let result of results) {
     let approaches = [];

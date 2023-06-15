@@ -34,7 +34,7 @@ const Result: FC<ResultProps> = ({
        ? "bg-green-950"
        : appoaches.length >= 3 && appoaches.length < 5
        ? "bg-green-800"
-       : "bg-grenn-700"
+       : "bg-green-700"
      : "bg-zinc-800"
    } text-white flex flex-col`}
   >

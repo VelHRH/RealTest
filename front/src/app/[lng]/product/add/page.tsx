@@ -14,7 +14,7 @@ export const metadata = {
 const Page: FC<PageProps> = ({ searchParams }) => {
  return (
   <div className="flex flex-col w-full items-center mt-5">
-   <Headline color="blue" classes="text-4xl font-bold">
+   <Headline color="yellow" classes="text-4xl font-bold">
     Adding new product...
    </Headline>
    <AddProduct

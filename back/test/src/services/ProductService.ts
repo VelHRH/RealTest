@@ -10,10 +10,11 @@ export class ProductService {
   price: number;
   companyId: string;
   imgUrl: string;
+  description?: string;
   identityLogin: string;
  }) {
   try {
-   const { name, price, companyId, imgUrl, identityLogin } = data;
+   const { name, price, companyId, imgUrl, identityLogin, description } = data;
    if (!name || !price || !companyId || !imgUrl) {
     throw AppError.badRequest("All fields should be filled!");
    }
@@ -23,6 +24,7 @@ export class ProductService {
     price,
     companyId,
     imgUrl,
+    description,
    });
    const doc = await product.save();
    return doc;

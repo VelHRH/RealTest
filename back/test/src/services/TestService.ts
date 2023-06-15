@@ -3,6 +3,7 @@ import { AppError } from "../utils/app-errors";
 import axios from "axios";
 import { BASE_URL } from "../config";
 import mongoose from "mongoose";
+import { ProductModel } from "../database/models/Product";
 
 export class TestService {
  async CreateTest(data: {
@@ -30,10 +31,12 @@ export class TestService {
     );
    }
    await this.CheckCompanyByPurchase(purchaseId, identityLogin);
+   const product = await ProductModel.findOne({ _id: productId });
    const test = new TestModel({
     purchaseId,
     name,
     productId,
+    companyId: product.companyId,
     reportingFrequency,
     testCreator: identityLogin,
    });

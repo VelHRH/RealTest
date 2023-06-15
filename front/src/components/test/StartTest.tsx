@@ -50,7 +50,7 @@ const StartTest: FC<StartTestProps> = ({ testId, text, otherTests }) => {
    }));
   const response = await res.json();
   const response2 = res2 && (await res2.json());
-  if (response.success && response2.success) {
+  if (response.success && (response2.success || secondTest._id === "")) {
    toast.success("Test(s) started!");
    window.location.reload();
   }
