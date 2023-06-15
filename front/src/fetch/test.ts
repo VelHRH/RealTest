@@ -29,3 +29,12 @@ export const getResults = async (id: string) => {
  });
  return await res.json();
 };
+
+export const getTests = async () => {
+ const res = await fetch(`${process.env.API_HOST}/test`, {
+  headers: {
+   Cookie: `COOKIE_AUTH=${cookies().get("COOKIE_AUTH")?.value}`,
+  },
+ });
+ return (await res.json()) as ITest[];
+};

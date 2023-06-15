@@ -39,7 +39,6 @@ const getPurchasesByCompany = async (id: string) => {
   },
  });
  const purchases = await res.json();
- console.log(purchases);
  let returnPurchases = [];
  for (let i of purchases) {
   const res2 = await fetch(

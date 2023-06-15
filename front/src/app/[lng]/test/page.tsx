@@ -1,15 +1,10 @@
 import TestCard from "@/components/test/TestCard";
 import Headline from "@/components/ui/Headline";
-import { cookies } from "next/headers";
+import { getTests } from "@/fetch/test";
 import { useTranslation } from "../../i18n";
 
 const Page = async ({ params }: { params: { lng: string } }) => {
- const res = await fetch(`${process.env.API_HOST}/test`, {
-  headers: {
-   Cookie: `COOKIE_AUTH=${cookies().get("COOKIE_AUTH")?.value}`,
-  },
- });
- const tests = (await res.json()) as ITest[];
+ const tests = await getTests();
  const { t } = (await useTranslation(params.lng)) as TranslationResult;
  return (
   <>

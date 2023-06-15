@@ -6,7 +6,7 @@ import { checkAdmin, checkAuth } from "@/middleware";
 import { cookies } from "next/headers";
 import Result from "@/components/Result";
 import { useTranslation } from "../../../i18n";
-import { getResults, getTest } from "@/fetch/test";
+import { getResults, getTest, getTests } from "@/fetch/test";
 import { getProduct } from "@/fetch/product";
 import { getPurchase } from "@/fetch/device";
 
@@ -17,6 +17,7 @@ export async function generateMetadata({ params }: IParams) {
 
 const Test = async ({ params }: { params: { id: string; lng: string } }) => {
  const test = await getTest(params.id);
+ const allTests = await getTests();
  const purchase = await getPurchase(test.purchaseId);
  const product = await getProduct(test.productId);
  const user = await checkAuth(cookies().get("COOKIE_AUTH")?.value);
@@ -64,7 +65,12 @@ const Test = async ({ params }: { params: { id: string; lng: string } }) => {
        <StartTest
         testId={test._id}
         text={t("Start test")}
-        testName={test.name}
+        otherTests={allTests.filter(
+         (t) =>
+          t.companyId === product.companyId &&
+          t.testStart === undefined &&
+          t._id !== test._id
+        )}
        />
        <DeleteTest testId={test._id} text={t("Delete test")} />
       </div>
