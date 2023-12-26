@@ -172,7 +172,7 @@ const Device: FC<DeviceProps> = ({
     <div className="flex flex-col w-1/5">
      <Image
       alt="Device image"
-      src={imgUrl}
+      src={`${process.env.API_HOST}/${imgUrl}`}
       width={700}
       height={700}
       priority

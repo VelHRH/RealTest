@@ -97,7 +97,6 @@ export const testAPI = async (app: express.Application) => {
 
  app.get(
   "/",
-  checkAuth,
   async (
    req: express.Request,
    res: express.Response,
