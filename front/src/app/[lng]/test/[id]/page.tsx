@@ -4,11 +4,11 @@ import StartTest from '@/components/test/StartTest';
 import DeleteTest from '@/components/test/DeleteTest';
 import { checkAdmin, checkAuth } from '@/middleware';
 import { cookies } from 'next/headers';
-import Result from '@/components/Result';
 import { useTranslation } from '../../../i18n';
 import { getResults, getTest, getTests } from '@/fetch/test';
 import { getProduct } from '@/fetch/product';
 import { getPurchase } from '@/fetch/device';
+import PeriodDetails from '@/components/testResults/PeriodDetails';
 
 export async function generateMetadata({ params }: IParams) {
   const test = await getTest(params.id);
@@ -17,7 +17,7 @@ export async function generateMetadata({ params }: IParams) {
 
 const Test = async ({ params }: { params: { id: string; lng: string } }) => {
   const allTests = await getTests();
-  const test = allTests.find(t => t._id === params.id);
+  const test = allTests.find(t => t._id === params.id)!;
   const purchase = await getPurchase(test.purchaseId);
   const product = await getProduct(test.productId);
   const user = await checkAuth(cookies().get('COOKIE_AUTH')?.value);
@@ -91,23 +91,7 @@ const Test = async ({ params }: { params: { id: string; lng: string } }) => {
           )}
         </div>
       </div>
-      {isAdmin && test.testStart && (
-        <div className="flex flex-col gap-4 mt-7 w-full mb-7">
-          <h1 className="mb-3 pb-2 border-b-2 border-zinc-700 font-bold text-3xl text-zinc-100">
-            {t('Results')}:
-          </h1>
-          {!results.error &&
-            results.reports.map((result: IResult) => (
-              <Result
-                key={result._id}
-                lng={params.lng}
-                appoaches={result.approaches}
-                resultEnd={result.resultEnd}
-                resultSatrt={result.resultStart}
-              />
-            ))}
-        </div>
-      )}
+      {isAdmin && test.testStart && <PeriodDetails lng={params.lng} results={results} />}
     </>
   );
 };
