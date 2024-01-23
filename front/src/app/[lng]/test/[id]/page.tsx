@@ -9,6 +9,7 @@ import { getResults, getTest, getTests } from '@/fetch/test';
 import { getProduct } from '@/fetch/product';
 import { getPurchase } from '@/fetch/device';
 import PeriodDetails from '@/components/testResults/PeriodDetails';
+import ApproachCharts from '@/components/charts/ApproachCharts';
 
 export async function generateMetadata({ params }: IParams) {
   const test = await getTest(params.id);
@@ -28,7 +29,7 @@ const Test = async ({ params }: { params: { id: string; lng: string } }) => {
   const results = await getResults(params.id);
   const { t } = (await useTranslation(params.lng)) as TranslationResult;
   return (
-    <>
+    <div className="flex flex-col gap-3">
       <div className="flex gap-2 items-center">
         <div className="w-1/2 text-white border-4 border-zinc-700 rounded-2xl p-5 mt-7">
           <div className="font-bold text-4xl mb-10">{test.name}</div>
@@ -91,8 +92,9 @@ const Test = async ({ params }: { params: { id: string; lng: string } }) => {
           )}
         </div>
       </div>
+      <ApproachCharts results={results.reports} />
       {isAdmin && test.testStart && <PeriodDetails lng={params.lng} results={results} />}
-    </>
+    </div>
   );
 };
 
