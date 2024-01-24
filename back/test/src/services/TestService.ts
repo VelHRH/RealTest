@@ -33,7 +33,7 @@ export class TestService {
         purchaseId,
         name,
         productId,
-        companyId: product.companyId,
+        companyId: product?.companyId,
         reportingFrequency,
         testCreator: identityLogin,
       });
@@ -58,11 +58,11 @@ export class TestService {
         throw AppError.badRequest('Wrong id format!');
       }
       const test = await TestModel.findById(testId);
-      await this.CheckCompanyByPurchase(test.purchaseId, identityLogin);
+      await this.CheckCompanyByPurchase(test!.purchaseId, identityLogin);
       await TestModel.findByIdAndDelete(testId);
       const payload = {
         event: 'SWITCH_PURCHASE_STATUS',
-        data: { purchaseId: test.purchaseId },
+        data: { purchaseId: test?.purchaseId },
       };
       await axios.post(`${BASE_URL}/company/app-events/`, {
         payload,
@@ -152,7 +152,7 @@ export class TestService {
       }
       return true;
     } catch (err) {
-      if (err.response && err.response.status === 500) {
+      if (err instanceof AppError) {
         throw AppError.internal(
           'The foreign service is unavailable at this time. Please try again later.',
         );

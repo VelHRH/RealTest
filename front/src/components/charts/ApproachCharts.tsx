@@ -1,27 +1,55 @@
-import { FC } from 'react';
 import CustomChart from './CustomChart';
+import { useTranslation } from '@/app/i18n';
 
 interface ApproachChartsProps {
   results: any;
+  lng: string;
 }
 
-const ApproachCharts: FC<ApproachChartsProps> = ({ results }) => {
-  const approachesByNumber = results.map(res => res.approaches.length);
+const ApproachCharts = async ({ results, lng }: ApproachChartsProps) => {
+  const approachesNumber = results.map(res => res.approaches.length);
   const totalDurations = results.map(result => {
     const totalDuration = result.approaches.reduce((acc, approach) => acc + approach.duration, 0);
-    console.log(totalDuration);
     return totalDuration;
   });
+  const avgDurations = totalDurations.map((duration, index) => duration / approachesNumber[index]);
+  const avgDistance = results.map((result, index) => {
+    const totalDistance = result.approaches.reduce((acc, approach) => acc + approach.approach, 0);
+    return totalDistance / approachesNumber[index];
+  });
+  const { t } = await useTranslation(lng);
   return (
-    <div className="flex justify-around h-[500px]">
-      <div className="flex flex-col items-center text-zinc-300 text-3xl font-bold w-2/5">
-        Approaches per period
-        <CustomChart id="appbynumber" data={approachesByNumber} />
-      </div>
-      <div className="flex flex-col items-center text-zinc-300 text-3xl font-bold w-2/5">
-        Approaches duration per period
-        <CustomChart id="appbyduration" data={totalDurations} bgColor="yellow" />
-      </div>
+    <div className="flex gap-5 justify-around flex-wrap text-2xl font-bold text-zinc-300">
+      <CustomChart
+        id="appnumber"
+        data={approachesNumber}
+        name={t('App per period')}
+        xName={t('Period')}
+        yName={t('Approaches')}
+      />
+      <CustomChart
+        id="appduration"
+        data={totalDurations}
+        name={t('App duration per period')}
+        xName={t('Period')}
+        yName={t('Duration (seconds)')}
+        bgColor="yellow"
+      />
+      <CustomChart
+        id="avgdistance"
+        data={avgDistance}
+        name={t('Avg distance per app')}
+        xName={t('Period')}
+        yName={t('Distance (centimeter)')}
+      />
+      <CustomChart
+        id="avgduration"
+        data={avgDurations}
+        name={t('Avg app duration per period')}
+        xName={t('Period')}
+        yName={t('Avg duration (seconds)')}
+        bgColor="yellow"
+      />
     </div>
   );
 };

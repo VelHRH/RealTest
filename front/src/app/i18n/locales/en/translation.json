@@ -62,5 +62,9 @@
   "Logout": "Logout",
   "Periods details": "Periods details",
   "Show": "Show",
-  "Hide": "Hide"
+  "Hide": "Hide",
+  "App per period": "App per period",
+  "App duration per period": "App duration per period",
+  "Avg app duration per period": "Avg app duration per period",
+  "Avg distance per app": "Avg distance per app"
 }

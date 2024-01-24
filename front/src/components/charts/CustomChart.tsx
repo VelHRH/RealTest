@@ -4,6 +4,9 @@ import { FC, useEffect } from 'react';
 import { Chart, ChartTypeRegistry } from 'chart.js/auto';
 
 interface ApproachChartProps {
+  name?: string;
+  xName?: string;
+  yName?: string;
   data: number[];
   id: string;
   bgColor?: string;
@@ -11,7 +14,16 @@ interface ApproachChartProps {
   type?: keyof ChartTypeRegistry;
 }
 
-const CustomChart: FC<ApproachChartProps> = ({ data, id, bgColor, labels, type }) => {
+const CustomChart: FC<ApproachChartProps> = ({
+  data,
+  id,
+  bgColor,
+  labels,
+  type,
+  name,
+  xName,
+  yName,
+}) => {
   useEffect(() => {
     const canvas = document.getElementById(id) as HTMLCanvasElement;
     var ctx = canvas.getContext('2d');
@@ -21,15 +33,6 @@ const CustomChart: FC<ApproachChartProps> = ({ data, id, bgColor, labels, type }
     }
     new Chart(ctx!, {
       type: type || 'bar',
-      options: {
-        indexAxis: 'x',
-        maintainAspectRatio: false,
-        plugins: {
-          legend: {
-            display: false,
-          },
-        },
-      },
       data: {
         labels: labels || data.map((i, index) => index + 1),
         datasets: [
@@ -39,10 +42,36 @@ const CustomChart: FC<ApproachChartProps> = ({ data, id, bgColor, labels, type }
           },
         ],
       },
+      options: {
+        scales: {
+          x: {
+            title: {
+              display: true,
+              text: xName,
+            },
+          },
+          y: {
+            title: {
+              display: true,
+              text: yName,
+            },
+          },
+        },
+        plugins: {
+          legend: {
+            display: false,
+          },
+        },
+      },
     });
   }, []);
 
-  return <canvas id={id} className="h-full w-full"></canvas>;
+  return (
+    <div className="flex flex-col items-center w-2/5 h-[500px]">
+      {name}
+      <canvas id={id} className="flex-1"></canvas>
+    </div>
+  );
 };
 
 export default CustomChart;

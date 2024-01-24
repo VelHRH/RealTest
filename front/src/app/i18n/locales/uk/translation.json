@@ -62,5 +62,9 @@
   "Logout": "Вийти",
   "Periods details": "Подробиці кожного періоду",
   "Show": "Показати",
-  "Hide": "Сховати"
+  "Hide": "Сховати",
+  "App per period": "Кількість наближень",
+  "App duration per period": "Загальна тривалість наближень",
+  "Avg app duration per period": "Середня тривалість наближень",
+  "Avg distance per app": "Середня дистанція на наближення"
 }
