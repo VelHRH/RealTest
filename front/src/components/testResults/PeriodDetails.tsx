@@ -1,8 +1,9 @@
 'use client';
 
 import { FC, useState } from 'react';
-import Result from '../Result';
+import ResultItem from '../ResultItem';
 import { useTranslation } from '@/app/i18n/client';
+import { Result } from 'types';
 
 interface PeriodDetailsProps {
   lng: string;
@@ -23,13 +24,13 @@ const PeriodDetails: FC<PeriodDetailsProps> = ({ lng, results }) => {
       </div>
       {!results.error &&
         isOpen &&
-        results.reports.map((result: IResult) => (
-          <Result
+        results.map(result => (
+          <ResultItem
             key={result._id}
             lng={lng}
             appoaches={result.approaches}
-            resultEnd={result.resultEnd}
-            resultSatrt={result.resultStart}
+            resultEnd={result.end}
+            resultSatrt={result.start}
           />
         ))}
     </div>

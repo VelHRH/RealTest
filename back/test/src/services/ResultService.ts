@@ -18,10 +18,10 @@ export class ResultService {
       }
       const reportingFrequency =
         test.reportingFrequency === 'Every 15 minutes'
-          ? 60 * 1000
+          ? 15 * 60 * 1000
           : test.reportingFrequency === 'Every 30 minutes'
           ? 30 * 60 * 1000
-          : 60 * 60 * 1000;
+          : 60 * 1000;
       const start = new Date();
       const end = new Date(testEnd);
       const timeDifference = end.getTime() - start.getTime();
@@ -32,43 +32,53 @@ export class ResultService {
         { _id: testId },
         { testStart: start, testEnd: end, isExecuted: true },
       );
+
       const intervalId = setInterval(async () => {
         await this.ExecuteTest(testId, reportingFrequency);
       }, reportingFrequency + 1000);
 
+      this.switchPurchaseStatus(test.purchaseId);
+
+      await this.ExecuteTest(testId, reportingFrequency);
+
       setTimeout(async () => {
-        const payload = {
-          event: 'SWITCH_PURCHASE_STATUS',
-          data: { purchaseId: test.purchaseId },
-        };
-        await axios.post(`${BASE_URL}/company/app-events/`, {
-          payload,
-        });
+        this.switchPurchaseStatus(test.purchaseId);
         clearInterval(intervalId);
       }, timeDifference);
 
-      return Promise.resolve({ success: true });
+      return { success: true };
     } catch (err) {
       throw err;
     }
   }
 
+  private async switchPurchaseStatus(id: string) {
+    const payload = {
+      event: 'SWITCH_PURCHASE_STATUS',
+      data: { purchaseId: id },
+    };
+    await axios.post(`${BASE_URL}/company/app-events/`, {
+      payload,
+    });
+  }
+
   async ExecuteTest(testId: string, reportingFrequency: number) {
     const startTime = new Date();
-    const result = await runTestingForDuration(reportingFrequency);
-    const newResult = new ResultModel({
+    const results = await runTestingForDuration(reportingFrequency);
+    const newResult: Result = {
       testId: testId,
-      resultStart: startTime,
-      resultEnd: new Date(),
-      data: result,
-    });
-    await newResult.save();
+      start: startTime,
+      end: new Date(),
+      approaches: results,
+    };
+    await new ResultModel(newResult).save();
   }
 
   async GetResults({ testId }: { testId: string }) {
     try {
       let results: Result[] = await ResultModel.find({ testId });
       let allApproaches = 0;
+      if (!results.length) return { results, allApproaches };
       const defaultDistance = results[0].approaches[0].distance;
       for (let index in results) {
         let apps: Approach[] = [];

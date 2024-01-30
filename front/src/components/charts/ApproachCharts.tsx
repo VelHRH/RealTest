@@ -9,17 +9,17 @@ interface ApproachChartsProps {
 const ApproachCharts = async ({ results, lng }: ApproachChartsProps) => {
   const approachesNumber = results.map(res => res.approaches.length);
   const totalDurations = results.map(result => {
-    const totalDuration = result.approaches.reduce((acc, approach) => acc + approach.duration, 0);
+    const totalDuration = result.approaches.reduce((acc, approach) => acc + approach.time, 0);
     return totalDuration;
   });
   const avgDurations = totalDurations.map((duration, index) => duration / approachesNumber[index]);
   const avgDistance = results.map((result, index) => {
-    const totalDistance = result.approaches.reduce((acc, approach) => acc + approach.approach, 0);
+    const totalDistance = result.approaches.reduce((acc, approach) => acc + approach.distance, 0);
     return totalDistance / approachesNumber[index];
   });
   const { t } = await useTranslation(lng);
   return (
-    <div className="flex gap-5 justify-around flex-wrap text-2xl font-bold text-zinc-300">
+    <div className="flex gap-5 justify-around flex-wrap font-bold text-zinc-300">
       <CustomChart
         id="appnumber"
         data={approachesNumber}

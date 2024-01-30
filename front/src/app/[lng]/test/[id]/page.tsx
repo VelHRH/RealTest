@@ -26,8 +26,9 @@ const Test = async ({ params }: { params: { id: string; lng: string } }) => {
     userLogin: user.login,
     companyId: product.companyId,
   });
-  const results = await getResults(params.id);
+  const { results, allApproaches } = await getResults(params.id);
   const { t } = (await useTranslation(params.lng)) as TranslationResult;
+
   return (
     <div className="flex flex-col gap-5">
       <div className="flex gap-2 items-center">
@@ -85,15 +86,20 @@ const Test = async ({ params }: { params: { id: string; lng: string } }) => {
               </h1>
               <h1>
                 <span className="font-semibold">
-                  {t('Total approaches')}: {results.allApproaches}
+                  {t('Total approaches')}: {allApproaches}
                 </span>
               </h1>
             </div>
           )}
         </div>
       </div>
-      <ApproachCharts results={results.reports} lng={params.lng} />
-      {isAdmin && test.testStart && <PeriodDetails lng={params.lng} results={results} />}
+      {isAdmin && results.length && (
+        <>
+          {/* @ts-expect-error Server Component */}
+          <ApproachCharts results={results} lng={params.lng} />
+          <PeriodDetails lng={params.lng} results={results} />
+        </>
+      )}
     </div>
   );
 };

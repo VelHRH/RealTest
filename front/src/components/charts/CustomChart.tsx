@@ -68,7 +68,7 @@ const CustomChart: FC<ApproachChartProps> = ({
 
   return (
     <div className="flex flex-col items-center w-2/5 h-[500px]">
-      {name}
+      <p className="text-2xl">{name}</p>
       <canvas id={id} className="flex-1"></canvas>
     </div>
   );
