@@ -1,10 +1,9 @@
-'use client';
+"use client";
 
-import { FC, useEffect } from 'react';
-import { Chart, ChartTypeRegistry } from 'chart.js/auto';
+import { Chart, ChartTypeRegistry } from "chart.js/auto";
+import { FC, useEffect } from "react";
 
 interface ApproachChartProps {
-  name?: string;
   xName?: string;
   yName?: string;
   data: number[];
@@ -20,25 +19,24 @@ const CustomChart: FC<ApproachChartProps> = ({
   bgColor,
   labels,
   type,
-  name,
   xName,
   yName,
 }) => {
   useEffect(() => {
     const canvas = document.getElementById(id) as HTMLCanvasElement;
-    var ctx = canvas.getContext('2d');
+    var ctx = canvas.getContext("2d");
     const existingChart = Chart.getChart(ctx!);
     if (existingChart) {
       existingChart.destroy();
     }
     new Chart(ctx!, {
-      type: type || 'bar',
+      type: type || "bar",
       data: {
         labels: labels || data.map((i, index) => index + 1),
         datasets: [
           {
             data: data,
-            backgroundColor: bgColor || '#14b8a6',
+            backgroundColor: bgColor || "#14b8a6",
           },
         ],
       },
@@ -66,12 +64,7 @@ const CustomChart: FC<ApproachChartProps> = ({
     });
   }, []);
 
-  return (
-    <div className="flex flex-col items-center w-2/5 h-[500px]">
-      <p className="text-2xl">{name}</p>
-      <canvas id={id} className="flex-1"></canvas>
-    </div>
-  );
+  return <canvas id={id}></canvas>;
 };
 
 export default CustomChart;

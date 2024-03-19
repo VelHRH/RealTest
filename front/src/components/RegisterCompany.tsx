@@ -1,18 +1,17 @@
-//@ts-nocheck
 "use client";
-import React, { useEffect, useState } from "react";
+import { faUpload } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
+import React, { FormEvent, useEffect, useState } from "react";
+import { useTranslation } from "../app/i18n/client";
 import Button from "./ui/Button";
 import Input from "./ui/Input";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faUpload } from "@fortawesome/free-solid-svg-icons";
-import Image from "next/image";
-import { useTranslation } from "../app/i18n/client";
 
 const RegisterCompany = ({ lng }: { lng: string }) => {
  const [name, setName] = useState("");
  const [desc, setDesc] = useState("");
- const [selectedImage, setSelectedImage] = useState(null);
+ const [selectedImage, setSelectedImage] = useState<File>();
  const [avatarUrl, setAvatarUrl] = useState("");
  const [isLoading, setIsLoading] = useState(false);
  const router = useRouter();
@@ -27,9 +26,9 @@ const RegisterCompany = ({ lng }: { lng: string }) => {
 
  const addImageHandler = async (e: React.ChangeEvent<HTMLInputElement>) => {
   const formData = new FormData();
-  const file = e.target.files[0];
+  const file = e.target.files![0];
   setSelectedImage(file);
-  formData.append("image", e.target.files[0]);
+  formData.append("image", e.target.files![0]);
   const res = await fetch(`${process.env.API_HOST}/upload`, {
    method: "POST",
    body: formData,
@@ -39,7 +38,7 @@ const RegisterCompany = ({ lng }: { lng: string }) => {
   setAvatarUrl(imgUrl.url);
  };
 
- const createCompany = async (e: React.React.FormEvent<HTMLFormElement>) => {
+ const createCompany = async (e: FormEvent<HTMLFormElement>) => {
   e.preventDefault();
   setIsLoading(true);
   const res = await fetch(`${process.env.API_HOST}/company/create`, {
@@ -119,7 +118,7 @@ const RegisterCompany = ({ lng }: { lng: string }) => {
       color={`${
        desc.length >= 2 && name.length >= 2 && selectedImage ? "yellow" : "grey"
       }`}
-      isAnimate={desc.length >= 2 && name.length >= 2 && selectedImage}
+      isAnimate={!!(desc.length >= 2 && name.length >= 2 && selectedImage)}
       isDisabled={desc.length < 2 || name.length < 2 || !selectedImage}
       isLoading={isLoading}
      >

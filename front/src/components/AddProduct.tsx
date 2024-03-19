@@ -1,12 +1,11 @@
-// @ts-nocheck
 "use client";
-import React, { useState } from "react";
+import { faUpload } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
+import { ChangeEvent, FormEvent, useState } from "react";
 import Button from "./ui/Button";
 import Input from "./ui/Input";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faUpload } from "@fortawesome/free-solid-svg-icons";
-import Image from "next/image";
 
 const AddProduct = ({
  companyName,
@@ -18,16 +17,16 @@ const AddProduct = ({
  const [name, setName] = useState("");
  const [description, setDescription] = useState("");
  const [price, setPrice] = useState(0);
- const [selectedImage, setSelectedImage] = useState(null);
+ const [selectedImage, setSelectedImage] = useState<File>();
  const [imgUrl, setImgUrl] = useState("");
  const [isLoading, setIsLoading] = useState(false);
  const router = useRouter();
 
- const addImageHandler = async (e: React.ChangeEvent<HTMLInputElement>) => {
+ const addImageHandler = async (e: ChangeEvent<HTMLInputElement>) => {
   const formData = new FormData();
-  const file = e.target.files[0];
+  const file = e.target.files![0];
   setSelectedImage(file);
-  formData.append("image", e.target.files[0]);
+  formData.append("image", e.target.files![0]);
   const res = await fetch(`${process.env.API_HOST}/upload`, {
    method: "POST",
    body: formData,
@@ -37,7 +36,7 @@ const AddProduct = ({
   setImgUrl(imgUrl.url);
  };
 
- const createProduct = async (e: React.React.FormEvent<HTMLFormElement>) => {
+ const createProduct = async (e: FormEvent<HTMLFormElement>) => {
   e.preventDefault();
   setIsLoading(true);
   const res = await fetch(`${process.env.API_HOST}/test/product/create`, {
@@ -68,7 +67,7 @@ const AddProduct = ({
       <input
        type="text"
        value={companyName}
-       disabled={companyName}
+       disabled={!!companyName}
        className={`w-full outline-none bg-zinc-900 h-full p-2 ${
         companyName ? "text-amber-500" : "text-white"
        } font-medium text-lg `}
@@ -90,7 +89,7 @@ const AddProduct = ({
      isDisplay={name.length >= 2}
     />
     <Input
-     value={price}
+     value={price.toString()}
      setValue={setPrice}
      placeholder="Your price"
      color="yellow"
@@ -137,7 +136,7 @@ const AddProduct = ({
       color={`${
        price > 0 && name.length >= 2 && selectedImage ? "blue" : "grey"
       }`}
-      isAnimate={price >= 2 && name.length >= 2 && selectedImage}
+      isAnimate={!!(price >= 2 && name.length >= 2 && selectedImage)}
       isDisabled={price === 0 || name.length < 2 || !selectedImage}
       isLoading={isLoading}
      >

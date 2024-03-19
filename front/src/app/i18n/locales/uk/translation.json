@@ -66,5 +66,7 @@
   "App per period": "Кількість наближень",
   "App duration per period": "Загальна тривалість наближень",
   "Avg app duration per period": "Середня тривалість наближень",
-  "Avg distance per app": "Середня дистанція на наближення"
+  "Avg distance per app": "Середня дистанція на наближення",
+  "Prognose approaches based on overall customers number": "Прогнозуйте підходи на основі загальної кількості клієнтів",
+  "Using data from the test to simulate similar situations with more or fewer customers. Using this test, you can find out the exact probability of performing a certain number of approaches given the total number of visitors in your establishment. The binomial distribution is used to build the model.": "Використання даних із тесту для моделювання аналогічних ситуацій з більшою чи меншою кількістю покупців. За допомогою цього тесту ви зможете дізнатися точну ймовірність здійснення певної кількості підходів при заданій кількості відвідувачів у вашому закладі. Біноміальний розподіл використовується для побудови моделі."
 }

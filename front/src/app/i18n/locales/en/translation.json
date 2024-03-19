@@ -66,5 +66,7 @@
   "App per period": "App per period",
   "App duration per period": "App duration per period",
   "Avg app duration per period": "Avg app duration per period",
-  "Avg distance per app": "Avg distance per app"
+  "Avg distance per app": "Avg distance per app",
+  "Prognose approaches based on overall customers number": "Prognose approaches based on overall customers number",
+  "Using data from the test to simulate similar situations with more or fewer customers. Using this test, you can find out the exact probability of performing a certain number of approaches given the total number of visitors in your establishment. The binomial distribution is used to build the model.": "Using data from the test to simulate similar situations with more or fewer customers. Using this test, you can find out the exact probability of performing a certain number of approaches given the total number of visitors in your establishment. The binomial distribution is used to build the model."
 }

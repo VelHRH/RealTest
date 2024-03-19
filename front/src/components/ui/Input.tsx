@@ -1,9 +1,9 @@
-import { FC } from "react";
+import { Dispatch, FC, SetStateAction } from "react";
 
 interface InputProps {
  color?: string;
  value: string;
- setValue: (value: string) => void;
+ setValue: Dispatch<SetStateAction<any>>;
  placeholder: string;
  isDisplay?: boolean;
  type?: string;
