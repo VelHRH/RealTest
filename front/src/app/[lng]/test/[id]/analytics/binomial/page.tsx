@@ -13,7 +13,7 @@ const BinomialAnalytics = async ({
   const { t } = (await useTranslation(params.lng)) as TranslationResult;
   const binomialDistributionData = await getBinomial(
     params.id,
-    searchParams.people
+    searchParams.people || "100"
   );
   return (
     <div className="flex gap-5 items-center">
@@ -26,7 +26,7 @@ const BinomialAnalytics = async ({
           data={binomialDistributionData.map((record) => record.probability)}
           labels={binomialDistributionData.map((record) => record.people)}
           xName={t("People")}
-          yName={t("Probability")}
+          yName={`${t("Probability")}, %`}
           bgColor="yellow"
         />
       </div>

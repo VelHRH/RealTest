@@ -1,4 +1,5 @@
 import { cookies } from "next/headers";
+import { AnovaResult, BinomialResult, PoissonResult } from "types-realtest";
 
 export const getTest = async (id: string) => {
   const res = await fetch(`${process.env.API_HOST}/test/${id}`, {
@@ -50,5 +51,29 @@ export const getBinomial = async (id: string, people: string) => {
       },
     }
   );
-  return await res.json();
+  return (await res.json()) as BinomialResult;
+};
+
+export const getPoisson = async (id: string, start: string, end: string) => {
+  const params = new URLSearchParams();
+  params.append("start", start);
+  params.append("end", end);
+  const res = await fetch(
+    `${process.env.API_HOST}/test/${id}/poisson?${params.toString()}`,
+    {
+      headers: {
+        Cookie: `COOKIE_AUTH=${cookies().get("COOKIE_AUTH")?.value}`,
+      },
+    }
+  );
+  return (await res.json()) as PoissonResult;
+};
+
+export const getAnova = async (id: string) => {
+  const res = await fetch(`${process.env.API_HOST}/test/${id}/anova`, {
+    headers: {
+      Cookie: `COOKIE_AUTH=${cookies().get("COOKIE_AUTH")?.value}`,
+    },
+  });
+  return (await res.json()) as AnovaResult;
 };

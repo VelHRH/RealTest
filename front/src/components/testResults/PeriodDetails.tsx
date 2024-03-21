@@ -2,7 +2,7 @@
 
 import { useTranslation } from "@/app/i18n/client";
 import { FC, useState } from "react";
-import { Result } from "types";
+import { Result } from "types-realtest";
 import ResultItem from "../ResultItem";
 
 interface PeriodDetailsProps {
@@ -21,8 +21,7 @@ const PeriodDetails: FC<PeriodDetailsProps> = ({ lng, results }) => {
         <h1 className="font-bold text-3xl">{t("Periods details")}</h1>
         <button onClick={openToggler}>{isOpen ? t("Hide") : t("Show")}</button>
       </div>
-      {!results.error &&
-        isOpen && // TODO: fix the error
+      {isOpen &&
         results.map((result) => (
           <ResultItem key={result.start.toString()} lng={lng} {...result} />
         ))}

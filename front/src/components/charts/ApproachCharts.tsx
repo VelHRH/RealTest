@@ -1,5 +1,5 @@
 import { useTranslation } from "@/app/i18n";
-import { Result } from "types";
+import { Result } from "types-realtest";
 import CustomChart from "./CustomChart";
 
 interface ApproachChartsProps {

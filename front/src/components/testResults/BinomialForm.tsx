@@ -2,14 +2,23 @@
 
 import Button from "@/components/ui/Button";
 import Input from "@/components/ui/Input";
-import { usePathname } from "next/navigation";
-import { FC, useState } from "react";
+import { usePathname, useSearchParams } from "next/navigation";
+import { useEffect, useState } from "react";
 
-interface BinomialFormProps {}
-
-const BinomialForm: FC<BinomialFormProps> = ({}) => {
-  const [peopleNumber, setPeopleNumber] = useState<string>("");
+const BinomialForm = () => {
+  const searchParams = useSearchParams();
+  const [peopleNumber, setPeopleNumber] = useState<string>(
+    searchParams.get("people") || "100"
+  );
   const pathname = usePathname();
+  const [hydrated, setHydrated] = useState(false);
+  useEffect(() => {
+    setHydrated(true);
+  }, []);
+  if (!hydrated) {
+    return null;
+  }
+
   const handleClick = () => {
     window.location.href = `${pathname}?people=${peopleNumber}`;
   };
@@ -26,7 +35,7 @@ const BinomialForm: FC<BinomialFormProps> = ({}) => {
       ></Input>
       <button onClick={handleClick}>
         <Button color="yellow" size="small">
-          Model
+          Go
         </Button>
       </button>
     </div>

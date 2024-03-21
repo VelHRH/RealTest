@@ -3,7 +3,7 @@ import { faChevronDown } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { format } from "date-fns";
 import { FC, useEffect, useState } from "react";
-import { Result } from "types";
+import { Result } from "types-realtest";
 import { useTranslation } from "../app/i18n/client";
 
 interface ResultProps extends Result {
