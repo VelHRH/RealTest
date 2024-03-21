@@ -1,5 +1,5 @@
-import mongoose from 'mongoose';
-import type { Result } from 'types';
+import mongoose from "mongoose";
+import type { Result } from "types-realtest";
 
 const ResultSchema = new mongoose.Schema<Result>({
   testId: {
@@ -31,4 +31,4 @@ const ResultSchema = new mongoose.Schema<Result>({
   },
 });
 
-export const ResultModel = mongoose.model<Result>('Result', ResultSchema);
+export const ResultModel = mongoose.model<Result>("Result", ResultSchema);
