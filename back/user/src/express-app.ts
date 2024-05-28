@@ -1,5 +1,4 @@
 import express from "express";
-import cors from "cors";
 import cookieParser from "cookie-parser";
 import { userAPI, authAPI, appEvents } from "./api";
 import { ErrorHandler } from "./utils/error-handler";

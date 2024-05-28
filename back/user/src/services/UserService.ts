@@ -7,12 +7,9 @@ export class UserService {
  async GetProfileByID(id: string) {
   try {
    const existingUser = await UserModel.findById(id);
-   if (!existingUser) {
-    throw AppError.badRequest("User doesn't exist");
-   }
    return existingUser;
   } catch (err) {
-   throw err;
+    throw AppError.badRequest("User doesn't exist");
   }
  }
 
@@ -53,13 +50,15 @@ export class UserService {
 
  async ChangeRole(newRole: string, login: string) {
   try {
-   await UserModel.findOneAndUpdate({ login }, { role: newRole });
+    const {role} = await UserModel.findOneAndUpdate({ login }, { role: newRole });
+    return {login, newRole: role}
   } catch (err) {
    throw err;
   }
  }
 
  async SubscribeEvents(payload: { event: string; data: object }) {
+  console.log(payload)
   const { event, data } = payload;
   let result;
   switch (event) {
