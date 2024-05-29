@@ -1,38 +1,55 @@
-import { AuthService } from '../services/AuthService';
-import express from 'express';
-import { checkAuth } from '../utils/check-auth';
-import { registerValidation, passwordValidation } from '../utils/validations';
-import { validationResult } from 'express-validator';
-import { AppError } from '../utils/app-errors';
+import { AuthService } from "../services/AuthService";
+import express from "express";
+import { checkAuth } from "../utils/check-auth";
+import { registerValidation, passwordValidation } from "../utils/validations";
+import { validationResult } from "express-validator";
+import { AppError } from "../utils/app-errors";
 
 export const authAPI = async (app: express.Application) => {
   const service = new AuthService();
 
   app.post(
-    '/register',
+    "/register",
     registerValidation,
-    async (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    async (
+      req: express.Request,
+      res: express.Response,
+      next: express.NextFunction
+    ) => {
       try {
         const validationErrors = validationResult(req);
         if (!validationErrors.isEmpty()) {
           throw AppError.badRequest(validationErrors.array()[0].msg);
         }
         const { email, login, password, name } = req.body;
-        const data = await service.RegisterUser({ email, login, password, name });
+        const data = await service.RegisterUser({
+          email,
+          login,
+          password,
+          name,
+        });
         return res.status(200).json(data);
       } catch (err) {
         next(err);
       }
-    },
+    }
   );
 
   app.post(
-    '/login',
-    async (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    "/login",
+    async (
+      req: express.Request,
+      res: express.Response,
+      next: express.NextFunction
+    ) => {
       try {
         const { email, login, password } = req.body;
-        const { data, token } = await service.LoginUser({ email, login, password });
-        res.cookie('COOKIE_AUTH', token, {
+        const { data, token } = await service.LoginUser({
+          email,
+          login,
+          password,
+        });
+        res.cookie("COOKIE_AUTH", token, {
           httpOnly: true,
           maxAge: 1000 * 60 * 60 * 24,
         });
@@ -40,13 +57,17 @@ export const authAPI = async (app: express.Application) => {
       } catch (err) {
         next(err);
       }
-    },
+    }
   );
 
   app.get(
-    '/me',
+    "/me",
     checkAuth,
-    async (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    async (
+      req: express.Request,
+      res: express.Response,
+      next: express.NextFunction
+    ) => {
       try {
         const { identity } = req.body;
         const data = await service.MyInformation(identity);
@@ -54,28 +75,36 @@ export const authAPI = async (app: express.Application) => {
       } catch (err) {
         next(err);
       }
-    },
+    }
   );
 
   app.post(
-    '/logout',
+    "/logout",
     checkAuth,
-    async (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    async (
+      req: express.Request,
+      res: express.Response,
+      next: express.NextFunction
+    ) => {
       try {
         await service.LogoutUser(req.cookies.COOKIE_AUTH);
-        res.clearCookie('COOKIE_AUTH');
+        res.clearCookie("COOKIE_AUTH");
         return res.status(200).json({ success: true }).end();
       } catch (err) {
         next(err);
       }
-    },
+    }
   );
 
   app.put(
-    '/changePassword',
+    "/changePassword",
     passwordValidation,
     checkAuth,
-    async (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    async (
+      req: express.Request,
+      res: express.Response,
+      next: express.NextFunction
+    ) => {
       try {
         const validationErrors = validationResult(req);
         if (!validationErrors.isEmpty()) {
@@ -93,6 +122,6 @@ export const authAPI = async (app: express.Application) => {
       } catch (err) {
         next(err);
       }
-    },
+    }
   );
 };

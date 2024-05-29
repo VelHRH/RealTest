@@ -52,7 +52,6 @@ export const resultAPI = async (app: express.Application) => {
         const numberOfPeople = peopleNumber
           ? parseFloat(peopleNumber as string)
           : undefined;
-        console.log(numberOfPeople);
         const data = await service.BinomialDistribution(
           req.params.id,
           numberOfPeople
