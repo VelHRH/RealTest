@@ -181,7 +181,6 @@ export class ResultService {
         });
       }
     }
-
     return distributionArray;
   }
 
